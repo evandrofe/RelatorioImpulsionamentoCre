@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Relatórios Ads</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f0f;color:#e5e5e5;min-height:100vh}
+header{background:#0f0f0f;border-bottom:1px solid #262626;position:sticky;top:0;z-index:50;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{background:#ff9900;padding:6px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:18px;height:18px;fill:white}
+.logo h1{font-size:18px;font-weight:700;color:#fff}
+.logo h1 span{color:#ff9900}
+.header-btns{display:flex;gap:10px}
+.btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:none;font-weight:500;transition:all .2s}
+.btn-excel{background:#15803d;color:#fff;border:1px solid #16a34a}.btn-excel:hover{background:#16a34a}
+.btn-pdf{background:#262626;color:#fff;border:1px solid #404040}.btn-pdf:hover{background:#333}
+.btn-back{background:transparent;color:#9ca3af;border:none;font-size:13px;cursor:pointer;text-decoration:underline;padding:4px 0}.btn-back:hover{color:#fff}
+main{max-width:1400px;margin:0 auto;padding:32px 24px}
+.upload-wrap{max-width:600px;margin:48px auto}
+.upload-card{background:#262626;border-radius:16px;border:2px dashed #404040;padding:48px;text-align:center}
+.upload-icon{width:72px;height:72px;background:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.upload-icon svg{width:36px;height:36px;fill:#ff9900}
+.upload-card h2{font-size:22px;font-weight:700;margin-bottom:8px}
+.upload-card p{color:#9ca3af;margin-bottom:28px;font-size:14px}
+.btn-upload{background:#ff9900;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}.btn-upload:hover{background:#e68900;transform:scale(1.03)}
+.error{margin-top:20px;background:rgba(153,27,27,.4);border:1px solid #991b1b;color:#fca5a5;padding:12px 16px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px}
+.instructions{margin-top:24px;background:rgba(0,0,0,.3);border:1px solid #333;border-radius:8px;padding:16px;text-align:left;font-size:13px;color:#6b7280}
+.instructions strong{color:#9ca3af;display:block;margin-bottom:8px}
+.instructions ul{padding-left:20px;line-height:1.8}
+.instructions code{background:#1a1a1a;padding:2px 6px;border-radius:4px;font-size:12px;color:#ff9900}
+/* Review */
+#reviewArea{display:none}
+.review-card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;margin-bottom:16px}
+.review-card h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.review-card>p{color:#9ca3af;font-size:13px;margin-bottom:20px}
+.review-table{width:100%;border-collapse:collapse;font-size:13px}
+.review-table th{text-align:left;padding:10px 12px;border-bottom:1px solid #333;color:#9ca3af;font-weight:600;font-size:11px;text-transform:uppercase}
+.review-table td{padding:10px 12px;border-bottom:1px solid #222}
+.review-table tr:hover{background:#222}
+.review-name{color:#fff;font-weight:500;max-width:300px;word-break:break-word}
+.review-format{color:#9ca3af}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;text-transform:uppercase;white-space:nowrap}
+.badge-alc{background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.badge-eng{background:rgba(168,85,247,.2);color:#d8b4fe;border:1px solid rgba(168,85,247,.3)}
+.badge-eng-link{background:rgba(168,85,247,.15);color:#c4b5fd;border:1px solid rgba(168,85,247,.25)}
+.badge-conv{background:rgba(34,197,94,.2);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+.badge-conv-link{background:rgba(34,197,94,.15);color:#6ee7b7;border:1px solid rgba(34,197,94,.25)}
+.badge-views{background:rgba(251,146,60,.2);color:#fed7aa;border:1px solid rgba(251,146,60,.3)}
+.badge-unknown{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.obj-select{background:#262626;color:#e5e5e5;border:1px solid #404040;border-radius:6px;padding:5px 8px;font-size:12px;cursor:pointer}.obj-select:focus{border-color:#ff9900;outline:none}
+.btn-generate{background:#ff9900;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:16px}.btn-generate:hover{background:#e68900;transform:scale(1.02)}
+.review-actions{display:flex;gap:12px;align-items:center;margin-top:8px}
+.review-stats{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.stat-chip{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600}
+/* Capa */
+#capaArea{display:none}
+.capa-card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px}
+.capa-card h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.capa-card>p{color:#9ca3af;font-size:13px;margin-bottom:24px}
+.capa-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.capa-grid{grid-template-columns:1fr}}
+.capa-section{background:#262626;border-radius:10px;padding:20px;border:1px solid #333}
+.capa-section h3{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.capa-section h3 .icon-fb{color:#1877f2}.capa-section h3 .icon-ig{color:#e4405f}
+.capa-field{margin-bottom:14px}
+.capa-field label{display:block;font-size:12px;color:#9ca3af;margin-bottom:4px;font-weight:600;text-transform:uppercase}
+.capa-field input{width:100%;background:#1a1a1a;border:1px solid #404040;border-radius:6px;padding:8px 12px;color:#fff;font-size:14px;font-family:inherit}.capa-field input:focus{border-color:#ff9900;outline:none}
+.capa-field input::placeholder{color:#555}
+.capa-actions{display:flex;gap:12px;align-items:center;margin-top:20px}
+/* Preview Capa */
+#capaPreview{display:none;margin-top:28px}
+.capa-preview-box{background:#FBBC04;border-radius:12px;padding:24px;font-family:'Montserrat','Segoe UI',sans-serif;color:#000;box-shadow:0 8px 32px rgba(251,188,4,.25);border:2px solid #e0a800}
+.capa-preview-title{font-size:22px;font-weight:900;text-align:center;color:#fff;background:rgba(0,0,0,.15);border-radius:8px;padding:10px 16px;margin-bottom:20px;letter-spacing:.5px;word-break:break-word}
+.capa-preview-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.capa-preview-cols{grid-template-columns:1fr}}
+.capa-preview-col{background:rgba(255,255,255,.18);border-radius:10px;padding:16px;border:1px solid rgba(0,0,0,.08)}
+.capa-preview-col-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.5px}
+.capa-preview-seg{font-size:18px;font-weight:700;text-align:center;padding:8px;background:rgba(255,255,255,.25);border-radius:6px;margin-bottom:6px}
+.capa-preview-seg-ant{font-size:12px;text-align:center;color:rgba(0,0,0,.65);margin-bottom:12px;font-style:italic}
+.capa-preview-genero{display:flex;justify-content:center;gap:20px;margin-bottom:12px}
+.capa-preview-genero span{font-size:14px;font-weight:700;background:rgba(255,255,255,.3);padding:4px 12px;border-radius:20px}
+.capa-preview-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.capa-preview-metric{text-align:center;background:rgba(255,255,255,.25);border-radius:6px;padding:6px 4px}
+.capa-preview-metric .val{font-size:16px;font-weight:800;display:block}
+.capa-preview-metric .lbl{font-size:9px;font-weight:600;text-transform:uppercase;color:rgba(0,0,0,.6);line-height:1.2;margin-top:2px;display:block}
+/* Report */
+.report-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.report-header h2{font-size:22px;font-weight:700}
+.report-header p{color:#9ca3af;font-size:13px;margin-top:2px}
+.table-wrap{background:#fff;border-radius:8px;overflow:hidden;border:1px solid #000;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.table-title{background:#ff9900;color:#fff;text-align:center;padding:8px;font-weight:700;font-size:15px;letter-spacing:.5px;border-bottom:1px solid #000}
+.table-scroll{overflow-x:auto}
+table.report{width:100%;border-collapse:collapse;color:#000;font-size:10.5px}
+table.report thead tr{background:#b7b7b7}
+table.report th{padding:7px 5px;font-weight:700;font-size:9.5px;text-transform:uppercase;border-right:1px solid #000;border-bottom:1px solid #000;text-align:center;white-space:nowrap;font-family:'Century Gothic',Arial}
+table.report th:first-child{text-align:left}
+table.report td{padding:6px 5px;border-right:1px solid #d1d5db;border-bottom:1px solid #d1d5db;text-align:center;background:#fff;white-space:nowrap}
+table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
+.legend{background:#fff;border:1px solid #000;padding:16px;margin-top:24px;color:#000;border-radius:4px}
+.legend-title{background:#ff9900;color:#fff;font-weight:700;text-align:center;padding:6px;margin:-16px -16px 16px;border-radius:4px 4px 0 0;font-size:13px;font-family:'Century Gothic',Arial}
+.legend p{font-size:13px;margin-bottom:10px;line-height:1.6}
+.legend-note{font-size:11px;color:#6b7280;border-top:1px solid #ddd;padding-top:10px;margin-top:10px}
+@media print{header,#headerBtns,.btn-back{display:none!important}body{background:#fff;color:#000}main{padding:0}}
+
+.config-panel{margin-top:18px;padding:16px;border:1px solid #262626;border-radius:12px;background:#171717}
+.config-panel summary{cursor:pointer;font-weight:700;color:#fff;list-style:none}
+.config-panel summary::-webkit-details-marker{display:none}
+.config-panel summary::after{content:' ▾';color:#ff9900}
+.config-panel[open] summary::after{content:' ▴';color:#ff9900}
+.config-panel p{margin:10px 0 0;color:#a3a3a3;font-size:13px;line-height:1.5}
+.config-textarea{width:100%;min-height:280px;margin-top:14px;background:#0f0f0f;color:#e5e5e5;border:1px solid #404040;border-radius:10px;padding:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+.config-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn-secondary{background:#262626;color:#fff;border:1px solid #404040}
+.btn-secondary:hover{background:#333}
+.btn-warning{background:#7c2d12;color:#fff;border:1px solid #9a3412}
+.btn-warning:hover{background:#9a3412}
+.config-status{margin-top:12px;font-size:13px;color:#d4d4d4;min-height:18px}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 10h2v2H7v-2zm0-4h2v4H7V11zm4 2h2v4h-2v-4zm0-4h2v2h-2V9zm4 6h2v2h-2v-2zm0-6h2v6h-2V9z"/></svg></div><h1>Relatórios <span>Ads</span></h1></div>
+  <div class="header-btns" id="headerBtns" style="display:none">
+    <button class="btn btn-excel" id="btnExcel" onclick="exportExcel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg> Baixar Excel</button>
+    <button class="btn btn-pdf" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> PDF</button>
+  </div>
+</header>
+<main id="mainContent">
+  <!-- UPLOAD -->
+  <div id="uploadArea" class="upload-wrap">
+    <div class="upload-card">
+      <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg></div>
+      <h2>Importar Dados da Campanha</h2>
+      <p>Carregue o arquivo Excel (.xlsx) exportado do Gerenciador de Anúncios do Meta.</p>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(event)"/>
+      <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Selecionar Arquivo Excel</button>
+      <div id="errorMsg" class="error" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span id="errorText"></span></div>
+      <div class="instructions">
+        <strong>Padrão de nome das campanhas:</strong>
+        <ul><li><code>Nome - Formato - Data - Objetivo</code></li><li>Objetivos: <code>ALC</code> <code>ENG</code> <code>WHATS</code> <code>VIEWS</code></li><li>Modificador: <code>CLIQUE NO LINK</code></li></ul>
+      </div>
+      <details class="config-panel">
+        <summary>⚙️ Configurar regras do CampaignClassifier via JSON</summary>
+        <p>Edite as regras abaixo para mudar a detecção de formato, objetivo e prioridade sem alterar o código. Ao aplicar, as campanhas já importadas também são reclassificadas.</p>
+        <textarea id="classifierConfigInput" class="config-textarea" spellcheck="false"></textarea>
+        <div class="config-actions">
+          <button type="button" class="btn btn-excel" onclick="applyClassifierConfig()">Aplicar JSON</button>
+          <button type="button" class="btn btn-secondary" onclick="downloadClassifierConfig()">Baixar JSON</button>
+          <button type="button" class="btn btn-warning" onclick="resetClassifierConfig()">Restaurar padrão</button>
+        </div>
+        <div id="classifierConfigStatus" class="config-status"></div>
+      </details>
+
+    </div>
+  </div>
+  <!-- REVIEW -->
+  <div id="reviewArea">
+    <div class="review-card">
+      <h2>Revisar Objetivos — <span id="clienteName" style="color:#ff9900"></span></h2>
+      <p>Confira os objetivos detectados e ajuste se necessário.</p>
+      <div class="review-stats" id="reviewStats"></div>
+      <div style="overflow-x:auto"><table class="review-table"><thead><tr><th>Campanha</th><th>Formato</th><th>Objetivo</th><th>Alterar</th></tr></thead><tbody id="reviewBody"></tbody></table></div>
+      <div class="review-actions"><button class="btn-generate" onclick="goToCapa()">Próximo: Preencher Capa →</button><button class="btn-back" onclick="resetView()">Voltar</button></div>
+    </div>
+  </div>
+  <!-- CAPA -->
+  <div id="capaArea">
+    <div class="capa-card">
+      <h2>Preencher Dados da Capa — <span id="capaClienteName" style="color:#ff9900"></span></h2>
+      <p>Preencha os dados de seguidores e métricas do Facebook e Instagram para a capa do relatório.</p>
+      <div class="capa-grid">
+        <div class="capa-section">
+          <h3><span class="icon-fb">📘</span> Facebook</h3>
+          <div class="capa-field"><label>Total de Seguidores</label><input type="text" id="fb_seguidores" placeholder="Ex: 5.230"></div>
+          <div class="capa-field"><label>Seguidores no Mês Anterior</label><input type="text" id="fb_seg_anterior" placeholder="Ex: 5.100"></div>
+          <div class="capa-field"><label>% Homens</label><input type="text" id="fb_homens" placeholder="Ex: 27,2%"></div>
+          <div class="capa-field"><label>% Mulheres</label><input type="text" id="fb_mulheres" placeholder="Ex: 72,8%"></div>
+          <div class="capa-field"><label>Faixa Etária Principal</label><input type="text" id="fb_faixa" placeholder="Ex: 25 a 45"></div>
+          <div class="capa-field"><label>Contas Alcançadas</label><input type="text" id="fb_alcancadas" placeholder="Ex: 12.500"></div>
+          <div class="capa-field"><label>Visitas à Página</label><input type="text" id="fb_visitas" placeholder="Ex: 3.200"></div>
+        </div>
+        <div class="capa-section">
+          <h3><span class="icon-ig">📸</span> Instagram</h3>
+          <div class="capa-field"><label>Total de Seguidores</label><input type="text" id="ig_seguidores" placeholder="Ex: 8.450"></div>
+          <div class="capa-field"><label>Seguidores no Mês Anterior</label><input type="text" id="ig_seg_anterior" placeholder="Ex: 8.100"></div>
+          <div class="capa-field"><label>% Homens</label><input type="text" id="ig_homens" placeholder="Ex: 33,7%"></div>
+          <div class="capa-field"><label>% Mulheres</label><input type="text" id="ig_mulheres" placeholder="Ex: 66,3%"></div>
+          <div class="capa-field"><label>Faixa Etária Principal</label><input type="text" id="ig_faixa" placeholder="Ex: 25 a 45"></div>
+          <div class="capa-field"><label>Contas Alcançadas</label><input type="text" id="ig_alcancadas" placeholder="Ex: 25.000"></div>
+          <div class="capa-field"><label>Visitas ao Perfil</label><input type="text" id="ig_visitas" placeholder="Ex: 6.800"></div>
+        </div>
+      </div>
+      <div class="capa-actions">
+        <button class="btn-generate" onclick="toggleCapaPreview()" id="btnPreviewCapa">👁 Visualizar Capa</button>
+        <button class="btn-generate" onclick="confirmAndRender()" style="background:#15803d;border:1px solid #16a34a">Gerar Relatório</button>
+        <button class="btn-back" onclick="backToReview()">← Voltar à Revisão</button>
+      </div>
+      <!-- PREVIEW DA CAPA -->
+      <div id="capaPreview">
+        <div class="capa-preview-box" id="capaPreviewBox">
+          <div class="capa-preview-title" id="prev_titulo">CLIENTE - MÊS - ANO</div>
+          <div class="capa-preview-cols">
+            <div class="capa-preview-col">
+              <div class="capa-preview-col-title">📘 Facebook</div>
+              <div class="capa-preview-seg" id="prev_fb_seg">Total de — seguidores</div>
+              <div class="capa-preview-seg-ant" id="prev_fb_seg_ant">— seguidores no mês anterior</div>
+              <div class="capa-preview-genero">
+                <span id="prev_fb_h">👨 —</span>
+                <span id="prev_fb_m">👩 —</span>
+              </div>
+              <div class="capa-preview-metrics">
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_faixa">—</span><span class="lbl">Faixa Etária</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_vis">—</span><span class="lbl">Visitas à Página</span></div>
+              </div>
+            </div>
+            <div class="capa-preview-col">
+              <div class="capa-preview-col-title">📸 Instagram</div>
+              <div class="capa-preview-seg" id="prev_ig_seg">Total de — seguidores</div>
+              <div class="capa-preview-seg-ant" id="prev_ig_seg_ant">— seguidores no mês anterior</div>
+              <div class="capa-preview-genero">
+                <span id="prev_ig_h">👨 —</span>
+                <span id="prev_ig_m">👩 —</span>
+              </div>
+              <div class="capa-preview-metrics">
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_faixa">—</span><span class="lbl">Faixa Etária</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_vis">—</span><span class="lbl">Visitas ao Perfil</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- REPORT -->
+  <div id="reportArea" style="display:none">
+    <div class="report-header"><div><h2>Relatório — <span id="clienteNameReport" style="color:#ff9900"></span></h2><p>Apenas as métricas correspondentes ao objetivo são preenchidas.</p></div><button class="btn-back" onclick="resetView()">Importar outro arquivo</button></div>
+    <div class="table-wrap"><div class="table-title">AÇÕES MENSAIS</div><div class="table-scroll"><table class="report"><thead><tr>
+      <th>Nome da Ação</th><th>Formato</th><th>Validade</th><th>Investimento</th><th>Valor Gasto</th><th>Alcance</th><th>Engajamento</th><th>Cliques no Link</th><th>Visualização (ThruPlay)</th><th>Custo por 1.000 Pessoas</th><th>Custo por Cliques no Link</th><th>Custo por ThruPlay</th><th>Custo por Interação</th><th>Custo por Conversa</th><th>Filtro</th><th>Cidade</th><th>Conversas Iniciadas</th>
+    </tr></thead><tbody id="tableBody"></tbody></table></div></div>
+    <div class="legend">
+      <div class="legend-title">RAIO-X DOS RESULTADOS - ENTENDA O QUE CADA INDICADOR MOSTRA</div>
+      <p><strong>Alcance:</strong> É o número de contas que a postagem alcançou. Ou seja, a quantidade de contas que receberam o post.</p>
+      <p><strong>Engajamento:</strong> É o número de vezes que houve interação com a postagem de pessoas com maior probabilidade de interesse no produto ofertado. A plataforma analisa os perfis de pessoas que estejam procurando os produtos ofertados, e faz a entrega para estes perfis (sem filtro). Ou seja, a soma da quantidade de vezes que o post foi aberto, curtido, compartilhado, comentado por um público mais engajado.</p>
+      <p><strong>Conversas iniciadas:</strong> Quantidade de conversas iniciadas no WhatsApp a partir do anúncio.</p>
+      <p><strong>Visualização (ThruPlay):</strong> Número de vezes que o vídeo foi assistido por pelo menos 15 segundos ou até o fim, quando menor que esse tempo.</p>
+      <p><strong>Cliques no link:</strong> Quantidade de cliques em links do anúncio para destinos externos, como site ou WhatsApp.</p>
+      <p class="legend-note">*Algumas colunas podem não ser preenchidas, pois variam de acordo com o tipo de impulsionamento e com as métricas disponíveis em cada campanha. Além disso, em alguns casos, a plataforma pode não utilizar toda a verba prevista, seja por limitação de público, concorrência no leilão de anúncios, baixo engajamento ou instabilidades na entrega. Por isso, o valor efetivamente considerado como consumido é o da coluna "Valor gasto".</p>
+    </div>
+  </div>
+</main>
+<script>
+
+// ======================================================
+// Estado global da aplicação
+// ======================================================
+var campaignsData = [];
+var originalFileName = '';
+var capaData = { fb: {}, ig: {} };
+
+var APP_STORAGE_KEY = 'relatorios_ads_state_v1';
+var CAPA_INPUT_IDS = [
+  'fb_seguidores', 'fb_seg_anterior', 'fb_homens', 'fb_mulheres',
+  'fb_faixa', 'fb_alcancadas', 'fb_visitas',
+  'ig_seguidores', 'ig_seg_anterior', 'ig_homens', 'ig_mulheres',
+  'ig_faixa', 'ig_alcancadas', 'ig_visitas'
+];
+var capaInputsBound = false;
+
+var AppState = {
+  get campaignsData() { return campaignsData; },
+  set campaignsData(value) { campaignsData = Array.isArray(value) ? value : []; },
+  get originalFileName() { return originalFileName; },
+  set originalFileName(value) { originalFileName = value || ''; },
+  get capaData() { return capaData; },
+  set capaData(value) { capaData = value || { fb: {}, ig: {} }; }
+};
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+// ======================================================
+// Persistência
+// ======================================================
+function getCurrentView() {
+  if ($('reportArea').style.display === 'block') return 'report';
+  if ($('capaArea').style.display === 'block') return 'capa';
+  if ($('reviewArea').style.display === 'block') return 'review';
+  return 'upload';
+}
+
+function collectCapaDataSafe() {
+  return $('fb_seguidores') ? collectCapaData() : (AppState.capaData || { fb: {}, ig: {} });
+}
+
+var StorageService = {
+  buildState: function () {
+    return {
+      campaignsData: AppState.campaignsData,
+      originalFileName: AppState.originalFileName,
+      capaData: collectCapaDataSafe(),
+      currentView: getCurrentView(),
+      previewVisible: $('capaPreview').style.display === 'block'
+    };
+  },
+  save: function () {
+    try {
+      localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(this.buildState()));
+    } catch (err) {
+      console.warn('Não foi possível salvar o estado no navegador.', err);
+    }
+  },
+  load: function () {
+    try {
+      var raw = localStorage.getItem(APP_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (err) {
+      console.warn('Não foi possível recuperar o estado salvo.', err);
+      return null;
+    }
+  },
+  clear: function () {
+    try {
+      localStorage.removeItem(APP_STORAGE_KEY);
+    } catch (err) {
+      console.warn('Não foi possível limpar o estado salvo.', err);
+    }
+  }
+};
+
+function buildPersistedState() {
+  return StorageService.buildState();
+}
+
+function saveAppState() {
+  StorageService.save();
+}
+
+function loadAppState() {
+  return StorageService.load();
+}
+
+function clearAppState() {
+  StorageService.clear();
+}
+
+// ======================================================
+// Formatação e parsing utilitário
+// ======================================================
+var fmtBRL = function (v) {
+  return (typeof v === 'number' && v > 0)
+    ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
+    : '-';
+};
+
+var fmtNum = function (v) {
+  return (typeof v === 'number' && v > 0)
+    ? new Intl.NumberFormat('pt-BR').format(v)
+    : '-';
+};
+
+function parseCurrency(v) {
+  if (typeof v === 'number') return v;
+  if (!v) return 0;
+  return parseFloat(String(v).replace(/[^0-9,.\-]/g, '').replace(/\.(?=\d{3})/g, '').replace(',', '.')) || 0;
+}
+
+function parseNum(v) {
+  if (typeof v === 'number') return Math.round(v);
+  if (!v) return 0;
+  return parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+}
+
+function parseMetaDate(v) {
+  if (v instanceof Date && !isNaN(v.getTime())) return v;
+  if (typeof v === 'number') {
+    var parsed = XLSX.SSF.parse_date_code(v);
+    if (parsed) return new Date(parsed.y, parsed.m - 1, parsed.d);
+  }
+  if (!v) return null;
+  var s = String(v).trim();
+  var m = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})$/);
+  if (m) {
+    var year = +m[3];
+    if (year < 100) year += 2000;
+    var d = new Date(year, +m[2] - 1, +m[1]);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  var iso = new Date(s);
+  return isNaN(iso.getTime()) ? null : iso;
+}
+
+function fmtDateBR(d) {
+  if (!d) return '';
+  return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+}
+
+function extractDateFromName(name) {
+  var match = (name || '').match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+  if (!match) return null;
+  var year = +match[3];
+  if (year < 100) year += 2000;
+  var d = new Date(year, +match[2] - 1, +match[1]);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function getIdx(headers, keywords) {
+  var exact = headers.findIndex(function (header) {
+    return keywords.some(function (keyword) { return header === keyword; });
+  });
+  if (exact >= 0) return exact;
+
+  return headers.findIndex(function (header) {
+    return keywords.some(function (keyword) { return header.includes(keyword); });
+  });
+}
+
+function levenshtein(a, b) {
+  var m = a.length;
+  var n = b.length;
+  var d = [];
+
+  for (var i = 0; i <= m; i++) {
+    d[i] = [];
+    for (var j = 0; j <= n; j++) d[i][j] = 0;
+  }
+
+  for (var i2 = 0; i2 <= m; i2++) d[i2][0] = i2;
+  for (var j2 = 0; j2 <= n; j2++) d[0][j2] = j2;
+
+  for (var row = 1; row <= m; row++) {
+    for (var col = 1; col <= n; col++) {
+      d[row][col] = Math.min(
+        d[row - 1][col] + 1,
+        d[row][col - 1] + 1,
+        d[row - 1][col - 1] + (a[row - 1] === b[col - 1] ? 0 : 1)
+      );
+    }
+  }
+
+  return d[m][n];
+}
+
+function fuzzyMatch(word, targets, maxDist) {
+  var normalized = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  for (var i = 0; i < targets.length; i++) {
+    if (normalized === targets[i]) return true;
+    if (normalized.length >= 3 && targets[i].length >= 3 && levenshtein(normalized, targets[i]) <= maxDist) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// ======================================================
+// Regras de classificação
+// ======================================================
+
+var OBJ_LABELS = {
+  Alcance: 'Alcance',
+  Engajamento: 'Engajamento',
+  EngLink: 'Engajamento + Link',
+  Conversas: 'Conversas (WhatsApp)',
+  ConvLink: 'WhatsApp + Link',
+  Reels: 'Reels/Vídeo (ThruPlay)',
+  indefinido: '⚠ Não detectado'
+};
+var OBJ_BADGE = {
+  Alcance: 'badge-alc',
+  Engajamento: 'badge-eng',
+  EngLink: 'badge-eng-link',
+  Conversas: 'badge-conv',
+  ConvLink: 'badge-conv-link',
+  Reels: 'badge-views',
+  indefinido: 'badge-unknown'
+};
+var OBJ_OPTIONS = ['Alcance', 'Engajamento', 'EngLink', 'Conversas', 'ConvLink', 'Reels'];
+var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v1';
+var DEFAULT_CLASSIFIER_CONFIG = {
+  normalizationAliases: {
+    panfleto: ['panfletos'],
+    tabloide: ['tabloides', 'tablóide', 'tablóides', 'tabloid', 'tabloids'],
+    virtual: ['virtuais'],
+    carrossel: ['carrosel', 'carrosseis', 'carrosséis'],
+    reels: ['reel'],
+    video: ['vídeo', 'videos', 'vídeos', 'vid'],
+    whatsapp: ['whats', 'wpp', 'zap', 'zapp', 'wats'],
+    engajamento: ['eng', 'engaj', 'engajamentos'],
+    alcance: ['alc', 'alcances'],
+    conversa: ['conversas'],
+    clique: ['cliques', 'clic'],
+    link: ['links']
+  },
+  formatKeywords: [
+    { keyword: 'reels', label: 'Reels' },
+    { keyword: 'panfleto', label: 'Panfleto', aliases: ['virtual', 'tabloide'] },
+    { keyword: 'carrossel', label: 'Carrossel' },
+    { keyword: 'post', label: 'Post' },
+    { keyword: 'video', label: 'Vídeo', aliases: ['vídeo'] }
+  ],
+  objectivePriority: {
+    Alcance: 1,
+    Engajamento: 2,
+    EngLink: 3,
+    Conversas: 4,
+    ConvLink: 5,
+    Reels: 6
+  },
+  objectiveRules: [
+    {
+      name: 'Reels por formato',
+      objective: 'Reels',
+      when: { formatIn: ['Reels', 'Vídeo'] }
+    },
+    {
+      name: 'WhatsApp + clique no link',
+      objective: 'ConvLink',
+      when: {
+        textRegex: 'CLIQUE\\s*(NO\\s*)?LINK',
+        anyWords: [['whats', 'whatsapp', 'wapp', 'wpp', 'zap']]
+      }
+    },
+    {
+      name: 'Tráfego + clique no link',
+      objective: 'EngLink',
+      when: {
+        textRegex: 'CLIQUE\\s*(NO\\s*)?LINK',
+        anyWords: [['trafego', 'tráfego'], ['engajamento', 'engaj', 'eng']]
+      }
+    },
+    {
+      name: 'Conversas por WhatsApp',
+      objective: 'Conversas',
+      aliases: ['WhatsApp'],
+      when: {
+        anyWords: [['whats', 'whatsapp', 'wapp', 'wpp', 'zap']]
+      }
+    },
+    {
+      name: 'Engajamento',
+      objective: 'Engajamento',
+      when: {
+        anyWords: [['engajamento', 'engaj', 'eng']]
+      }
+    },
+    {
+      name: 'Alcance',
+      objective: 'Alcance',
+      when: {
+        anyWords: [['alcance', 'alc']]
+      }
+    },
+    {
+      name: 'Reels por visualização',
+      objective: 'Reels',
+      when: {
+        anyWords: [['views', 'visualizacao', 'visualizações', 'thruplay']]
+      }
+    }
+  ]
+};
+
+function deepClone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+var CampaignClassifier = {
+  config: null,
+  normalizeText: function (value) {
+    return String(value || '')
+      .toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  },
+  normalizeWord: function (value) {
+    return this.normalizeText(value).toLowerCase();
+  },
+  normalizeCompact: function (value) {
+    return this.normalizeWord(value).replace(/\s+/g, '');
+  },
+  tokenize: function (value) {
+    var classifier = this;
+    var rawTokens = this.normalizeText(value).split(/[\s\-–_]+/).filter(Boolean);
+    var result = [];
+    rawTokens.forEach(function (token) {
+      var canonical = classifier.canonicalizeToken(token);
+      if (canonical) result.push(canonical);
+      if (canonical && canonical !== token.toLowerCase()) result.push(token.toLowerCase());
+      var singular = classifier.toSingular(canonical || token.toLowerCase());
+      if (singular) result.push(singular);
+    });
+    return Array.from(new Set(result.filter(Boolean)));
+  },
+  ensureArray: function (value) {
+    return Array.isArray(value) ? value : [];
+  },
+  getDefaultConfig: function () {
+    return deepClone(DEFAULT_CLASSIFIER_CONFIG);
+  },
+  normalizeConfig: function (config) {
+    var base = config && typeof config === 'object' ? deepClone(config) : this.getDefaultConfig();
+
+    var aliasesMap = base.normalizationAliases && typeof base.normalizationAliases === 'object'
+      ? base.normalizationAliases
+      : deepClone(DEFAULT_CLASSIFIER_CONFIG.normalizationAliases);
+
+    var normalizedAliases = {};
+    Object.keys(aliasesMap || {}).forEach(function (key) {
+      var canonical = CampaignClassifier.normalizeWord(key);
+      if (!canonical) return;
+      normalizedAliases[canonical] = CampaignClassifier.ensureArray(aliasesMap[key]).map(function (alias) {
+        return String(alias || '').trim();
+      }).filter(Boolean);
+    });
+    base.normalizationAliases = normalizedAliases;
+
+    base.formatKeywords = this.ensureArray(base.formatKeywords).map(function (item) {
+      if (typeof item === 'string') {
+        return {
+          keyword: item,
+          label: item.charAt(0).toUpperCase() + item.slice(1),
+          aliases: []
+        };
+      }
+
+      return {
+        keyword: String(item && item.keyword || '').trim(),
+        label: String(item && item.label || item && item.keyword || '').trim(),
+        aliases: CampaignClassifier.ensureArray(item && item.aliases).map(function (alias) {
+          return String(alias || '').trim();
+        }).filter(Boolean)
+      };
+    }).filter(function (item) { return item.keyword; });
+
+    base.objectivePriority = base.objectivePriority && typeof base.objectivePriority === 'object'
+      ? base.objectivePriority
+      : deepClone(DEFAULT_CLASSIFIER_CONFIG.objectivePriority);
+
+    base.objectiveRules = this.ensureArray(base.objectiveRules).map(function (rule) {
+      return {
+        name: String(rule && rule.name || '').trim(),
+        objective: String(rule && rule.objective || '').trim(),
+        aliases: CampaignClassifier.ensureArray(rule && rule.aliases).map(function (alias) {
+          return String(alias || '').trim();
+        }).filter(Boolean),
+        tolerance: typeof rule.tolerance === 'number' ? rule.tolerance : null,
+        when: rule && typeof rule.when === 'object' ? rule.when : {}
+      };
+    }).filter(function (rule) { return rule.objective; });
+
+    if (!base.formatKeywords.length) base.formatKeywords = deepClone(DEFAULT_CLASSIFIER_CONFIG.formatKeywords);
+    if (!base.objectiveRules.length) base.objectiveRules = deepClone(DEFAULT_CLASSIFIER_CONFIG.objectiveRules);
+
+    return base;
+  },
+  loadConfig: function () {
+    try {
+      var raw = localStorage.getItem(CLASSIFIER_CONFIG_STORAGE_KEY);
+      if (!raw) return this.getDefaultConfig();
+      return this.normalizeConfig(JSON.parse(raw));
+    } catch (err) {
+      console.warn('Não foi possível carregar a configuração do classificador.', err);
+      return this.getDefaultConfig();
+    }
+  },
+  saveConfig: function (config) {
+    var normalized = this.normalizeConfig(config);
+    localStorage.setItem(CLASSIFIER_CONFIG_STORAGE_KEY, JSON.stringify(normalized));
+    this.config = normalized;
+    return normalized;
+  },
+  resetConfig: function () {
+    try {
+      localStorage.removeItem(CLASSIFIER_CONFIG_STORAGE_KEY);
+    } catch (err) {
+      console.warn('Não foi possível limpar a configuração do classificador.', err);
+    }
+    this.config = this.getDefaultConfig();
+    return this.config;
+  },
+  exportConfig: function () {
+    return JSON.stringify(this.ensureConfig(), null, 2);
+  },
+  ensureConfig: function () {
+    if (!this.config) this.config = this.loadConfig();
+    return this.config;
+  },
+  toSingular: function (value) {
+    var word = this.normalizeWord(value);
+    if (!word) return '';
+    if (word.endsWith('oes')) return word.slice(0, -3) + 'ao';
+    if (word.endsWith('aes')) return word.slice(0, -3) + 'ao';
+    if (word.endsWith('is') && word.length > 4) return word.slice(0, -2) + 'l';
+    if (word.endsWith('s') && word.length > 3) return word.slice(0, -1);
+    return word;
+  },
+  getAliasesForCanonical: function (canonical) {
+    var cfg = this.ensureConfig();
+    var key = this.normalizeWord(canonical);
+    return this.ensureArray(cfg.normalizationAliases && cfg.normalizationAliases[key]);
+  },
+  canonicalizeToken: function (value) {
+    var token = this.toSingular(value);
+    if (!token) return '';
+    var cfg = this.ensureConfig();
+    var aliasesMap = cfg.normalizationAliases || {};
+    var keys = Object.keys(aliasesMap);
+
+    for (var i = 0; i < keys.length; i++) {
+      var canonical = this.normalizeWord(keys[i]);
+      if (token === canonical) return canonical;
+
+      var aliases = this.ensureArray(aliasesMap[keys[i]]);
+      for (var j = 0; j < aliases.length; j++) {
+        if (token === this.toSingular(aliases[j])) return canonical;
+      }
+    }
+
+    return token;
+  },
+  expandTermVariants: function (term) {
+    var classifier = this;
+    var seen = {};
+    var variants = [];
+
+    function addVariant(value) {
+      var normalized = classifier.normalizeWord(value);
+      if (!normalized) return;
+      var forms = [normalized, classifier.toSingular(normalized)];
+      forms.forEach(function (form) {
+        if (!form) return;
+        if (!seen[form]) {
+          seen[form] = true;
+          variants.push(form);
+        }
+      });
+    }
+
+    addVariant(term);
+    var canonical = this.canonicalizeToken(term);
+    addVariant(canonical);
+    this.getAliasesForCanonical(canonical).forEach(addVariant);
+    this.getAliasesForCanonical(term).forEach(addVariant);
+
+    return variants;
+  },
+  getCanonicalObjective: function (objective) {
+    var cfg = this.ensureConfig();
+    var normalizedObjective = this.normalizeText(objective);
+
+    if (!normalizedObjective) return objective || '-';
+
+    for (var i = 0; i < cfg.objectiveRules.length; i++) {
+      var rule = cfg.objectiveRules[i];
+      if (this.normalizeText(rule.objective) === normalizedObjective) return rule.objective;
+
+      var aliases = this.ensureArray(rule.aliases);
+      for (var j = 0; j < aliases.length; j++) {
+        if (this.normalizeText(aliases[j]) === normalizedObjective) {
+          return rule.objective;
+        }
+      }
+    }
+
+    var priorities = Object.keys(cfg.objectivePriority || {});
+    for (var p = 0; p < priorities.length; p++) {
+      if (this.normalizeText(priorities[p]) === normalizedObjective) return priorities[p];
+    }
+
+    return objective || '-';
+  },
+  hasFuzzyWord: function (words, dictionary, tolerance) {
+    var expandedDictionary = [];
+    this.ensureArray(dictionary).forEach(function (item) {
+      expandedDictionary = expandedDictionary.concat(CampaignClassifier.expandTermVariants(item));
+    });
+    expandedDictionary = Array.from(new Set(expandedDictionary));
+
+    return words.some(function (word) {
+      return fuzzyMatch(word, expandedDictionary, tolerance);
+    });
+  },
+  normalizeWordGroups: function (groups) {
+    return this.ensureArray(groups).map(function (group) {
+      return Array.isArray(group) ? group : [group];
+    }).map(function (group) {
+      return group.map(function (item) { return String(item || '').trim(); }).filter(Boolean);
+    }).filter(function (group) { return group.length; });
+  },
+  matchesWordGroup: function (words, group, tolerance) {
+    return this.hasFuzzyWord(words, group, tolerance);
+  },
+  matchesAllWordGroups: function (words, groups, tolerance) {
+    var normalizedGroups = this.normalizeWordGroups(groups);
+    for (var i = 0; i < normalizedGroups.length; i++) {
+      if (!this.matchesWordGroup(words, normalizedGroups[i], tolerance)) return false;
+    }
+    return true;
+  },
+  matchesAnyWordGroups: function (words, groups, tolerance) {
+    var normalizedGroups = this.normalizeWordGroups(groups);
+    if (!normalizedGroups.length) return false;
+    for (var i = 0; i < normalizedGroups.length; i++) {
+      if (this.matchesWordGroup(words, normalizedGroups[i], tolerance)) return true;
+    }
+    return false;
+  },
+  testRegex: function (pattern, text) {
+    if (!pattern) return true;
+    try {
+      return new RegExp(pattern, 'i').test(text);
+    } catch (err) {
+      console.warn('Regex inválida na configuração do classificador:', pattern, err);
+      return false;
+    }
+  },
+  sourceContainsTerm: function (source, term) {
+    var normalizedSource = this.normalizeWord(source);
+    var compactSource = this.normalizeCompact(source);
+    var variants = this.expandTermVariants(term);
+
+    for (var i = 0; i < variants.length; i++) {
+      var variant = variants[i];
+      if (!variant) continue;
+      if (normalizedSource.indexOf(variant) !== -1) return true;
+      if (compactSource.indexOf(variant.replace(/\s+/g, '')) !== -1) return true;
+    }
+
+    return false;
+  },
+  matchRule: function (rule, campName, format) {
+    var when = rule && rule.when || {};
+    var tolerance = typeof rule.tolerance === 'number'
+      ? rule.tolerance
+      : (typeof when.tolerance === 'number' ? when.tolerance : 1);
+
+    var normalizedText = this.normalizeText(campName);
+    var normalizedFormat = this.normalizeText(format);
+    var words = this.tokenize(campName);
+
+    var formatIn = this.ensureArray(when.formatIn).map(this.normalizeText.bind(this));
+    if (formatIn.length && formatIn.indexOf(normalizedFormat) === -1) return false;
+
+    if (when.textRegex && !this.testRegex(when.textRegex, normalizedText)) return false;
+
+    if (when.textIncludes) {
+      var includesGroups = this.normalizeWordGroups(when.textIncludes);
+      for (var ig = 0; ig < includesGroups.length; ig++) {
+        var groupMatched = includesGroups[ig].some(function (piece) {
+          return CampaignClassifier.sourceContainsTerm(normalizedText, piece);
+        });
+        if (!groupMatched) return false;
+      }
+    }
+
+    if (when.allWords && !this.matchesAllWordGroups(words, when.allWords, tolerance)) return false;
+    if (when.anyWords && !this.matchesAnyWordGroups(words, when.anyWords, tolerance)) return false;
+    if (when.noneWords && this.matchesAnyWordGroups(words, when.noneWords, tolerance)) return false;
+
+    return true;
+  },
+  detectObjective: function (campName, format) {
+    var cfg = this.ensureConfig();
+
+    for (var i = 0; i < cfg.objectiveRules.length; i++) {
+      var rule = cfg.objectiveRules[i];
+      if (this.matchRule(rule, campName, format)) {
+        return rule.objective;
+      }
+    }
+
+    return 'indefinido';
+  },
+  detectFormat: function (campName, adName) {
+    var cfg = this.ensureConfig();
+    var sources = [campName, adName].filter(Boolean);
+
+    for (var sourceIndex = 0; sourceIndex < sources.length; sourceIndex++) {
+      var source = sources[sourceIndex];
+
+      for (var keywordIndex = 0; keywordIndex < cfg.formatKeywords.length; keywordIndex++) {
+        var keywordRule = cfg.formatKeywords[keywordIndex];
+        var terms = [keywordRule.keyword].concat(this.ensureArray(keywordRule.aliases));
+
+        for (var termIndex = 0; termIndex < terms.length; termIndex++) {
+          if (this.sourceContainsTerm(source, terms[termIndex])) {
+            return keywordRule.label || keywordRule.keyword;
+          }
+        }
+      }
+    }
+
+    return '-';
+  },
+  getObjectivePriority: function (objective) {
+    var cfg = this.ensureConfig();
+    var canonicalObjective = this.getCanonicalObjective(objective);
+    return cfg.objectivePriority[canonicalObjective] || 999;
+  }
+};
+
+function detectObjective(campName, format) {
+  return CampaignClassifier.detectObjective(campName, format);
+}
+
+function detectFormat(campName, adName) {
+  return CampaignClassifier.detectFormat(campName, adName);
+}
+
+function objPriority(objective) {
+  return CampaignClassifier.getObjectivePriority(objective);
+}
+
+function sortCampaignRows(data) {
+  data.sort(function (a, b) {
+    var da = extractDateFromName(a.name), db = extractDateFromName(b.name);
+    var ta = da ? da.getTime() : (a.sortDate ? a.sortDate.getTime() : 0);
+    var tb = db ? db.getTime() : (b.sortDate ? b.sortDate.getTime() : 0);
+    if (ta !== tb) return ta - tb;
+    return objPriority(a.objective) - objPriority(b.objective);
+  });
+}
+
+// ======================================================
+// Importação e parsing do Excel
+// ======================================================
+
+function parseExcel(wb){var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,dateNF:'dd/mm/yyyy'});if(!rows.length)throw new Error('Arquivo vazio.');var headers=rows[0].map(function(h){return String(h||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');});
+var iCN=getIdx(headers,['nome da campanha','campaign name']);var iAN=getIdx(headers,['nome do anuncio','ad name','nome do conjunto']);var iDS=getIdx(headers,['inicio dos relatorios','reporting starts','data de inicio']);var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);var iIm=getIdx(headers,['impressoes','impressions']);var iR=getIdx(headers,['alcance','reach']);var iRes=getIdx(headers,['resultados','results','result']);var iEP=getIdx(headers,['engajamentos com o post','post engagements']);var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);var iCPR=getIdx(headers,['custo por resultado','cost per result']);var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);var iLC=getIdx(headers,['cliques no link','link clicks']);var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
+var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||'').trim();var format=detectFormat(name,adName);var objective=detectObjective(name,format);var dateFromName=extractDateFromName(name);var dStart=parseMetaDate(g(iDS));var validity='';if(dateFromName)validity=fmtDateBR(dateFromName)+' –';else if(dStart)validity=fmtDateBR(dStart)+' –';var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
+var cpm=parseCurrency(g(iCPM));if(!cpm&&impr>0&&spent>0)cpm=(spent/impr)*1000;var cpc=parseCurrency(g(iCPC));if(!cpc&&links>0&&spent>0)cpc=spent/links;var cThru=parseCurrency(g(iTC));if(!cThru){var c1=parseCurrency(g(iCPR));if(c1>0)cThru=c1;else if(results>0&&spent>0)cThru=spent/results;}var cInt=parseCurrency(g(iCE));if(!cInt){var c2=parseCurrency(g(iCPR));if(c2>0)cInt=c2;else if(eng>0&&spent>0)cInt=spent/eng;}var cConv=parseCurrency(g(iCC));if(!cConv){var c3=parseCurrency(g(iCPR));if(c3>0)cConv=c3;else if(results>0&&spent>0)cConv=spent/results;}
+data.push({name:name,format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});}
+sortCampaignRows(data);return data;}
+
+function handleFile(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+
+  AppState.originalFileName = file.name;
+
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    try {
+      var wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true, dateNF: 'dd/mm/yyyy' });
+      var data = parseExcel(wb);
+
+      if (!data.length) {
+        showError('Nenhuma campanha encontrada.');
+        return;
+      }
+
+      AppState.campaignsData = data;
+      AppState.capaData = collectCapaDataSafe();
+
+      var info = parseFileName(AppState.originalFileName);
+      $('clienteName').textContent = info.cliente;
+
+      showReview();
+      saveAppState();
+    } catch (err) {
+      console.error(err);
+      showError('Erro ao processar.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+  event.target.value = '';
+}
+
+function showError(msg) {
+  $('errorText').textContent = msg;
+  $('errorMsg').style.display = 'flex';
+}
+
+// ======================================================
+// Tela de revisão
+// ======================================================
+function showReview() {
+  $('uploadArea').style.display = 'none';
+  $('reviewArea').style.display = 'block';
+
+  var tbody = $('reviewBody');
+  tbody.innerHTML = '';
+
+  for (var i = 0; i < AppState.campaignsData.length; i++) {
+    var row = AppState.campaignsData[i];
+    var options = '';
+
+    for (var oi = 0; oi < OBJ_OPTIONS.length; oi++) {
+      var opt = OBJ_OPTIONS[oi];
+      options += '<option value="' + opt + '" ' + (opt === row.objective ? 'selected' : '') + '>' + OBJ_LABELS[opt] + '</option>';
+    }
+
+    tbody.innerHTML += ''
+      + '<tr>'
+      +   '<td class="review-name">' + row.name + '</td>'
+      +   '<td class="review-format">' + row.format + '</td>'
+      +   '<td><span class="badge ' + (OBJ_BADGE[row.objective] || 'badge-unknown') + '" id="badge-' + i + '">' + (OBJ_LABELS[row.objective] || row.objective) + '</span></td>'
+      +   '<td><select class="obj-select" data-idx="' + i + '" onchange="updateObjective(this)">' + options + '</select></td>'
+      + '</tr>';
+  }
+
+  updateStats();
+  $('headerBtns').style.display = 'flex';
+  $('reportArea').style.display = 'none';
+  $('capaArea').style.display = 'none';
+  $('errorMsg').style.display = 'none';
+  saveAppState();
+}
+
+function updateObjective(select) {
+  var index = parseInt(select.dataset.idx, 10);
+  var objective = select.value;
+
+  AppState.campaignsData[index].objective = objective;
+
+  var badge = $('badge-' + index);
+  badge.className = 'badge ' + (OBJ_BADGE[objective] || 'badge-unknown');
+  badge.textContent = OBJ_LABELS[objective] || objective;
+
+  updateStats();
+  saveAppState();
+}
+
+function updateStats() {
+  var counts = {};
+
+  for (var i = 0; i < AppState.campaignsData.length; i++) {
+    var objective = AppState.campaignsData[i].objective;
+    counts[objective] = (counts[objective] || 0) + 1;
+  }
+
+  var el = $('reviewStats');
+  el.innerHTML = '';
+
+  for (var key in counts) {
+    el.innerHTML += '<div class="stat-chip ' + (OBJ_BADGE[key] || 'badge-unknown') + '">' + (OBJ_LABELS[key] || key) + ': ' + counts[key] + '</div>';
+  }
+}
+
+// ======================================================
+// Tela da capa
+// ======================================================
+function fillCapaInputs(data) {
+  var d = data || {};
+  var fb = d.fb || {};
+  var ig = d.ig || {};
+
+  var valuesById = {
+    fb_seguidores: fb.seguidores || '',
+    fb_seg_anterior: fb.segAnterior || '',
+    fb_homens: fb.homens || '',
+    fb_mulheres: fb.mulheres || '',
+    fb_faixa: fb.faixa || '',
+    fb_alcancadas: fb.alcancadas || '',
+    fb_visitas: fb.visitas || '',
+    ig_seguidores: ig.seguidores || '',
+    ig_seg_anterior: ig.segAnterior || '',
+    ig_homens: ig.homens || '',
+    ig_mulheres: ig.mulheres || '',
+    ig_faixa: ig.faixa || '',
+    ig_alcancadas: ig.alcancadas || '',
+    ig_visitas: ig.visitas || ''
+  };
+
+  Object.keys(valuesById).forEach(function (id) {
+    var input = $(id);
+    if (input) input.value = valuesById[id];
+  });
+}
+
+function bindCapaInputs() {
+  if (capaInputsBound) return;
+  capaInputsBound = true;
+
+  CAPA_INPUT_IDS.forEach(function (id) {
+    var input = $(id);
+    if (!input) return;
+
+    input.addEventListener('input', function () {
+      AppState.capaData = collectCapaData();
+      saveAppState();
+
+      if ($('capaPreview').style.display === 'block') {
+        updateCapaPreview();
+      }
+    });
+  });
+}
+
+function goToCapa() {
+  var hasUndefined = AppState.campaignsData.some(function (row) {
+    return row.objective === 'indefinido';
+  });
+
+  if (hasUndefined && !confirm('Existem campanhas sem objetivo definido. Continuar?')) return;
+
+  $('reviewArea').style.display = 'none';
+  $('capaArea').style.display = 'block';
+
+  var info = parseFileName(AppState.originalFileName);
+  $('capaClienteName').textContent = info.cliente + ' - ' + (info.mes || '') + ' ' + (info.ano || '');
+
+  fillCapaInputs(AppState.capaData);
+  bindCapaInputs();
+  saveAppState();
+}
+
+function backToReview() {
+  $('capaArea').style.display = 'none';
+  $('capaPreview').style.display = 'none';
+  $('reviewArea').style.display = 'block';
+  $('btnPreviewCapa').textContent = '👁 Visualizar Capa';
+  saveAppState();
+}
+
+function toggleCapaPreview() {
+  var preview = $('capaPreview');
+  var button = $('btnPreviewCapa');
+
+  if (preview.style.display === 'block') {
+    preview.style.display = 'none';
+    button.textContent = '👁 Visualizar Capa';
+  } else {
+    updateCapaPreview();
+    preview.style.display = 'block';
+    button.textContent = '🙈 Ocultar Preview';
+    preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  saveAppState();
+}
+
+function updateCapaPreview() {
+  var data = collectCapaData();
+  var info = parseFileName(AppState.originalFileName);
+
+  $('prev_titulo').textContent = (info.cliente || 'CLIENTE') + ' - ' + (info.mes || 'MÊS') + ' - ' + (info.ano || 'ANO');
+
+  $('prev_fb_seg').textContent = 'Total de ' + (data.fb.seguidores || '—') + ' seguidores';
+  $('prev_fb_seg_ant').textContent = (data.fb.segAnterior || '—') + ' seguidores no mês anterior';
+  $('prev_fb_h').textContent = '👨 ' + (data.fb.homens || '—');
+  $('prev_fb_m').textContent = '👩 ' + (data.fb.mulheres || '—');
+  $('prev_fb_faixa').textContent = data.fb.faixa || '—';
+  $('prev_fb_alc').textContent = data.fb.alcancadas || '—';
+  $('prev_fb_vis').textContent = data.fb.visitas || '—';
+
+  $('prev_ig_seg').textContent = 'Total de ' + (data.ig.seguidores || '—') + ' seguidores';
+  $('prev_ig_seg_ant').textContent = (data.ig.segAnterior || '—') + ' seguidores no mês anterior';
+  $('prev_ig_h').textContent = '👨 ' + (data.ig.homens || '—');
+  $('prev_ig_m').textContent = '👩 ' + (data.ig.mulheres || '—');
+  $('prev_ig_faixa').textContent = data.ig.faixa || '—';
+  $('prev_ig_alc').textContent = data.ig.alcancadas || '—';
+  $('prev_ig_vis').textContent = data.ig.visitas || '—';
+}
+
+function collectCapaData() {
+  return {
+    fb: {
+      seguidores: $('fb_seguidores').value,
+      segAnterior: $('fb_seg_anterior').value,
+      homens: $('fb_homens').value,
+      mulheres: $('fb_mulheres').value,
+      faixa: $('fb_faixa').value,
+      alcancadas: $('fb_alcancadas').value,
+      visitas: $('fb_visitas').value
+    },
+    ig: {
+      seguidores: $('ig_seguidores').value,
+      segAnterior: $('ig_seg_anterior').value,
+      homens: $('ig_homens').value,
+      mulheres: $('ig_mulheres').value,
+      faixa: $('ig_faixa').value,
+      alcancadas: $('ig_alcancadas').value,
+      visitas: $('ig_visitas').value
+    }
+  };
+}
+
+function confirmAndRender() {
+  AppState.capaData = collectCapaData();
+  $('capaArea').style.display = 'none';
+  $('capaPreview').style.display = 'none';
+  renderReport(AppState.campaignsData);
+  saveAppState();
+}
+
+// ======================================================
+// Relatório
+// ======================================================
+function renderReport(data){var tbody=document.getElementById('tableBody');tbody.innerHTML='';var lastDateKey='';for(var idx=0;idx<data.length;idx++){var r=data[idx];var o=r.objective;var isEngFmt=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(idx>0&&curDateKey!==lastDateKey){tbody.innerHTML+='<tr><td colspan="17" style="background:#fff;border:none;height:16px"></td></tr>';}lastDateKey=curDateKey;
+var colReach=(o==='Alcance'||o==='Reels')?fmtNum(r.reach):'-';var colEng=(o==='Engajamento'&&isEngFmt)?fmtNum(r.eng):'-';var colLinks=(o==='EngLink'||o==='ConvLink')?fmtNum(r.links):'-';var colViews=(o==='Reels')?fmtNum(r.views):'-';var colCPM=(o==='Alcance')?fmtBRL(r.cpm):'-';var colCPC=(o==='EngLink'||o==='ConvLink')?fmtBRL(r.cpc):'-';var colThru=(o==='Reels')?fmtBRL(r.cThru):'-';var colCInt=(o==='Engajamento'&&isEngFmt)?fmtBRL(r.cInt):'-';var colCConv=(o==='Conversas')?fmtBRL(r.cConv):'-';var colConv=(o==='Conversas')?fmtNum(r.conv):'-';
+tbody.innerHTML+='<tr><td>'+r.name+'</td><td>'+r.format+'</td><td>'+(r.validity||'-')+'</td><td>'+fmtBRL(r.budget)+'</td><td>'+fmtBRL(r.spent)+'</td><td>'+colReach+'</td><td>'+colEng+'</td><td>'+colLinks+'</td><td>'+colViews+'</td><td>'+colCPM+'</td><td>'+colCPC+'</td><td>'+colThru+'</td><td>'+colCInt+'</td><td>'+colCConv+'</td><td>-</td><td>-</td><td>'+colConv+'</td></tr>';}
+document.getElementById('reportArea').style.display='block';document.getElementById('headerBtns').style.display='flex';var info=parseFileName(originalFileName);document.getElementById('clienteNameReport').textContent=info.cliente;saveAppState();}
+
+function resetView() {
+  AppState.campaignsData = [];
+  AppState.originalFileName = '';
+  AppState.capaData = { fb: {}, ig: {} };
+
+  $('uploadArea').style.display = 'block';
+  $('reviewArea').style.display = 'none';
+  $('capaArea').style.display = 'none';
+  $('capaPreview').style.display = 'none';
+  $('reportArea').style.display = 'none';
+  $('headerBtns').style.display = 'none';
+  $('errorMsg').style.display = 'none';
+
+  fillCapaInputs(AppState.capaData);
+
+  var previewButton = $('btnPreviewCapa');
+  if (previewButton) previewButton.textContent = '👁 Visualizar Capa';
+
+  clearAppState();
+}
+
+// ======================================================
+// Nome do arquivo e exportação
+// ======================================================
+function parseFileName(filename){var base=filename.replace(/\.[^.]+$/,'').trim();var MESES={'01':'Janeiro','02':'Fevereiro','03':'Março','04':'Abril','05':'Maio','06':'Junho','07':'Julho','08':'Agosto','09':'Setembro','10':'Outubro','11':'Novembro','12':'Dezembro','jan':'Janeiro','fev':'Fevereiro','mar':'Março','abr':'Abril','mai':'Maio','jun':'Junho','jul':'Julho','ago':'Agosto','set':'Setembro','out':'Outubro','nov':'Novembro','dez':'Dezembro','janeiro':'Janeiro','fevereiro':'Fevereiro','março':'Março','marco':'Março','abril':'Abril','maio':'Maio','junho':'Junho','julho':'Julho','agosto':'Agosto','setembro':'Setembro','outubro':'Outubro','novembro':'Novembro','dezembro':'Dezembro'};var parts=base.split(/\s*[-–]\s*/).map(function(p){return p.trim();}).filter(Boolean);var cliente='',mes='',ano='';parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');if(/^\d{4}$/.test(p)){ano=p;return;}if(MESES[pl]){mes=MESES[pl];return;}if(MESES[p.toLowerCase()]){mes=MESES[p.toLowerCase()];return;}if(!cliente)cliente=p;});if(!mes||!ano)parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');for(var k in MESES){if(pl.includes(k)&&k.length>2){mes=MESES[k];break;}}var ym=p.match(/\b(20\d{2})\b/);if(ym)ano=ym[1];});if(!cliente)cliente=parts[0]||'Cliente';if(!ano)ano=new Date().getFullYear().toString();return{cliente:cliente,mes:mes,ano:ano};}
+
+var ReportExporter = {
+exportExcel: async function (){if(!campaignsData.length)return;var btn=document.getElementById('btnExcel');btn.textContent='Gerando...';btn.disabled=true;
+var C={orange:'FFFF9900',gold:'FFFBBC04',gray1:'FFB7B7B7',white:'FFFFFFFF',black:'FF000000',dark:'FF222526',cream:'FFF5F3F0'};var bk={style:'thin',color:{argb:C.black}};var bAll={top:bk,bottom:bk,left:bk,right:bk};var fl=function(a){return{type:'pattern',pattern:'solid',fgColor:{argb:a}};};var fn=function(b,s,a,n){return{bold:!!b,size:s||10,color:{argb:a||C.black},name:n||'Arial'};};var al=function(h,v,w){return{horizontal:h||'center',vertical:v||'top',wrapText:!!w};};var BRL='R$\\ #,##0.00',NUM='#,##0';
+var wb=new ExcelJS.Workbook();
+// ═══ ABA 1: CAPA ═══
+var wsCapa=wb.addWorksheet('Capa');
+var info=parseFileName(originalFileName);
+var titulo=info.cliente+' - '+(info.mes||'')+' - '+(info.ano||'');
+
+// Helpers
+var G=fl(C.gold);
+var setCell=function(ref,val,sz,bold,alignH,alignV,wrap){
+  var c=wsCapa.getCell(ref);
+  c.value=val;
+  c.fill=G;
+  c.font=fn(bold,sz||11,C.black,'Arial');
+  c.alignment=al(alignH||'center',alignV||'middle',!!wrap);
+  return c;
+};
+var setWhite=function(ref){
+  var c=wsCapa.getCell(ref);
+  c.fill=G;
+  return c;
+};
+// Preenche fundo gold em toda a linha
+var goldRow=function(rowNum,cols){
+  var rw=wsCapa.getRow(rowNum);
+  rw.eachCell({includeEmpty:true},function(cell){cell.fill=G;});
+  for(var ci=1;ci<=(cols||16);ci++){wsCapa.getRow(rowNum).getCell(ci).fill=G;}
+};
+
+// Larguras A(1)..P(16) — FB lado esquerdo, IG lado direito
+wsCapa.columns=[
+  {width:2},  // A col1
+  {width:2},  // B col2
+  {width:22}, // C col3 — FB: Total seguidores / seg anterior / faixa
+  {width:2},  // D col4
+  {width:16}, // E col5 — FB: Homens / contas
+  {width:16}, // F col6 — FB: Mulheres / visitas
+  {width:2},  // G col7
+  {width:4},  // H col8 — divisor central
+  {width:2},  // I col9
+  {width:22}, // J col10 — IG: Total seguidores / seg anterior / faixa
+  {width:2},  // K col11
+  {width:16}, // L col12 — IG: Homens / contas
+  {width:16}, // M col13 — IG: Mulheres / visitas
+  {width:2},  // N col14
+  {width:2},  // O col15
+  {width:2},  // P col16
+];
+
+// Pré-criar todas as linhas 1-16 com fundo gold
+for(var ri=1;ri<=16;ri++){
+  var rw=wsCapa.getRow(ri);
+  for(var ci=1;ci<=16;ci++){rw.getCell(ci).fill=G;}
+}
+
+// ── ROW 1: Título ─────────────────────────────────────────────
+wsCapa.mergeCells('A1:P1');
+wsCapa.getRow(1).height=52;
+var cTit=wsCapa.getCell('A1');
+cTit.value=titulo;cTit.fill=G;
+cTit.font=fn(true,26,C.white,'Arial');
+cTit.alignment=al('center','middle');
+
+// ── ROW 2: Espaço ─────────────────────────────────────────────
+wsCapa.getRow(2).height=10;
+
+// ── ROW 3: Labels plataforma ──────────────────────────────────
+wsCapa.getRow(3).height=24;
+wsCapa.mergeCells('C3:G3');wsCapa.mergeCells('J3:N3');
+wsCapa.getCell('C3').value='📘 FACEBOOK';
+wsCapa.getCell('C3').fill=G;wsCapa.getCell('C3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('C3').alignment=al('center','middle');
+wsCapa.getCell('J3').value='📸 INSTAGRAM';
+wsCapa.getCell('J3').fill=G;wsCapa.getCell('J3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('J3').alignment=al('center','middle');
+
+// ── ROW 4: Espaço ─────────────────────────────────────────────
+wsCapa.getRow(4).height=6;
+
+// ── ROW 5-6: Total de seguidores ──────────────────────────────
+wsCapa.getRow(5).height=32;wsCapa.getRow(6).height=32;
+wsCapa.mergeCells('C5:G6');wsCapa.mergeCells('J5:N6');
+wsCapa.getCell('C5').value='Total de '+capaData.fb.seguidores+' seguidores';
+wsCapa.getCell('C5').fill=G;wsCapa.getCell('C5').font=fn(false,20,C.black,'Arial');wsCapa.getCell('C5').alignment=al('center','middle',true);
+wsCapa.getCell('J5').value='Total de '+capaData.ig.seguidores+' seguidores';
+wsCapa.getCell('J5').fill=G;wsCapa.getCell('J5').font=fn(false,20,C.black,'Arial');wsCapa.getCell('J5').alignment=al('center','middle',true);
+
+// ── ROW 7: Seguidores mês anterior ────────────────────────────
+wsCapa.getRow(7).height=22;
+wsCapa.mergeCells('C7:G7');wsCapa.mergeCells('J7:N7');
+wsCapa.getCell('C7').value=capaData.fb.segAnterior+' seguidores no mês anterior';
+wsCapa.getCell('C7').fill=G;wsCapa.getCell('C7').font=fn(true,13,C.black,'Arial');wsCapa.getCell('C7').alignment=al('center','middle',true);
+wsCapa.getCell('J7').value=capaData.ig.segAnterior+' seguidores no mês anterior';
+wsCapa.getCell('J7').fill=G;wsCapa.getCell('J7').font=fn(true,13,C.black,'Arial');wsCapa.getCell('J7').alignment=al('center','middle',true);
+
+// ── ROW 8: Espaço ─────────────────────────────────────────────
+wsCapa.getRow(8).height=8;
+
+// ── ROW 9-10: % Homens e % Mulheres (com % garantido) ─────────
+var pct=function(v){var s=String(v||'').trim();return s?s+(s.slice(-1)==='%'?'':' %'):'';};
+wsCapa.getRow(9).height=30;wsCapa.getRow(10).height=30;
+wsCapa.mergeCells('C9:D10');wsCapa.mergeCells('E9:F10');wsCapa.mergeCells('J9:K10');wsCapa.mergeCells('L9:M10');
+wsCapa.getCell('C9').value='👨 '+pct(capaData.fb.homens)+' Homens';
+wsCapa.getCell('C9').fill=G;wsCapa.getCell('C9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('C9').alignment=al('center','middle');
+wsCapa.getCell('E9').value='👩 '+pct(capaData.fb.mulheres)+' Mulheres';
+wsCapa.getCell('E9').fill=G;wsCapa.getCell('E9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('E9').alignment=al('center','middle');
+wsCapa.getCell('J9').value='👨 '+pct(capaData.ig.homens)+' Homens';
+wsCapa.getCell('J9').fill=G;wsCapa.getCell('J9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('J9').alignment=al('center','middle');
+wsCapa.getCell('L9').value='👩 '+pct(capaData.ig.mulheres)+' Mulheres';
+wsCapa.getCell('L9').fill=G;wsCapa.getCell('L9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('L9').alignment=al('center','middle');
+
+// ── ROW 11: Espaço ────────────────────────────────────────────
+wsCapa.getRow(11).height=8;
+
+// ── ROW 12-13: Faixa / Contas / Visitas — VALORES ─────────────
+wsCapa.getRow(12).height=34;wsCapa.getRow(13).height=34;
+wsCapa.mergeCells('C12:D13');wsCapa.mergeCells('E12:E13');wsCapa.mergeCells('F12:F13');
+wsCapa.mergeCells('J12:K13');wsCapa.mergeCells('L12:L13');wsCapa.mergeCells('M12:M13');
+wsCapa.getCell('C12').value=capaData.fb.faixa;
+wsCapa.getCell('C12').fill=G;wsCapa.getCell('C12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('C12').alignment=al('center','middle');
+wsCapa.getCell('E12').value=capaData.fb.alcancadas;
+wsCapa.getCell('E12').fill=G;wsCapa.getCell('E12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('E12').alignment=al('center','middle');
+wsCapa.getCell('F12').value=capaData.fb.visitas;
+wsCapa.getCell('F12').fill=G;wsCapa.getCell('F12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('F12').alignment=al('center','middle');
+wsCapa.getCell('J12').value=capaData.ig.faixa;
+wsCapa.getCell('J12').fill=G;wsCapa.getCell('J12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('J12').alignment=al('center','middle');
+wsCapa.getCell('L12').value=capaData.ig.alcancadas;
+wsCapa.getCell('L12').fill=G;wsCapa.getCell('L12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('L12').alignment=al('center','middle');
+wsCapa.getCell('M12').value=capaData.ig.visitas;
+wsCapa.getCell('M12').fill=G;wsCapa.getCell('M12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('M12').alignment=al('center','middle');
+
+// ── ROW 14: Labels Faixa / Contas / Visitas ───────────────────
+wsCapa.getRow(14).height=20;
+wsCapa.mergeCells('C14:D14');
+wsCapa.getCell('C14').value='FAIXA ETÁRIA';
+wsCapa.getCell('C14').fill=G;wsCapa.getCell('C14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('C14').alignment=al('center','middle');
+wsCapa.getCell('E14').value='CONTAS ALCANÇADAS';
+wsCapa.getCell('E14').fill=G;wsCapa.getCell('E14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('E14').alignment=al('center','middle',true);
+wsCapa.getCell('F14').value='VISITAS À PÁGINA';
+wsCapa.getCell('F14').fill=G;wsCapa.getCell('F14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('F14').alignment=al('center','middle',true);
+wsCapa.mergeCells('J14:K14');
+wsCapa.getCell('J14').value='FAIXA ETÁRIA';
+wsCapa.getCell('J14').fill=G;wsCapa.getCell('J14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('J14').alignment=al('center','middle');
+wsCapa.getCell('L14').value='CONTAS ALCANÇADAS';
+wsCapa.getCell('L14').fill=G;wsCapa.getCell('L14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('L14').alignment=al('center','middle',true);
+wsCapa.getCell('M14').value='VISITAS AO PERFIL';
+wsCapa.getCell('M14').fill=G;wsCapa.getCell('M14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('M14').alignment=al('center','middle',true);
+
+// ── ROW 15-16: Espaço final ───────────────────────────────────
+wsCapa.getRow(15).height=10;wsCapa.getRow(16).height=10;
+
+// ═══ ABA 2: RELATÓRIO ═══
+var ws=wb.addWorksheet('Relatório');
+ws.columns=[{width:24},{width:14},{width:15},{width:14},{width:14},{width:13},{width:14},{width:14},{width:18},{width:20},{width:22},{width:20},{width:20},{width:20},{width:12},{width:12},{width:18}];
+ws.addRow(['AÇÕES MENSAIS']);ws.mergeCells('A1:Q1');var r1=ws.getCell('A1');r1.value='AÇÕES MENSAIS';r1.fill=fl(C.orange);r1.font=fn(true,15,C.white);r1.alignment=al('center','middle');r1.border={bottom:bk};ws.getRow(1).height=32;
+var HDR=['📋 NOME DA AÇÃO','🖼️ FORMATO','📅 VALIDADE','💰 INVESTIMENTO','💸 VALOR GASTO','👁️ ALCANCE','❤️ ENGAJAMENTO','🔗 CLIQUES NO LINK','▶️ VISUALIZAÇÃO (THRUPLAY)','📊 CUSTO POR 1.000 PESSOAS','🔗💰 CUSTO POR CLIQUES NO LINK','▶️💰 CUSTO POR THRUPLAY','❤️💰 CUSTO POR INTERAÇÃO','💬💰 CUSTO POR CONVERSA','🎯 FILTRO','📍 CIDADE','💬 CONVERSAS INICIADAS'];
+ws.addRow(HDR);ws.getRow(2).height=20;HDR.forEach(function(_,ci){var cell=ws.getRow(2).getCell(ci+1);cell.fill=fl(C.gray1);cell.font=fn(true,10,C.black,'Century Gothic');cell.alignment=al('center','middle',true);cell.border=bAll;});
+var lastDateKeyXl='';campaignsData.forEach(function(r){var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(lastDateKeyXl!==''&&curDateKey!==lastDateKeyXl){var rBlank=ws.addRow(Array(17).fill(''));rBlank.height=12;for(var ci=1;ci<=17;ci++){rBlank.getCell(ci).fill=fl(C.white);rBlank.getCell(ci).border={};}}lastDateKeyXl=curDateKey;
+var o=r.objective;var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var vals=[r.name,r.format,r.validity||'',r.budget>0?r.budget:'',r.spent>0?r.spent:'',(o==='Alcance'||o==='Reels')&&r.reach>0?r.reach:'',(o==='Engajamento'&&isEF)&&r.eng>0?r.eng:'',(o==='EngLink'||o==='ConvLink')&&r.links>0?r.links:'',o==='Reels'&&r.views>0?r.views:'',o==='Alcance'&&r.cpm>0?r.cpm:'',(o==='EngLink'||o==='ConvLink')&&r.cpc>0?r.cpc:'',o==='Reels'&&r.cThru>0?r.cThru:'',(o==='Engajamento'&&isEF)&&r.cInt>0?r.cInt:'',o==='Conversas'&&r.cConv>0?r.cConv:'','','',o==='Conversas'&&r.conv>0?r.conv:''];
+var row=ws.addRow(vals);row.height=20;vals.forEach(function(v,ci){var cell=row.getCell(ci+1);cell.fill=fl(C.white);cell.font=fn(false,10,C.black);cell.alignment=ci===0?al('left','top',true):al('center','top');cell.border=bAll;if(typeof v==='number'){if([3,4,9,10,11,12,13].includes(ci))cell.numFmt=BRL;if([5,6,7,8,16].includes(ci))cell.numFmt=NUM;}});});
+// Empty + Legendas
+var rE=ws.addRow(Array(17).fill(''));rE.height=20;for(var ci=1;ci<=17;ci++){rE.getCell(ci).fill=fl(C.white);rE.getCell(ci).border={};}
+var rLT=ws.addRow(['RAIO-X DOS RESULTADOS - ENTENDA O QUE CADA INDICADOR MOSTRA']);ws.mergeCells('A'+rLT.number+':I'+rLT.number);var cLT=rLT.getCell(1);cLT.fill=fl(C.orange);cLT.font=fn(true,11,C.white,'Century Gothic');cLT.alignment=al('center','middle');rLT.height=20;
+var legs=['Alcance: É o número de contas que a postagem alcançou. Ou seja, a quantidade de contas que receberam o post.','Engajamento: É o número de vezes que houve interação com a postagem de pessoas com maior probabilidade de interesse no produto ofertado. A plataforma analisa os perfis de pessoas que estejam procurando os produtos ofertados, e faz a entrega para estes perfis (sem filtro). Ou seja, a soma da quantidade de vezes que o post foi aberto, curtido, compartilhado, comentado por um público mais engajado.','Conversas iniciadas: Quantidade de conversas iniciadas no WhatsApp a partir do anúncio.','Visualização (ThruPlay): Número de vezes que o vídeo foi assistido por pelo menos 15 segundos ou até o fim, quando menor que esse tempo.','Cliques no link: Quantidade de cliques em links do anúncio para destinos externos, como site ou WhatsApp.'];
+legs.forEach(function(txt){var rL=ws.addRow([txt]);ws.mergeCells('A'+rL.number+':I'+rL.number);var cL=rL.getCell(1);cL.fill=fl(C.white);cL.font=fn(false,10,C.dark);cL.alignment=al('left','top',true);cL.border={bottom:bk,right:bk};rL.height=24;});
+var rSep=ws.addRow(Array(9).fill(''));rSep.height=10;for(var ci=1;ci<=9;ci++){rSep.getCell(ci).border={bottom:{style:'double',color:{argb:C.black}}};rSep.getCell(ci).fill=fl(C.white);}
+var fnTxt='*Algumas colunas podem não ser preenchidas, pois variam de acordo com o tipo de impulsionamento e com as métricas disponíveis em cada campanha. Além disso, em alguns casos, a plataforma pode não utilizar toda a verba prevista, seja por limitação de público, concorrência no leilão de anúncios, baixo engajamento ou instabilidades na entrega. Por isso, o valor efetivamente considerado como consumido é o da coluna "Valor gasto".';
+var rFn=ws.addRow([fnTxt]);ws.mergeCells('A'+rFn.number+':I'+rFn.number);var cFn=rFn.getCell(1);cFn.fill=fl(C.white);cFn.font=fn(false,10,C.black,'Century Gothic');cFn.alignment=al('left','top',true);cFn.border={bottom:{style:'double',color:{argb:C.black}},right:{style:'double',color:{argb:C.black}}};rFn.height=50;
+// Download
+try{var buf=await wb.xlsx.writeBuffer();var blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=['Relatório de impulsionamento',info.cliente,info.mes,info.ano].filter(Boolean).join(' - ')+'.xlsx';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}finally{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg> Baixar Excel';btn.disabled=false;}}
+};
+
+function exportExcel() {
+  return ReportExporter.exportExcel();
+}
+
+
+function setClassifierConfigStatus(message, isError) {
+  var status = $('classifierConfigStatus');
+  if (!status) return;
+  status.textContent = message || '';
+  status.style.color = isError ? '#fca5a5' : '#d4d4d4';
+}
+
+function refreshClassifierConfigEditor() {
+  var input = $('classifierConfigInput');
+  if (!input) return;
+  input.value = CampaignClassifier.exportConfig();
+}
+
+function reclassifyCampaignData() {
+  if (!AppState.campaignsData || !AppState.campaignsData.length) return;
+
+  for (var i = 0; i < AppState.campaignsData.length; i++) {
+    var row = AppState.campaignsData[i];
+    row.format = detectFormat(row.name, row.adName || '');
+    row.objective = detectObjective(row.name, row.format);
+  }
+
+  sortCampaignRows(AppState.campaignsData);
+
+  if ($('reviewArea').style.display === 'block') {
+    showReview();
+    return;
+  }
+
+  if ($('reportArea').style.display === 'block') {
+    renderReport(AppState.campaignsData);
+    return;
+  }
+
+  saveAppState();
+}
+
+function applyClassifierConfig() {
+  var input = $('classifierConfigInput');
+  if (!input) return;
+
+  try {
+    var parsed = JSON.parse(input.value);
+    CampaignClassifier.saveConfig(parsed);
+    refreshClassifierConfigEditor();
+    reclassifyCampaignData();
+    setClassifierConfigStatus('Configuração aplicada com sucesso.');
+  } catch (err) {
+    console.error(err);
+    setClassifierConfigStatus('JSON inválido: ' + err.message, true);
+  }
+}
+
+function resetClassifierConfig() {
+  CampaignClassifier.resetConfig();
+  refreshClassifierConfigEditor();
+  reclassifyCampaignData();
+  setClassifierConfigStatus('Configuração padrão restaurada.');
+}
+
+function downloadClassifierConfig() {
+  try {
+    var blob = new Blob([CampaignClassifier.exportConfig()], { type: 'application/json;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'campaign-classifier-config.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setClassifierConfigStatus('Arquivo JSON baixado.');
+  } catch (err) {
+    console.error(err);
+    setClassifierConfigStatus('Não foi possível baixar o JSON.', true);
+  }
+}
+
+
+// ======================================================
+// Restauração de sessão
+// ======================================================
+function restoreAppState() {
+  bindCapaInputs();
+
+  var saved = loadAppState();
+  if (!saved || !saved.campaignsData || !saved.campaignsData.length) return;
+
+  AppState.campaignsData = saved.campaignsData;
+  AppState.originalFileName = saved.originalFileName || '';
+  AppState.capaData = saved.capaData || { fb: {}, ig: {} };
+
+  fillCapaInputs(AppState.capaData);
+
+  var info = parseFileName(AppState.originalFileName || 'Cliente');
+  $('clienteName').textContent = info.cliente;
+
+  showReview();
+
+  if (saved.currentView === 'capa' || saved.currentView === 'report') {
+    goToCapa();
+    fillCapaInputs(AppState.capaData);
+
+    if (saved.previewVisible) {
+      updateCapaPreview();
+      $('capaPreview').style.display = 'block';
+      $('btnPreviewCapa').textContent = '🙈 Ocultar Preview';
+    }
+  }
+
+  if (saved.currentView === 'report') {
+    AppState.capaData = collectCapaData();
+    $('capaArea').style.display = 'none';
+    $('capaPreview').style.display = 'none';
+    renderReport(AppState.campaignsData);
+  }
+
+  saveAppState();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  CampaignClassifier.ensureConfig();
+  refreshClassifierConfigEditor();
+  bindCapaInputs();
+  restoreAppState();
+});
+
+</script>
+</body>
+</html>
