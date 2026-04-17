@@ -124,38 +124,190 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
 .btn-warning:hover{background:#9a3412}
 .config-status{margin-top:12px;font-size:13px;color:#d4d4d4;min-height:18px}
 
+
+.progress-wrap{max-width:1100px;margin:0 auto 24px}
+.progress-steps{display:flex;gap:12px;flex-wrap:wrap}
+.progress-step{flex:1;min-width:180px;background:#171717;border:1px solid #2f2f2f;border-radius:12px;padding:12px 14px;opacity:.55;transition:all .2s}
+.progress-step.active{opacity:1;border-color:#ff9900;box-shadow:0 0 0 1px rgba(255,153,0,.25)}
+.progress-step.done{opacity:1;border-color:#16a34a}
+.progress-step-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#262626;color:#fff;font-size:12px;font-weight:700;margin-bottom:8px}
+.progress-step.active .progress-step-num{background:#ff9900}
+.progress-step.done .progress-step-num{background:#16a34a}
+.progress-step-title{font-size:13px;font-weight:700;color:#fff}
+.progress-step-desc{font-size:11px;color:#9ca3af;margin-top:4px;line-height:1.4}
+.upload-hero{margin-bottom:18px}
+.upload-hero-badge{display:inline-block;background:rgba(255,153,0,.12);color:#ffb84d;border:1px solid rgba(255,153,0,.28);padding:6px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-bottom:14px}
+.upload-subtext{max-width:520px;margin:0 auto 28px;color:#a3a3a3;font-size:14px;line-height:1.6}
+.dropzone-active{border-color:#ff9900!important;background:rgba(255,153,0,.06)!important;box-shadow:0 0 0 3px rgba(255,153,0,.08)}
+.upload-hint{margin-top:14px;color:#737373;font-size:12px}
+.summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.summary-card{background:#111;border:1px solid #333;border-radius:10px;padding:14px;text-align:left}
+.summary-label{font-size:11px;color:#9ca3af;text-transform:uppercase;font-weight:700;letter-spacing:.4px;margin-bottom:6px}
+.summary-value{font-size:18px;font-weight:800;color:#fff}
+.summary-value.small{font-size:15px;font-weight:700}
+.classification-banner{display:none;margin-top:16px;background:rgba(21,128,61,.10);border:1px solid rgba(21,128,61,.45);border-radius:10px;padding:14px 16px;color:#dcfce7}
+.classification-banner.warn{background:rgba(180,83,9,.12);border-color:rgba(245,158,11,.45);color:#fef3c7}
+.classification-banner strong{display:block;color:#fff;margin-bottom:4px}
+footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
+@media(max-width:700px){.summary-grid{grid-template-columns:1fr}}
+
+
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr);gap:24px;align-items:start}
+.premium-panel{background:linear-gradient(180deg,#171717 0%,#121212 100%);border:1px solid #2c2c2c;border-radius:18px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.28)}
+.hero-title{font-size:34px;line-height:1.05;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:12px}
+.hero-desc{font-size:15px;line-height:1.7;color:#b3b3b3;max-width:680px;margin-bottom:18px}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,0,.12);color:#ffd08a;border:1px solid rgba(255,153,0,.22);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.hero-upload-card{background:radial-gradient(circle at top, rgba(255,153,0,.07), transparent 40%), #1a1a1a;border:1px solid #333;border-radius:20px;padding:28px}
+.hero-upload-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+.hero-upload-head h2{font-size:24px;font-weight:800;color:#fff;margin-bottom:8px}
+.hero-upload-head p{color:#aaa;line-height:1.6;font-size:14px;max-width:560px}
+.compat-box{background:#111;border:1px solid #2e2e2e;border-radius:14px;padding:14px 16px;margin-top:16px}
+.compat-box-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#8f8f8f;font-weight:700;margin-bottom:10px}
+.compat-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.compat-item{background:#161616;border:1px solid #262626;border-radius:12px;padding:12px}
+.compat-item strong{display:block;font-size:13px;color:#fff;margin-bottom:4px}
+.compat-item span{display:block;font-size:12px;color:#979797;line-height:1.45}
+.side-card{background:linear-gradient(180deg,#171717 0%,#121212 100%);border:1px solid #2c2c2c;border-radius:18px;padding:22px}
+.side-card + .side-card{margin-top:18px}
+.side-card h3{font-size:16px;color:#fff;margin-bottom:14px}
+.flow-list{display:grid;gap:10px}
+.flow-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #232323}
+.flow-item:last-child{border-bottom:none;padding-bottom:0}
+.flow-num{width:28px;height:28px;border-radius:50%;background:#ff9900;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none}
+.flow-item strong{display:block;color:#fff;font-size:13px;margin-bottom:2px}
+.flow-item span{display:block;color:#9a9a9a;font-size:12px;line-height:1.45}
+.auto-list{display:grid;gap:10px}
+.auto-pill{display:flex;justify-content:space-between;align-items:center;background:#111;border:1px solid #272727;border-radius:12px;padding:12px 14px;color:#fff;font-size:13px}
+.auto-pill small{color:#8e8e8e}
+.example-card{background:linear-gradient(180deg,rgba(255,153,0,.10),rgba(255,153,0,.03));border:1px solid rgba(255,153,0,.2)}
+.example-file{font-size:13px;color:#ffd08a;margin-bottom:14px;font-weight:700}
+.example-stats{display:grid;gap:10px}
+.example-stat{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 14px}
+.example-stat span{color:#b8b8b8;font-size:12px}
+.example-stat strong{color:#fff;font-size:14px}
+@media(max-width:980px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-title{font-size:28px}
+}
+@media(max-width:700px){
+  .compat-list{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
-<header style="background:#0f0f0f;border-bottom:1px solid #262626;padding:12px 24px;display:flex;align-items:center;gap:12px;">
-  <img src="favicon_64.png" style="width:36px;height:36px;border-radius:50%">
-  <div>
-    <h1 style="margin:0;font-size:18px;color:#fff;">Relatório de Impulsionamento</h1>
-    <p style="margin:0;font-size:12px;color:#9ca3af;">Meta Ads • Classificação e geração de relatórios</p>
+<header>
+  <div class="logo">
+    <img src="favicon_64.png" alt="Logo" style="width:32px;height:32px;border-radius:50%;object-fit:cover">
+    <h1>Relatório de <span>Impulsionamento</span></h1>
   </div>
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 10h2v2H7v-2zm0-4h2v4H7V11zm4 2h2v4h-2v-4zm0-4h2v2h-2V9zm4 6h2v2h-2v-2zm0-6h2v6h-2V9z"/></svg></div><h1>Relatórios <span>Ads</span></h1></div>
   <div class="header-btns" id="headerBtns" style="display:none">
     <button class="btn btn-excel" id="btnExcel" onclick="exportExcel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg> Baixar Excel</button>
     <button class="btn btn-pdf" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> PDF</button>
   </div>
 </header>
 <main id="mainContent">
-  <div style="max-width:1200px;margin:30px auto;padding:0 20px;">
-    <div style="background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:24px;">
-  <!-- UPLOAD -->
-  <div id="uploadArea" class="upload-wrap">
-    <div class="upload-card">
-      <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg></div>
-      <h2>Importar Dados da Campanha</h2>
-      <p>Carregue o arquivo Excel (.xlsx) exportado do Gerenciador de Anúncios do Meta.</p>
-      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(event)"/>
-      <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Selecionar Arquivo Excel</button>
-      <div id="errorMsg" class="error" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span id="errorText"></span></div>
-      <div class="instructions">
-        <strong>Padrão de nome das campanhas:</strong>
-        <ul><li><code>Nome - Formato - Data - Objetivo</code></li><li>Objetivos: <code>ALC</code> <code>ENG</code> <code>WHATS</code> <code>VIEWS</code></li><li>Modificador: <code>CLIQUE NO LINK</code></li></ul>
+  <div class="progress-wrap">
+    <div class="progress-steps" id="progressSteps">
+      <div class="progress-step active" data-step="1">
+        <div class="progress-step-num">1</div>
+        <div class="progress-step-title">Importar planilha</div>
+        <div class="progress-step-desc">Envie o arquivo exportado do Meta Ads.</div>
       </div>
-      <details class="config-panel">
+      <div class="progress-step" data-step="2">
+        <div class="progress-step-num">2</div>
+        <div class="progress-step-title">Revisar classificação</div>
+        <div class="progress-step-desc">Confira os objetivos detectados automaticamente.</div>
+      </div>
+      <div class="progress-step" data-step="3">
+        <div class="progress-step-num">3</div>
+        <div class="progress-step-title">Preencher capa</div>
+        <div class="progress-step-desc">Complete os dados de Facebook e Instagram.</div>
+      </div>
+      <div class="progress-step" data-step="4">
+        <div class="progress-step-num">4</div>
+        <div class="progress-step-title">Exportar relatório</div>
+        <div class="progress-step-desc">Baixe o Excel final formatado.</div>
+      </div>
+    </div>
+  </div>
+  <!-- UPLOAD -->
+  <div id="uploadArea" class="upload-wrap" style="max-width:1200px;margin:24px auto 0;">
+    <div class="hero-grid">
+      <div class="premium-panel hero-upload-card upload-card" id="uploadDropzone">
+        <div class="hero-badges">
+          <span class="hero-badge">⚡ Classificação automática</span>
+          <span class="hero-badge">📊 Exportação em Excel</span>
+          <span class="hero-badge">🧠 Regras configuráveis por JSON</span>
+        </div>
+
+        <div class="hero-upload-head">
+          <div>
+            <h1 class="hero-title">Transforme exportações do Meta Ads em relatórios prontos para múltiplos clientes.</h1>
+            <p class="hero-desc">Envie a planilha de qualquer cliente exportada do Meta Ads e deixe o sistema identificar cliente, período, campanhas, formatos e objetivos para acelerar seu fechamento mensal.</p>
+          </div>
+        </div>
+
+        <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg></div>
+        <div class="upload-hero">
+          <div class="upload-hero-badge">Fluxo guiado</div>
+          <h2>Importe sua planilha do Meta Ads</h2>
+          <p class="upload-subtext">Comece com um arquivo <strong>.xlsx</strong> exportado do Gerenciador de Anúncios. O sistema faz a leitura inicial automaticamente e leva você até a exportação final em poucos passos.</p>
+        </div>
+
+        <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(event)"/>
+        <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Selecionar planilha do Meta Ads</button>
+        <div class="upload-hint">ou arraste e solte o arquivo .xlsx aqui</div>
+
+        <div class="compat-box">
+          <div class="compat-box-title">Compatibilidade e leitura automática</div>
+          <div class="compat-list">
+            <div class="compat-item">
+              <strong>Arquivo compatível</strong>
+              <span>Exportação em Excel do Meta Ads em formato <code>.xlsx</code>.</span>
+            </div>
+            <div class="compat-item">
+              <strong>Identificação automática</strong>
+              <span>Cliente, período, campanhas, formatos e objetivos são detectados durante o upload.</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="errorMsg" class="error" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span id="errorText"></span></div>
+
+        <div id="fileSummary" style="display:none">
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-label">Cliente detectado</div>
+              <div class="summary-value small" id="sum_cliente">-</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">Período detectado</div>
+              <div class="summary-value small" id="sum_periodo">-</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">Campanhas encontradas</div>
+              <div class="summary-value" id="sum_campanhas">0</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">Classificação automática</div>
+              <div class="summary-value" id="sum_classificadas">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="classificationBanner" class="classification-banner">
+          <strong>Leitura automática concluída</strong>
+          <span id="classificationBannerText">O sistema já analisou a planilha.</span>
+        </div>
+
+        <div class="instructions">
+          <strong>Padrão de nome das campanhas:</strong>
+          <ul><li><code>Nome - Formato - Data - Objetivo</code></li><li>Objetivos: <code>ALC</code> <code>ENG</code> <code>WHATS</code> <code>VIEWS</code></li><li>Modificador: <code>CLIQUE NO LINK</code></li></ul>
+        </div>
+
+        <details class="config-panel">
         <summary>⚙️ Configurar regras do CampaignClassifier via JSON</summary>
         <p>Edite as regras abaixo para mudar a detecção de formato, objetivo e prioridade sem alterar o código. Ao aplicar, as campanhas já importadas também são reclassificadas.</p>
         <textarea id="classifierConfigInput" class="config-textarea" spellcheck="false"></textarea>
@@ -167,6 +319,53 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
         <div id="classifierConfigStatus" class="config-status"></div>
       </details>
 
+    </div>
+  </div>
+      <div>
+        <div class="side-card">
+          <h3>Como funciona</h3>
+          <div class="flow-list">
+            <div class="flow-item">
+              <div class="flow-num">1</div>
+              <div><strong>Envie a planilha</strong><span>Importe a planilha exportada do Meta Ads de qualquer cliente em poucos segundos.</span></div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">2</div>
+              <div><strong>Revise a classificação</strong><span>Confira objetivos e formatos detectados automaticamente.</span></div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">3</div>
+              <div><strong>Preencha a capa</strong><span>Complete Facebook e Instagram com os dados do período.</span></div>
+            </div>
+            <div class="flow-item">
+              <div class="flow-num">4</div>
+              <div><strong>Exporte o relatório</strong><span>Baixe o Excel final formatado para revisão e entrega.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h3>O que o sistema identifica sozinho</h3>
+          <div class="auto-list">
+            <div class="auto-pill"><span>Cliente</span><small>nome do arquivo</small></div>
+            <div class="auto-pill"><span>Período</span><small>mês e ano</small></div>
+            <div class="auto-pill"><span>Campanhas</span><small>linhas da planilha</small></div>
+            <div class="auto-pill"><span>Formatos</span><small>aliases e normalização</small></div>
+            <div class="auto-pill"><span>Objetivos</span><small>regras configuráveis</small></div>
+          </div>
+        </div>
+
+        <div class="side-card example-card">
+          <h3>Compatível com múltiplos clientes</h3>
+          <div class="example-file">Uso recorrente com diferentes planilhas exportadas do Meta Ads</div>
+          <div class="example-stats">
+            <div class="example-stat"><span>Cliente identificado</span><strong>Pelo nome do arquivo</strong></div>
+            <div class="example-stat"><span>Período detectado</span><strong>Mês e ano automáticos</strong></div>
+            <div class="example-stat"><span>Campanhas analisadas</span><strong>Leitura da planilha importada</strong></div>
+            <div class="example-stat"><span>Fluxo padronizado</span><strong>Upload → revisão → capa → exportação</strong></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <!-- REVIEW -->
@@ -263,8 +462,6 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
       <p><strong>Visualização (ThruPlay):</strong> Número de vezes que o vídeo foi assistido por pelo menos 15 segundos ou até o fim, quando menor que esse tempo.</p>
       <p><strong>Cliques no link:</strong> Quantidade de cliques em links do anúncio para destinos externos, como site ou WhatsApp.</p>
       <p class="legend-note">*Algumas colunas podem não ser preenchidas, pois variam de acordo com o tipo de impulsionamento e com as métricas disponíveis em cada campanha. Além disso, em alguns casos, a plataforma pode não utilizar toda a verba prevista, seja por limitação de público, concorrência no leilão de anúncios, baixo engajamento ou instabilidades na entrega. Por isso, o valor efetivamente considerado como consumido é o da coluna "Valor gasto".</p>
-    </div>
-  </div>
     </div>
   </div>
 </main>
@@ -957,6 +1154,107 @@ var cpm=parseCurrency(g(iCPM));if(!cpm&&impr>0&&spent>0)cpm=(spent/impr)*1000;va
 data.push({name:name,format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});}
 sortCampaignRows(data);return data;}
 
+
+function setCurrentStep(step) {
+  var steps = document.querySelectorAll('#progressSteps .progress-step');
+  for (var i = 0; i < steps.length; i++) {
+    var itemStep = parseInt(steps[i].getAttribute('data-step'), 10);
+    steps[i].classList.remove('active', 'done');
+    if (itemStep < step) steps[i].classList.add('done');
+    if (itemStep === step) steps[i].classList.add('active');
+  }
+}
+
+function showFileSummary() {
+  var info = parseFileName(AppState.originalFileName || '');
+  var total = AppState.campaignsData.length;
+  var classificados = AppState.campaignsData.filter(function (row) {
+    return row.objective && row.objective !== 'indefinido';
+  }).length;
+  var pendentes = total - classificados;
+
+  $('fileSummary').style.display = 'block';
+  $('sum_cliente').textContent = info.cliente || '-';
+  $('sum_periodo').textContent = ((info.mes || 'Mês não identificado') + (info.ano ? ' ' + info.ano : '')).trim();
+  $('sum_campanhas').textContent = String(total);
+  $('sum_classificadas').textContent = classificados + '/' + total;
+
+  var banner = $('classificationBanner');
+  var bannerText = $('classificationBannerText');
+  banner.style.display = 'block';
+
+  if (pendentes > 0) {
+    banner.className = 'classification-banner warn';
+    bannerText.textContent = classificados + ' campanhas classificadas automaticamente e ' + pendentes + ' precisam de revisão.';
+  } else {
+    banner.className = 'classification-banner';
+    bannerText.textContent = 'Todas as ' + total + ' campanhas foram classificadas automaticamente.';
+  }
+}
+
+function setupUploadDropzone() {
+  var dropzone = $('uploadDropzone');
+  var fileInput = $('fileInput');
+  if (!dropzone || !fileInput || dropzone.dataset.ready === 'true') return;
+  dropzone.dataset.ready = 'true';
+
+  ['dragenter', 'dragover'].forEach(function(evtName) {
+    dropzone.addEventListener(evtName, function (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      dropzone.classList.add('dropzone-active');
+    });
+  });
+
+  ['dragleave', 'dragend', 'drop'].forEach(function(evtName) {
+    dropzone.addEventListener(evtName, function (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      dropzone.classList.remove('dropzone-active');
+    });
+  });
+
+  dropzone.addEventListener('drop', function (evt) {
+    var files = evt.dataTransfer && evt.dataTransfer.files;
+    if (!files || !files.length) return;
+    processFile(files[0]);
+  });
+}
+
+function processFile(file) {
+  if (!file) return;
+
+  AppState.originalFileName = file.name;
+
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    try {
+      var wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true, dateNF: 'dd/mm/yyyy' });
+      var data = parseExcel(wb);
+
+      if (!data.length) {
+        showError('Nenhuma campanha encontrada.');
+        return;
+      }
+
+      AppState.campaignsData = data;
+      AppState.capaData = collectCapaDataSafe();
+
+      var info = parseFileName(AppState.originalFileName);
+      $('clienteName').textContent = info.cliente;
+
+      showFileSummary();
+      showReview();
+      saveAppState();
+    } catch (err) {
+      console.error(err);
+      showError('Erro ao processar.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
 function handleFile(event) {
   var file = event.target.files[0];
   if (!file) return;
@@ -995,6 +1293,7 @@ function handleFile(event) {
 function showError(msg) {
   $('errorText').textContent = msg;
   $('errorMsg').style.display = 'flex';
+  if ($('classificationBanner')) $('classificationBanner').style.display = 'none';
 }
 
 // ======================================================
@@ -1026,6 +1325,8 @@ function showReview() {
   }
 
   updateStats();
+  setCurrentStep(2);
+  showFileSummary();
   $('headerBtns').style.display = 'flex';
   $('reportArea').style.display = 'none';
   $('capaArea').style.display = 'none';
@@ -1128,6 +1429,7 @@ function goToCapa() {
 
   fillCapaInputs(AppState.capaData);
   bindCapaInputs();
+  setCurrentStep(3);
   saveAppState();
 }
 
@@ -1136,6 +1438,7 @@ function backToReview() {
   $('capaPreview').style.display = 'none';
   $('reviewArea').style.display = 'block';
   $('btnPreviewCapa').textContent = '👁 Visualizar Capa';
+  setCurrentStep(2);
   saveAppState();
 }
 
@@ -1207,6 +1510,7 @@ function confirmAndRender() {
   $('capaArea').style.display = 'none';
   $('capaPreview').style.display = 'none';
   renderReport(AppState.campaignsData);
+  setCurrentStep(4);
   saveAppState();
 }
 
@@ -1236,6 +1540,9 @@ function resetView() {
   var previewButton = $('btnPreviewCapa');
   if (previewButton) previewButton.textContent = '👁 Visualizar Capa';
 
+  setCurrentStep(1);
+  if ($('fileSummary')) $('fileSummary').style.display = 'none';
+  if ($('classificationBanner')) $('classificationBanner').style.display = 'none';
   clearAppState();
 }
 
@@ -1518,6 +1825,7 @@ function restoreAppState() {
   var info = parseFileName(AppState.originalFileName || 'Cliente');
   $('clienteName').textContent = info.cliente;
 
+  showFileSummary();
   showReview();
 
   if (saved.currentView === 'capa' || saved.currentView === 'report') {
@@ -1536,6 +1844,7 @@ function restoreAppState() {
     $('capaArea').style.display = 'none';
     $('capaPreview').style.display = 'none';
     renderReport(AppState.campaignsData);
+    setCurrentStep(4);
   }
 
   saveAppState();
@@ -1545,12 +1854,12 @@ document.addEventListener('DOMContentLoaded', function () {
   CampaignClassifier.ensureConfig();
   refreshClassifierConfigEditor();
   bindCapaInputs();
+  setupUploadDropzone();
+  setCurrentStep(1);
   restoreAppState();
 });
 
 </script>
-<footer style="text-align:center;padding:20px;color:#6b7280;font-size:12px;">
-  Relatório de Impulsionamento • v1.0
-</footer>
+<footer>Relatório de Impulsionamento • v1.0</footer>
 </body>
 </html>
