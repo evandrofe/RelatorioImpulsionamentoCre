@@ -1741,7 +1741,58 @@ function exportExcel() {
   return ReportExporter.exportExcel();
 }
 
+function exportExcel() {
+  return ReportExporter.exportExcel();
+}
 
+async function exportGoogleSheets() {
+  try {
+    if (!campaignsData.length) {
+      alert('Nenhuma campanha carregada.');
+      return;
+    }
+
+    const info = parseFileName(originalFileName || 'Cliente');
+
+    const payload = {
+      cliente: info.cliente || 'Cliente',
+      mes: info.mes || '',
+      ano: info.ano || '',
+      campaignsData: campaignsData,
+      capaData: capaData
+    };
+
+    const btn = document.getElementById('btnGoogleSheets');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Gerando Google Sheets...';
+    }
+
+    const response = await fetch('/api/export-google-sheets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || 'Falha ao gerar Google Sheets.');
+    }
+
+    window.open(result.url, '_blank');
+  } catch (error) {
+    console.error(error);
+    alert('Erro ao exportar para Google Sheets: ' + error.message);
+  } finally {
+    const btn = document.getElementById('btnGoogleSheets');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Google Sheets';
+    }
+  }
+}
+  
 function setClassifierConfigStatus(message, isError) {
   var status = $('classifierConfigStatus');
   if (!status) return;
