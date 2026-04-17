@@ -1,6 +1,7 @@
 import { google } from 'googleapis';
 
 const TEMPLATE_ID = '1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA';
+const OUTPUT_FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH';
 
 function getAuth() {
   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
