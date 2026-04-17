@@ -475,6 +475,12 @@ var originalFileName = '';
 var capaData = { fb: {}, ig: {} };
 
 var APP_STORAGE_KEY = 'relatorios_ads_state_v1';
+var GOOGLE_SHEETS_EXPORT_TEMPLATE = {
+  name: 'Modelo a ser preenchido 20',
+  spreadsheetId: '1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA',
+  url: 'https://docs.google.com/spreadsheets/d/1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA/edit',
+  sheetNames: ['Capa', 'Relatório']
+};
 var CAPA_INPUT_IDS = [
   'fb_seguidores', 'fb_seg_anterior', 'fb_homens', 'fb_mulheres',
   'fb_faixa', 'fb_alcancadas', 'fb_visitas',
@@ -1552,6 +1558,7 @@ function resetView() {
 function parseFileName(filename){var base=filename.replace(/\.[^.]+$/,'').trim();var MESES={'01':'Janeiro','02':'Fevereiro','03':'Março','04':'Abril','05':'Maio','06':'Junho','07':'Julho','08':'Agosto','09':'Setembro','10':'Outubro','11':'Novembro','12':'Dezembro','jan':'Janeiro','fev':'Fevereiro','mar':'Março','abr':'Abril','mai':'Maio','jun':'Junho','jul':'Julho','ago':'Agosto','set':'Setembro','out':'Outubro','nov':'Novembro','dez':'Dezembro','janeiro':'Janeiro','fevereiro':'Fevereiro','março':'Março','marco':'Março','abril':'Abril','maio':'Maio','junho':'Junho','julho':'Julho','agosto':'Agosto','setembro':'Setembro','outubro':'Outubro','novembro':'Novembro','dezembro':'Dezembro'};var parts=base.split(/\s*[-–]\s*/).map(function(p){return p.trim();}).filter(Boolean);var cliente='',mes='',ano='';parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');if(/^\d{4}$/.test(p)){ano=p;return;}if(MESES[pl]){mes=MESES[pl];return;}if(MESES[p.toLowerCase()]){mes=MESES[p.toLowerCase()];return;}if(!cliente)cliente=p;});if(!mes||!ano)parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');for(var k in MESES){if(pl.includes(k)&&k.length>2){mes=MESES[k];break;}}var ym=p.match(/\b(20\d{2})\b/);if(ym)ano=ym[1];});if(!cliente)cliente=parts[0]||'Cliente';if(!ano)ano=new Date().getFullYear().toString();return{cliente:cliente,mes:mes,ano:ano};}
 
 var ReportExporter = {
+googleSheetsTemplate: GOOGLE_SHEETS_EXPORT_TEMPLATE,
 exportExcel: async function (){if(!campaignsData.length)return;var btn=document.getElementById('btnExcel');btn.textContent='Gerando...';btn.disabled=true;
 var C={orange:'FFFF9900',gold:'FFFBBC04',gray1:'FFB7B7B7',white:'FFFFFFFF',black:'FF000000',dark:'FF222526',cream:'FFF5F3F0'};var bk={style:'thin',color:{argb:C.black}};var bAll={top:bk,bottom:bk,left:bk,right:bk};var fl=function(a){return{type:'pattern',pattern:'solid',fgColor:{argb:a}};};var fn=function(b,s,a,n){return{bold:!!b,size:s||10,color:{argb:a||C.black},name:n||'Arial'};};var al=function(h,v,w){return{horizontal:h||'center',vertical:v||'top',wrapText:!!w};};var BRL='R$\\ #,##0.00',NUM='#,##0';
 var wb=new ExcelJS.Workbook();
