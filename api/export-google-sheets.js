@@ -67,11 +67,11 @@ export default async function handler(req, res) {
       .filter(Boolean)
       .join(' - ');
 
-    // Copia o template
     const copied = await drive.files.copy({
       fileId: TEMPLATE_ID,
       requestBody: {
-        name: newFileName
+        name: newFileName,
+        parents: [OUTPUT_FOLDER_ID]
       }
     });
 
@@ -81,7 +81,6 @@ export default async function handler(req, res) {
       throw new Error('Não foi possível copiar a planilha modelo.');
     }
 
-    // Preencher CAPA
     const capaUpdates = [
       { range: 'Capa!A1', values: [[`${cliente} - ${mes} - ${ano}`]] },
 
@@ -110,13 +109,11 @@ export default async function handler(req, res) {
       }
     });
 
-    // Limpar dados antigos do relatório
     await sheets.spreadsheets.values.clear({
       spreadsheetId,
       range: 'Relatório!A3:Q1000'
     });
 
-    // Montar linhas do relatório
     const rows = campaignsData.map((r) => [
       r.name || '',
       r.format || '',
