@@ -118,7 +118,11 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error('Erro export Google Sheets:', err);
+    console.error('Erro export Google Sheets:', JSON.stringify({
+      message: err.message,
+      code: err.code,
+      status: err.status,
+      errors: err.errors,
+    }));
     return res.status(500).json({ success: false, error: err.message });
   }
-};
