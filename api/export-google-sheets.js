@@ -1,9 +1,10 @@
-// Versão OAuth — cria a planilha no Drive do próprio usuário (Vando)
-// usando o refresh token armazenado em env var.
+// Versão OAuth — copia o arquivo modelo (.xlsx) convertendo pra Google Sheets,
+// depois preenche os dados nas células mapeadas.
 
 const { google } = require('googleapis');
+const { Readable } = require('stream');
 
-const FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'; // pasta compartilhada do Creative
+const FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'; // pasta "Relatório" do Creative
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -13,32 +14,123 @@ module.exports = async function handler(req, res) {
   try {
     const { cliente, mes, ano, campaignsData, capaData } = req.body;
 
-    // ── Auth via OAuth ────────────────────────────────────────
+    // ── Validações ────────────────────────────────────────────
     if (!process.env.GOOGLE_REFRESH_TOKEN) {
       return res.status(500).json({
         success: false,
-        error: 'GOOGLE_REFRESH_TOKEN não configurado. Acesse /api/oauth-authorize primeiro.',
+        error: 'GOOGLE_REFRESH_TOKEN não configurado.',
       });
     }
 
+    const TEMPLATE_ID = process.env.GOOGLE_SHEETS_TEMPLATE_ID;
+    if (!TEMPLATE_ID) {
+      return res.status(500).json({
+        success: false,
+        error: 'GOOGLE_SHEETS_TEMPLATE_ID não configurado.',
+      });
+    }
+
+    // ── Auth ──────────────────────────────────────────────────
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_OAUTH_CLIENT_ID,
       process.env.GOOGLE_OAUTH_CLIENT_SECRET,
       process.env.GOOGLE_OAUTH_REDIRECT_URI
     );
-
     oauth2Client.setCredentials({
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
     const drive = google.drive({ version: 'v3', auth: oauth2Client });
+    const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
 
-    // ── Monta conteúdo ─────────────────────────────────────────
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
+    const titulo = [cliente, mes, ano].filter(Boolean).join(' - ').toUpperCase();
     const fb = (capaData && capaData.fb) || {};
     const ig = (capaData && capaData.ig) || {};
-    const titulo = [cliente, mes, ano].filter(Boolean).join(' - ');
 
+    // ── 1. Copiar o template como Google Sheets nativo ────────
+    const templateMeta = await drive.files.get({
+      fileId: TEMPLATE_ID,
+      fields: 'mimeType, name',
+    });
+
+    let spreadsheetId;
+
+    if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
+      // Já é Google Sheets — copia direto
+      const copied = await drive.files.copy({
+        fileId: TEMPLATE_ID,
+        requestBody: {
+          name: novoNome,
+          parents: [FOLDER_ID],
+        },
+        fields: 'id',
+      });
+      spreadsheetId = copied.data.id;
+    } else {
+      // É .xlsx — baixa o arquivo e reenvia como Sheets (converte na subida)
+      const xlsxBuffer = await drive.files.get(
+        { fileId: TEMPLATE_ID, alt: 'media' },
+        { responseType: 'arraybuffer' }
+      );
+
+      const buf = Buffer.from(xlsxBuffer.data);
+      const stream = Readable.from(buf);
+
+      const uploaded = await drive.files.create({
+        requestBody: {
+          name: novoNome,
+          mimeType: 'application/vnd.google-apps.spreadsheet',
+          parents: [FOLDER_ID],
+        },
+        media: {
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          body: stream,
+        },
+        fields: 'id',
+      });
+      spreadsheetId = uploaded.data.id;
+    }
+
+    // ── 2. Preencher a Capa nas células mapeadas ──────────────
+    const pct = v => {
+      const s = String(v || '').trim();
+      if (!s) return '';
+      return s.endsWith('%') ? s : s + '%';
+    };
+
+    const capaUpdates = [
+      // CABEÇALHO
+      { range: 'Capa!C2', values: [[titulo]] },
+
+      // FACEBOOK
+      { range: 'Capa!E12', values: [[fb.seguidores || '']] },
+      { range: 'Capa!C15', values: [[fb.segAnterior ? `${fb.segAnterior} seguidores no mês anterior` : '']] },
+      { range: 'Capa!E18', values: [[fb.homens ? `👨 ${pct(fb.homens)} Homens` : '']] },
+      { range: 'Capa!E23', values: [[fb.mulheres ? `👩 ${pct(fb.mulheres)} Mulheres` : '']] },
+      { range: 'Capa!B33', values: [[fb.faixa || '']] },
+      { range: 'Capa!D33', values: [[fb.alcancadas || '']] },
+      { range: 'Capa!G33', values: [[fb.visitas || '']] },
+
+      // INSTAGRAM
+      { range: 'Capa!N12', values: [[ig.seguidores || '']] },
+      { range: 'Capa!L15', values: [[ig.segAnterior ? `${ig.segAnterior} seguidores no mês anterior` : '']] },
+      { range: 'Capa!N18', values: [[ig.homens ? `👨 ${pct(ig.homens)} Homens` : '']] },
+      { range: 'Capa!N23', values: [[ig.mulheres ? `👩 ${pct(ig.mulheres)} Mulheres` : '']] },
+      { range: 'Capa!K33', values: [[ig.faixa || '']] },
+      { range: 'Capa!M33', values: [[ig.alcancadas || '']] },
+      { range: 'Capa!P33', values: [[ig.visitas || '']] },
+    ];
+
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        valueInputOption: 'USER_ENTERED',
+        data: capaUpdates,
+      },
+    });
+
+    // ── 3. Preencher a aba Relatório (cabeçalho + dados) ──────
     const cabecalho = [
       'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
       'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
@@ -68,76 +160,24 @@ module.exports = async function handler(req, res) {
       ];
     });
 
-    const csvEscape = v => {
-      const s = String(v == null ? '' : v);
-      return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-    };
+    const valoresRelatorio = [cabecalho, ...linhas];
 
-    const csvRelatorio = [cabecalho, ...linhas]
-      .map(row => row.map(csvEscape).join(','))
-      .join('\n');
-
-    // ── Upload como Google Sheets na pasta do Creative ────────
-    const uploadRelatorio = await drive.files.create({
-      requestBody: {
-        name: novoNome,
-        mimeType: 'application/vnd.google-apps.spreadsheet',
-        parents: [FOLDER_ID],
-      },
-      media: {
-        mimeType: 'text/csv',
-        body: csvRelatorio,
-      },
-      fields: 'id, webViewLink',
+    // Limpa a aba Relatório antes (caso o modelo tenha dados antigos)
+    await sheets.spreadsheets.values.clear({
+      spreadsheetId,
+      range: 'Relatório!A1:Q1000',
     });
 
-    const spreadsheetId = uploadRelatorio.data.id;
-    const url = uploadRelatorio.data.webViewLink
-      || `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: 'Relatório!A1',
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: valoresRelatorio },
+    });
 
-    // ── (opcional) também cria uma aba "Capa" com os dados da capa ──
-    // Como o upload cria só 1 aba, a gente usa Sheets API pra adicionar outra aba:
-    try {
-      const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
-
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId,
-        requestBody: {
-          requests: [
-            { addSheet: { properties: { title: 'Capa', index: 0 } } },
-          ],
-        },
-      });
-
-      const capaValues = [
-        ['titulo', titulo],
-        ['fb_seguidores', fb.seguidores || ''],
-        ['fb_seg_anterior', fb.segAnterior || ''],
-        ['fb_homens', fb.homens || ''],
-        ['fb_mulheres', fb.mulheres || ''],
-        ['fb_faixa', fb.faixa || ''],
-        ['fb_alcancadas', fb.alcancadas || ''],
-        ['fb_visitas', fb.visitas || ''],
-        ['ig_seguidores', ig.seguidores || ''],
-        ['ig_seg_anterior', ig.segAnterior || ''],
-        ['ig_homens', ig.homens || ''],
-        ['ig_mulheres', ig.mulheres || ''],
-        ['ig_faixa', ig.faixa || ''],
-        ['ig_alcancadas', ig.alcancadas || ''],
-        ['ig_visitas', ig.visitas || ''],
-      ];
-
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: 'Capa!A1',
-        valueInputOption: 'RAW',
-        requestBody: { values: capaValues },
-      });
-    } catch (errCapa) {
-      console.warn('Aviso: falhou ao criar aba Capa (relatório principal já criado):', errCapa.message);
-    }
-
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
     return res.status(200).json({ success: true, url, spreadsheetId });
+
   } catch (err) {
     console.error('Erro export Google Sheets:', JSON.stringify({
       message: err.message,
