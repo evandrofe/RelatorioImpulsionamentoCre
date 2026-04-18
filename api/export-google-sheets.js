@@ -28,11 +28,17 @@ module.exports = async function handler(req, res) {
 
     const copia = await drive.files.copy({
   fileId: templateId,
+  requestBody: { name: novoNome },
+});
+const spreadsheetId = copia.data.id;
+
+await drive.permissions.create({
+  fileId: spreadsheetId,
   requestBody: {
-    name: novoNome,
-    parents: ['root'],
+    role: 'writer',
+    type: 'user',
+    emailAddress: 'evandro.ferraz15@gmail.com',
   },
-  supportsAllDrives: true,
 });
 
 // Transfere a propriedade para o seu Google pessoal
