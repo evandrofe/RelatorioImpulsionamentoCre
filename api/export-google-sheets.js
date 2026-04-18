@@ -1,163 +1,113 @@
-import { google } from 'googleapis';
+const { google } = require('googleapis');
 
-const TEMPLATE_ID = '1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA';
-const OUTPUT_FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH';
-
-function getAuth() {
-  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-
-  if (!clientEmail || !privateKey) {
-    throw new Error('Credenciais Google não configuradas.');
-  }
-
-  privateKey = privateKey.replace(/\\n/g, '\n');
-
-  return new google.auth.JWT({
-    email: clientEmail,
-    key: privateKey,
-    scopes: [
-      'https://www.googleapis.com/auth/drive',
-      'https://www.googleapis.com/auth/spreadsheets'
-    ]
-  });
-}
-
-function parsePayload(body) {
-  if (!body) return {};
-  if (typeof body === 'string') return JSON.parse(body);
-  return body;
-}
-
-function safeNumber(value) {
-  if (value === null || value === undefined || value === '') return '';
-  return value;
-}
-
-export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    return res.status(200).json({
-      success: true,
-      message: 'API da Vercel funcionando.'
-    });
-  }
-
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: 'Método não permitido.'
-    });
+    return res.status(405).json({ error: 'Método não permitido' });
   }
 
   try {
-    const payload = parsePayload(req.body);
-    const {
-      cliente = 'Cliente',
-      mes = '',
-      ano = '',
-      campaignsData = [],
-      capaData = { fb: {}, ig: {} }
-    } = payload;
+    const { cliente, mes, ano, campaignsData, capaData } = req.body;
 
-    const auth = getAuth();
-    const drive = google.drive({ version: 'v3', auth });
-    const sheets = google.sheets({ version: 'v4', auth });
-
-    const newFileName = ['Relatório de impulsionamento', cliente, mes, ano]
-      .filter(Boolean)
-      .join(' - ');
-
-    const copied = await drive.files.copy({
-      fileId: TEMPLATE_ID,
-      requestBody: {
-        name: newFileName,
-        parents: [OUTPUT_FOLDER_ID]
-      }
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      },
+      scopes: [
+        'https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/drive',
+      ],
     });
 
-    const spreadsheetId = copied.data.id;
+    const authClient = await auth.getClient();
+    const drive = google.drive({ version: 'v3', auth: authClient });
+    const sheets = google.sheets({ version: 'v4', auth: authClient });
 
-    if (!spreadsheetId) {
-      throw new Error('Não foi possível copiar a planilha modelo.');
-    }
+    const templateId = process.env.GOOGLE_SHEETS_TEMPLATE_ID;
+    const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
 
-    const capaUpdates = [
-      { range: 'Capa!A1', values: [[`${cliente} - ${mes} - ${ano}`]] },
+    const copia = await drive.files.copy({
+      fileId: templateId,
+      requestBody: { name: novoNome },
+    });
+    const spreadsheetId = copia.data.id;
 
-      { range: 'Capa!C5', values: [[capaData?.fb?.seguidores || '']] },
-      { range: 'Capa!C7', values: [[capaData?.fb?.segAnterior || '']] },
-      { range: 'Capa!C9', values: [[capaData?.fb?.homens || '']] },
-      { range: 'Capa!E9', values: [[capaData?.fb?.mulheres || '']] },
-      { range: 'Capa!C12', values: [[capaData?.fb?.faixa || '']] },
-      { range: 'Capa!E12', values: [[capaData?.fb?.alcancadas || '']] },
-      { range: 'Capa!F12', values: [[capaData?.fb?.visitas || '']] },
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+    const abas = spreadsheet.data.sheets.map(s => s.properties.title);
+    const abaCapa = abas.find(a => a.toLowerCase().includes('capa')) || abas[0];
+    const abaRelatorio = abas.find(a => a.toLowerCase().includes('relat')) || abas[1];
 
-      { range: 'Capa!J5', values: [[capaData?.ig?.seguidores || '']] },
-      { range: 'Capa!J7', values: [[capaData?.ig?.segAnterior || '']] },
-      { range: 'Capa!J9', values: [[capaData?.ig?.homens || '']] },
-      { range: 'Capa!L9', values: [[capaData?.ig?.mulheres || '']] },
-      { range: 'Capa!J12', values: [[capaData?.ig?.faixa || '']] },
-      { range: 'Capa!L12', values: [[capaData?.ig?.alcancadas || '']] },
-      { range: 'Capa!M12', values: [[capaData?.ig?.visitas || '']] }
+    // ── CAPA ──
+    const fb = capaData?.fb || {};
+    const ig = capaData?.ig || {};
+    const titulo = [cliente, mes, ano].filter(Boolean).join(' - ');
+
+    const capaValues = [
+      [titulo],
+      [],
+      ['📘 FACEBOOK', '', '', '', '', '', '', '📸 INSTAGRAM'],
+      [],
+      [`Total de ${fb.seguidores || ''} seguidores`, '', '', '', '', '', '', `Total de ${ig.seguidores || ''} seguidores`],
+      [`${fb.segAnterior || ''} seguidores no mês anterior`, '', '', '', '', '', '', `${ig.segAnterior || ''} seguidores no mês anterior`],
+      [],
+      [`👨 ${fb.homens || ''} Homens`, '', `👩 ${fb.mulheres || ''} Mulheres`, '', '', '', '', `👨 ${ig.homens || ''} Homens`, '', `👩 ${ig.mulheres || ''} Mulheres`],
+      [],
+      [fb.faixa || '', '', fb.alcancadas || '', fb.visitas || '', '', '', '', ig.faixa || '', '', ig.alcancadas || '', ig.visitas || ''],
+      ['FAIXA ETÁRIA', '', 'CONTAS ALCANÇADAS', 'VISITAS À PÁGINA', '', '', '', 'FAIXA ETÁRIA', '', 'CONTAS ALCANÇADAS', 'VISITAS AO PERFIL'],
     ];
 
-    await sheets.spreadsheets.values.batchUpdate({
+    await sheets.spreadsheets.values.update({
       spreadsheetId,
-      requestBody: {
-        valueInputOption: 'USER_ENTERED',
-        data: capaUpdates
-      }
+      range: `${abaCapa}!A1`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: capaValues },
     });
 
-    await sheets.spreadsheets.values.clear({
-      spreadsheetId,
-      range: 'Relatório!A3:Q1000'
+    // ── RELATÓRIO ──
+    const cabecalho = [
+      'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
+      'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
+      'Custo por 1.000 Pessoas', 'Custo por Cliques no Link', 'Custo por ThruPlay',
+      'Custo por Interação', 'Custo por Conversa', 'Filtro', 'Cidade', 'Conversas Iniciadas'
+    ];
+
+    const fmtNum = v => (typeof v === 'number' && v > 0) ? v : '';
+    const fmtBRL = v => (typeof v === 'number' && v > 0) ? v : '';
+
+    const linhas = campaignsData.map(r => {
+      const o = r.objective;
+      const isEF = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+      return [
+        r.name, r.format, r.validity || '',
+        fmtBRL(r.budget), fmtBRL(r.spent),
+        (o === 'Alcance' || o === 'Reels') ? fmtNum(r.reach) : '',
+        (o === 'Engajamento' && isEF) ? fmtNum(r.eng) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmtNum(r.links) : '',
+        o === 'Reels' ? fmtNum(r.views) : '',
+        o === 'Alcance' ? fmtBRL(r.cpm) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmtBRL(r.cpc) : '',
+        o === 'Reels' ? fmtBRL(r.cThru) : '',
+        (o === 'Engajamento' && isEF) ? fmtBRL(r.cInt) : '',
+        o === 'Conversas' ? fmtBRL(r.cConv) : '',
+        '', '',
+        o === 'Conversas' ? fmtNum(r.conv) : '',
+      ];
     });
 
-    const rows = campaignsData.map((r) => [
-      r.name || '',
-      r.format || '',
-      r.validity || '',
-      safeNumber(r.budget),
-      safeNumber(r.spent),
-      safeNumber(r.reach),
-      safeNumber(r.eng),
-      safeNumber(r.links),
-      safeNumber(r.views),
-      safeNumber(r.cpm),
-      safeNumber(r.cpc),
-      safeNumber(r.cThru),
-      safeNumber(r.cInt),
-      safeNumber(r.cConv),
-      '',
-      '',
-      safeNumber(r.conv)
-    ]);
-
-    if (rows.length) {
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: `Relatório!A3:Q${rows.length + 2}`,
-        valueInputOption: 'USER_ENTERED',
-        requestBody: {
-          values: rows
-        }
-      });
-    }
-
-    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `${abaRelatorio}!A1`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [cabecalho, ...linhas] },
+    });
 
     return res.status(200).json({
       success: true,
-      spreadsheetId,
-      url,
-      name: newFileName
+      url: `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`
     });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      success: false,
-      error: error.message || 'Erro interno ao exportar para Google Sheets.'
-    });
+
+  } catch (err) {
+    console.error('Erro export Google Sheets:', err);
+    return res.status(500).json({ success: false, error: err.message });
   }
-}
+};
