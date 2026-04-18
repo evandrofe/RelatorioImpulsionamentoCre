@@ -27,38 +27,25 @@ module.exports = async function handler(req, res) {
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
 
     const copia = await drive.files.copy({
-  fileId: templateId,
-  requestBody: { name: novoNome },
-});
-const spreadsheetId = copia.data.id;
-
-await drive.permissions.create({
-  fileId: spreadsheetId,
-  requestBody: {
-    role: 'writer',
-    type: 'user',
-    emailAddress: 'evandro.ferraz15@gmail.com',
-  },
-});
-
-// Transfere a propriedade para o seu Google pessoal
-await drive.permissions.create({
-  fileId: copia.data.id,
-  transferOwnership: true,
-  requestBody: {
-    role: 'owner',
-    type: 'user',
-    emailAddress: 'evandro.ferraz15@gmail.com', // coloca seu e-mail aqui
-  },
-});
+      fileId: templateId,
+      requestBody: { name: novoNome },
+    });
     const spreadsheetId = copia.data.id;
+
+    await drive.permissions.create({
+      fileId: spreadsheetId,
+      requestBody: {
+        role: 'writer',
+        type: 'user',
+        emailAddress: 'evandro.ferraz15@gmail.com',
+      },
+    });
 
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
     const abas = spreadsheet.data.sheets.map(s => s.properties.title);
     const abaCapa = abas.find(a => a.toLowerCase().includes('capa')) || abas[0];
     const abaRelatorio = abas.find(a => a.toLowerCase().includes('relat')) || abas[1];
 
-    // ── CAPA ──
     const fb = capaData?.fb || {};
     const ig = capaData?.ig || {};
     const titulo = [cliente, mes, ano].filter(Boolean).join(' - ');
@@ -84,7 +71,6 @@ await drive.permissions.create({
       requestBody: { values: capaValues },
     });
 
-    // ── RELATÓRIO ──
     const cabecalho = [
       'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
       'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
