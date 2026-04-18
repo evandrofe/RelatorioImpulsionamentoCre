@@ -27,9 +27,24 @@ module.exports = async function handler(req, res) {
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
 
     const copia = await drive.files.copy({
-      fileId: templateId,
-      requestBody: { name: novoNome },
-    });
+  fileId: templateId,
+  requestBody: {
+    name: novoNome,
+    parents: ['root'],
+  },
+  supportsAllDrives: true,
+});
+
+// Transfere a propriedade para o seu Google pessoal
+await drive.permissions.create({
+  fileId: copia.data.id,
+  transferOwnership: true,
+  requestBody: {
+    role: 'owner',
+    type: 'user',
+    emailAddress: 'evandro.ferraz15@gmail.com', // coloca seu e-mail aqui
+  },
+});
     const spreadsheetId = copia.data.id;
 
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
