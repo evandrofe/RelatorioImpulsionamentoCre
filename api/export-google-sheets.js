@@ -1,4 +1,6 @@
-// Versão OAuth com logs detalhados pra debug.
+// Versão OAuth — copia o modelo, preserva a formatação do título, cabeçalho e legendas.
+// Os dados das campanhas são inseridos a partir da linha 3 (linhas 1-2 já existem no modelo).
+// As legendas do "RAIO-X" são empurradas pra baixo conforme a quantidade de dados.
 
 const { google } = require('googleapis');
 const { Readable } = require('stream');
@@ -10,30 +12,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  // Helper para loggar de forma estruturada
-  const log = (step, data) => console.log(`[DEBUG] ${step}:`, JSON.stringify(data));
-  const logErr = (step, err) => console.error(`[DEBUG-ERROR] ${step}:`, JSON.stringify({
-    message: err.message,
-    code: err.code,
-    status: err.status,
-    errors: err.errors,
-    response_status: err.response && err.response.status,
-    response_data: err.response && err.response.data,
-  }));
-
   try {
     const { cliente, mes, ano, campaignsData, capaData } = req.body;
-
-    log('1-env-check', {
-      hasRefreshToken: !!process.env.GOOGLE_REFRESH_TOKEN,
-      refreshTokenPrefix: process.env.GOOGLE_REFRESH_TOKEN
-        ? process.env.GOOGLE_REFRESH_TOKEN.substring(0, 10) + '...'
-        : 'MISSING',
-      templateId: process.env.GOOGLE_SHEETS_TEMPLATE_ID,
-      hasClientId: !!process.env.GOOGLE_OAUTH_CLIENT_ID,
-      hasClientSecret: !!process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-      redirectUri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
-    });
 
     if (!process.env.GOOGLE_REFRESH_TOKEN) {
       return res.status(500).json({ success: false, error: 'GOOGLE_REFRESH_TOKEN não configurado.' });
@@ -54,29 +34,6 @@ module.exports = async function handler(req, res) {
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
-    // Testa a autenticação pegando o userinfo
-    try {
-      const tokenResponse = await oauth2Client.getAccessToken();
-      log('2-token-obtained', {
-        hasToken: !!tokenResponse.token,
-        tokenPrefix: tokenResponse.token ? tokenResponse.token.substring(0, 15) + '...' : 'NONE',
-      });
-
-      // Descobre qual conta tá logada
-      const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
-      const userinfo = await oauth2.userinfo.get();
-      log('3-userinfo', {
-        email: userinfo.data.email,
-        verified: userinfo.data.verified_email,
-      });
-    } catch (err) {
-      logErr('2-token-or-userinfo', err);
-      return res.status(500).json({
-        success: false,
-        error: 'Falha na autenticação OAuth: ' + err.message,
-      });
-    }
-
     const drive = google.drive({ version: 'v3', auth: oauth2Client });
     const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
 
@@ -85,93 +42,42 @@ module.exports = async function handler(req, res) {
     const fb = (capaData && capaData.fb) || {};
     const ig = (capaData && capaData.ig) || {};
 
-    // ── Tenta acessar o template ──────────────────────────────
-    let templateMeta;
-    try {
-      templateMeta = await drive.files.get({
-        fileId: TEMPLATE_ID,
-        fields: 'id, mimeType, name, owners, trashed',
-      });
-      log('4-template-found', {
-        id: templateMeta.data.id,
-        name: templateMeta.data.name,
-        mimeType: templateMeta.data.mimeType,
-        owners: templateMeta.data.owners && templateMeta.data.owners.map(o => o.emailAddress),
-        trashed: templateMeta.data.trashed,
-      });
-    } catch (err) {
-      logErr('4-template-get', err);
-      return res.status(500).json({
-        success: false,
-        error: `Erro ao acessar template (${TEMPLATE_ID}): ${err.message}`,
-      });
-    }
+    // ── 1. Copiar o template ──────────────────────────────────
+    const templateMeta = await drive.files.get({
+      fileId: TEMPLATE_ID,
+      fields: 'mimeType',
+    });
 
-    // ── Tenta acessar a pasta de saída ────────────────────────
-    try {
-      const folderMeta = await drive.files.get({
-        fileId: OUTPUT_FOLDER_ID,
-        fields: 'id, name, owners, mimeType',
-      });
-      log('5-folder-found', {
-        id: folderMeta.data.id,
-        name: folderMeta.data.name,
-        owners: folderMeta.data.owners && folderMeta.data.owners.map(o => o.emailAddress),
-      });
-    } catch (err) {
-      logErr('5-folder-get', err);
-      return res.status(500).json({
-        success: false,
-        error: `Erro ao acessar pasta de saída (${OUTPUT_FOLDER_ID}): ${err.message}`,
-      });
-    }
-
-    // ── Copiar o template ─────────────────────────────────────
     let spreadsheetId;
-    try {
-      if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
-        const copied = await drive.files.copy({
-          fileId: TEMPLATE_ID,
-          requestBody: {
-            name: novoNome,
-            parents: [OUTPUT_FOLDER_ID],
-          },
-          fields: 'id',
-        });
-        spreadsheetId = copied.data.id;
-        log('6-copied', { spreadsheetId });
-      } else {
-        const xlsxBuffer = await drive.files.get(
-          { fileId: TEMPLATE_ID, alt: 'media' },
-          { responseType: 'arraybuffer' }
-        );
-        const buf = Buffer.from(xlsxBuffer.data);
-        const stream = Readable.from(buf);
 
-        const uploaded = await drive.files.create({
-          requestBody: {
-            name: novoNome,
-            mimeType: 'application/vnd.google-apps.spreadsheet',
-            parents: [OUTPUT_FOLDER_ID],
-          },
-          media: {
-            mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            body: stream,
-          },
-          fields: 'id',
-        });
-        spreadsheetId = uploaded.data.id;
-        log('6-uploaded-xlsx', { spreadsheetId });
-      }
-    } catch (err) {
-      logErr('6-copy', err);
-      return res.status(500).json({
-        success: false,
-        error: `Erro ao copiar template: ${err.message}`,
+    if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
+      const copied = await drive.files.copy({
+        fileId: TEMPLATE_ID,
+        requestBody: { name: novoNome, parents: [OUTPUT_FOLDER_ID] },
+        fields: 'id',
       });
+      spreadsheetId = copied.data.id;
+    } else {
+      const xlsxBuffer = await drive.files.get(
+        { fileId: TEMPLATE_ID, alt: 'media' },
+        { responseType: 'arraybuffer' }
+      );
+      const uploaded = await drive.files.create({
+        requestBody: {
+          name: novoNome,
+          mimeType: 'application/vnd.google-apps.spreadsheet',
+          parents: [OUTPUT_FOLDER_ID],
+        },
+        media: {
+          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          body: Readable.from(Buffer.from(xlsxBuffer.data)),
+        },
+        fields: 'id',
+      });
+      spreadsheetId = uploaded.data.id;
     }
 
-    // ── Preencher Capa ────────────────────────────────────────
+    // ── 2. Preencher a Capa ───────────────────────────────────
     const pct = v => {
       const s = String(v || '').trim();
       if (!s) return '';
@@ -196,75 +102,171 @@ module.exports = async function handler(req, res) {
       { range: 'Capa!P33', values: [[ig.visitas || '']] },
     ];
 
-    try {
-      await sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId,
-        requestBody: {
-          valueInputOption: 'USER_ENTERED',
-          data: capaUpdates,
-        },
-      });
-      log('7-capa-filled', { cells: capaUpdates.length });
-    } catch (err) {
-      logErr('7-capa', err);
-      // não falha, continua
-    }
-
-    // ── Preencher Relatório ───────────────────────────────────
-    const cabecalho = [
-      'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
-      'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
-      'Custo por 1.000 Pessoas', 'Custo por Cliques no Link', 'Custo por ThruPlay',
-      'Custo por Interação', 'Custo por Conversa', 'Filtro', 'Cidade', 'Conversas Iniciadas'
-    ];
-
-    const fmt = v => (typeof v === 'number' && v > 0) ? v : '';
-
-    const linhas = (campaignsData || []).map(r => {
-      const o = r.objective;
-      const isEF = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format || '');
-      return [
-        r.name, r.format, r.validity || '',
-        fmt(r.budget), fmt(r.spent),
-        (o === 'Alcance' || o === 'Reels') ? fmt(r.reach) : '',
-        (o === 'Engajamento' && isEF) ? fmt(r.eng) : '',
-        (o === 'EngLink' || o === 'ConvLink') ? fmt(r.links) : '',
-        o === 'Reels' ? fmt(r.views) : '',
-        o === 'Alcance' ? fmt(r.cpm) : '',
-        (o === 'EngLink' || o === 'ConvLink') ? fmt(r.cpc) : '',
-        o === 'Reels' ? fmt(r.cThru) : '',
-        (o === 'Engajamento' && isEF) ? fmt(r.cInt) : '',
-        o === 'Conversas' ? fmt(r.cConv) : '',
-        '', '',
-        o === 'Conversas' ? fmt(r.conv) : '',
-      ];
+    await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: { valueInputOption: 'USER_ENTERED', data: capaUpdates },
     });
 
-    const valoresRelatorio = [cabecalho, ...linhas];
+    // ── 3. Descobrir a estrutura da aba Relatório ─────────────
+    // Ler toda a aba pra encontrar onde ficam as legendas
+    const existingData = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Relatório!A1:Q100',
+      valueRenderOption: 'FORMATTED_VALUE',
+    });
+    const existingRows = existingData.data.values || [];
 
-    try {
-      await sheets.spreadsheets.values.clear({
-        spreadsheetId,
-        range: 'Relatório!A1:Q1000',
+    // Encontra a linha do "RAIO-X" (0-indexed)
+    let raioXRowIdx = -1;
+    for (let i = 0; i < existingRows.length; i++) {
+      const firstCell = String(existingRows[i][0] || '').trim();
+      if (firstCell.includes('RAIO-X')) {
+        raioXRowIdx = i;
+        break;
+      }
+    }
+
+    // Pega a aba "Relatório" pra saber o sheetId
+    const spreadsheetMeta = await sheets.spreadsheets.get({
+      spreadsheetId,
+      fields: 'sheets(properties(sheetId,title))',
+    });
+    const relatorioSheet = spreadsheetMeta.data.sheets.find(
+      s => s.properties.title === 'Relatório'
+    );
+    const sheetId = relatorioSheet ? relatorioSheet.properties.sheetId : 0;
+
+    // ── 4. Montar os dados das campanhas ──────────────────────
+    const fmt = v => (typeof v === 'number' && v > 0) ? v : '';
+    const fmtBRL = v => {
+      if (typeof v !== 'number' || v <= 0) return '';
+      return 'R$ ' + v.toFixed(2).replace('.', ',');
+    };
+    const fmtNum = v => {
+      if (typeof v !== 'number' || v <= 0) return '';
+      return v.toLocaleString('pt-BR');
+    };
+
+    // Agrupa campanhas por data pra inserir linhas separadoras
+    const dataRows = [];
+    let lastDateKey = null;
+
+    (campaignsData || []).forEach((r, idx) => {
+      const o = r.objective;
+      const isEF = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format || '');
+
+      // Extrai data do nome pra agrupar
+      const dateMatch = (r.name || '').match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+      let curDateKey = 'none';
+      if (dateMatch) {
+        let year = +dateMatch[3];
+        if (year < 100) year += 2000;
+        curDateKey = `${year}-${dateMatch[2].padStart(2,'0')}-${dateMatch[1].padStart(2,'0')}`;
+      }
+
+      // Insere linha vazia separadora entre datas diferentes
+      if (idx > 0 && curDateKey !== lastDateKey) {
+        dataRows.push(Array(17).fill(''));
+      }
+      lastDateKey = curDateKey;
+
+      dataRows.push([
+        r.name,
+        r.format,
+        r.validity || '',
+        fmt(r.budget) ? fmtBRL(r.budget) : '',
+        fmt(r.spent) ? fmtBRL(r.spent) : '',
+        (o === 'Alcance' || o === 'Reels') ? fmtNum(r.reach) : '',
+        (o === 'Engajamento' && isEF) ? fmtNum(r.eng) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmtNum(r.links) : '',
+        o === 'Reels' ? fmtNum(r.views) : '',
+        o === 'Alcance' ? fmtBRL(r.cpm) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmtBRL(r.cpc) : '',
+        o === 'Reels' ? fmtBRL(r.cThru) : '',
+        (o === 'Engajamento' && isEF) ? fmtBRL(r.cInt) : '',
+        o === 'Conversas' ? fmtBRL(r.cConv) : '',
+        '',
+        '',
+        o === 'Conversas' ? fmtNum(r.conv) : '',
+      ]);
+    });
+
+    // ── 5. Manipular a aba Relatório ──────────────────────────
+    // Estratégia: o modelo tem linhas 1 (título) e 2 (cabeçalho) fixas.
+    // Linhas 3-4-5 são placeholders vazios antes do "RAIO-X".
+    // Precisamos:
+    // a) Limpar as linhas de placeholder (3 até raioX-1)
+    // b) Inserir linhas suficientes pra caber os dados
+    // c) Preencher os dados a partir da linha 3
+
+    // Número de linhas de placeholder no modelo (entre cabeçalho e RAIO-X)
+    // raioXRowIdx é 0-indexed, cabeçalho está na linha 2 (0-indexed: 1)
+    // Então placeholders = raioXRowIdx - 2 (linhas 3 até raioX-1)
+    const placeholderCount = raioXRowIdx > 2 ? raioXRowIdx - 2 : 0;
+    const dataCount = dataRows.length;
+    const diff = dataCount - placeholderCount;
+
+    const batchRequests = [];
+
+    if (diff > 0) {
+      // Precisamos INSERIR linhas extras antes do RAIO-X
+      batchRequests.push({
+        insertDimension: {
+          range: {
+            sheetId: sheetId,
+            dimension: 'ROWS',
+            startIndex: raioXRowIdx, // insere ANTES do RAIO-X (0-indexed)
+            endIndex: raioXRowIdx + diff,
+          },
+          inheritFromBefore: true,
+        },
       });
+    } else if (diff < 0) {
+      // Temos linhas sobrando — deletar o excesso
+      const deleteStart = 2 + dataCount; // logo após os dados (0-indexed)
+      const deleteEnd = raioXRowIdx;     // até antes do RAIO-X
+      if (deleteEnd > deleteStart) {
+        batchRequests.push({
+          deleteDimension: {
+            range: {
+              sheetId: sheetId,
+              dimension: 'ROWS',
+              startIndex: deleteStart,
+              endIndex: deleteEnd,
+            },
+          },
+        });
+      }
+    }
 
+    // Executar insert/delete de linhas se necessário
+    if (batchRequests.length > 0) {
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: { requests: batchRequests },
+      });
+    }
+
+    // ── 6. Preencher os dados a partir de A3 ──────────────────
+    if (dataRows.length > 0) {
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: 'Relatório!A1',
+        range: `Relatório!A3:Q${3 + dataRows.length - 1}`,
         valueInputOption: 'USER_ENTERED',
-        requestBody: { values: valoresRelatorio },
+        requestBody: { values: dataRows },
       });
-      log('8-relatorio-filled', { rows: valoresRelatorio.length });
-    } catch (err) {
-      logErr('8-relatorio', err);
     }
 
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
-    log('9-done', { url });
     return res.status(200).json({ success: true, url, spreadsheetId });
 
   } catch (err) {
-    logErr('FATAL', err);
+    console.error('Erro export Google Sheets:', JSON.stringify({
+      message: err.message,
+      code: err.code,
+      status: err.status,
+      errors: err.errors,
+    }));
     return res.status(500).json({ success: false, error: err.message });
   }
 };
