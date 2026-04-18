@@ -421,11 +421,13 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
               <div class="capa-preview-seg" id="prev_fb_seg">Total de — seguidores</div>
               <div class="capa-preview-seg-ant" id="prev_fb_seg_ant">— seguidores no mês anterior</div>
               <div class="capa-preview-genero">
+                <span id="prev_fb_h">— Homens</span>
+                <span id="prev_fb_m">— Mulheres</span>
                </div>
               <div class="capa-preview-metrics">
-                <div class="capa-preview-metric"><span class="lbl">Faixa Etária</span></div>
-                <div class="capa-preview-metric"><span class="lbl">Contas Alcançadas</span></div>
-                <div class="capa-preview-metric"><span class="lbl">Visitas à Página</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_faixa">—</span><span class="lbl">Faixa Etária</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_fb_vis">—</span><span class="lbl">Visitas à Página</span></div>
               </div>
             </div>
             <div class="capa-preview-col">
@@ -433,11 +435,13 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
               <div class="capa-preview-seg" id="prev_ig_seg">Total de — seguidores</div>
               <div class="capa-preview-seg-ant" id="prev_ig_seg_ant">— seguidores no mês anterior</div>
               <div class="capa-preview-genero">
+                <span id="prev_ig_h">— Homens</span>
+                <span id="prev_ig_m">— Mulheres</span>
             </div>
               <div class="capa-preview-metrics">
-                <div class="capa-preview-metric"><span class="lbl">Faixa Etária</span></div>
-                <div class="capa-preview-metric"><span class="lbl">Contas Alcançadas</span></div>
-                <div class="capa-preview-metric"><span class="lbl">Visitas ao Perfil</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_faixa">—</span><span class="lbl">Faixa Etária</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
+                <div class="capa-preview-metric"><span class="val" id="prev_ig_vis">—</span><span class="lbl">Visitas ao Perfil</span></div>
               </div>
             </div>
           </div>
@@ -1449,16 +1453,16 @@ function updateCapaPreview() {
 
   $('prev_fb_seg').textContent = 'Total de ' + (data.fb.seguidores || '—') + ' seguidores';
   $('prev_fb_seg_ant').textContent = (data.fb.segAnterior || '—') + ' seguidores no mês anterior';
-  $('prev_fb_h').textContent = '👨 ' + (data.fb.homens || '—');
-  $('prev_fb_m').textContent = '👩 ' + (data.fb.mulheres || '—');
+  $('prev_fb_h').textContent = (data.fb.homens || '—') + ' Homens';
+  $('prev_fb_m').textContent = (data.fb.mulheres || '—') + ' Mulheres';
   $('prev_fb_faixa').textContent = data.fb.faixa || '—';
   $('prev_fb_alc').textContent = data.fb.alcancadas || '—';
   $('prev_fb_vis').textContent = data.fb.visitas || '—';
 
   $('prev_ig_seg').textContent = 'Total de ' + (data.ig.seguidores || '—') + ' seguidores';
   $('prev_ig_seg_ant').textContent = (data.ig.segAnterior || '—') + ' seguidores no mês anterior';
-  $('prev_ig_h').textContent = '👨 ' + (data.ig.homens || '—');
-  $('prev_ig_m').textContent = '👩 ' + (data.ig.mulheres || '—');
+  $('prev_ig_h').textContent = (data.ig.homens || '—') + ' Homens';
+  $('prev_ig_m').textContent = (data.ig.mulheres || '—') + ' Mulheres';
   $('prev_ig_faixa').textContent = data.ig.faixa || '—';
   $('prev_ig_alc').textContent = data.ig.alcancadas || '—';
   $('prev_ig_vis').textContent = data.ig.visitas || '—';
@@ -1605,9 +1609,9 @@ wsCapa.getRow(2).height=10;
 // ── ROW 3: Labels plataforma ──────────────────────────────────
 wsCapa.getRow(3).height=24;
 wsCapa.mergeCells('C3:G3');wsCapa.mergeCells('J3:N3');
-wsCapa.getCell('C3').value='📘 FACEBOOK';
+wsCapa.getCell('C3').value='FACEBOOK';
 wsCapa.getCell('C3').fill=G;wsCapa.getCell('C3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('C3').alignment=al('center','middle');
-wsCapa.getCell('J3').value='📸 INSTAGRAM';
+wsCapa.getCell('J3').value='INSTAGRAM';
 wsCapa.getCell('J3').fill=G;wsCapa.getCell('J3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('J3').alignment=al('center','middle');
 
 // ── ROW 4: Espaço ─────────────────────────────────────────────
@@ -1689,10 +1693,10 @@ wsCapa.getRow(15).height=10;wsCapa.getRow(16).height=10;
 var ws=wb.addWorksheet('Relatório');
 ws.columns=[{width:24},{width:14},{width:15},{width:14},{width:14},{width:13},{width:14},{width:14},{width:18},{width:20},{width:22},{width:20},{width:20},{width:20},{width:12},{width:12},{width:18}];
 ws.addRow(['AÇÕES MENSAIS']);ws.mergeCells('A1:Q1');var r1=ws.getCell('A1');r1.value='AÇÕES MENSAIS';r1.fill=fl(C.orange);r1.font=fn(true,15,C.white);r1.alignment=al('center','middle');r1.border={bottom:bk};ws.getRow(1).height=32;
-var HDR=['📋 NOME DA AÇÃO','🖼️ FORMATO','📅 VALIDADE','💰 INVESTIMENTO','💸 VALOR GASTO','👁️ ALCANCE','❤️ ENGAJAMENTO','🔗 CLIQUES NO LINK','▶️ VISUALIZAÇÃO (THRUPLAY)','📊 CUSTO POR 1.000 PESSOAS','🔗💰 CUSTO POR CLIQUES NO LINK','▶️💰 CUSTO POR THRUPLAY','❤️💰 CUSTO POR INTERAÇÃO','💬💰 CUSTO POR CONVERSA','🎯 FILTRO','📍 CIDADE','💬 CONVERSAS INICIADAS'];
+var HDR=['NOME DA AÇÃO','FORMATO','VALIDADE','INVESTIMENTO','VALOR GASTO','ALCANCE','ENGAJAMENTO','CLIQUES NO LINK','VISUALIZAÇÃO (THRUPLAY)','CUSTO POR 1.000 PESSOAS','CUSTO POR CLIQUES NO LINK','CUSTO POR THRUPLAY','CUSTO POR INTERAÇÃO','CUSTO POR CONVERSA','FILTRO','CIDADE','CONVERSAS INICIADAS'];
 ws.addRow(HDR);ws.getRow(2).height=20;HDR.forEach(function(_,ci){var cell=ws.getRow(2).getCell(ci+1);cell.fill=fl(C.gray1);cell.font=fn(true,10,C.black,'Century Gothic');cell.alignment=al('center','middle',true);cell.border=bAll;});
-var lastDateKeyXl='';campaignsData.forEach(function(r){var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(lastDateKeyXl!==''&&curDateKey!==lastDateKeyXl){var rBlank=ws.addRow(Array(17).fill(''));rBlank.height=12;for(var ci=1;ci<=17;ci++){rBlank.getCell(ci).fill=fl(C.white);rBlank.getCell(ci).border={};}}lastDateKeyXl=curDateKey;
-var o=r.objective;var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var vals=[r.name,r.format,r.validity||'',r.budget>0?r.budget:'',r.spent>0?r.spent:'',(o==='Alcance'||o==='Reels')&&r.reach>0?r.reach:'',(o==='Engajamento'&&isEF)&&r.eng>0?r.eng:'',(o==='EngLink'||o==='ConvLink')&&r.links>0?r.links:'',o==='Reels'&&r.views>0?r.views:'',o==='Alcance'&&r.cpm>0?r.cpm:'',(o==='EngLink'||o==='ConvLink')&&r.cpc>0?r.cpc:'',o==='Reels'&&r.cThru>0?r.cThru:'',(o==='Engajamento'&&isEF)&&r.cInt>0?r.cInt:'',o==='Conversas'&&r.cConv>0?r.cConv:'','','',o==='Conversas'&&r.conv>0?r.conv:''];
+var lastDateKeyXl='';campaignsData.forEach(function(r){var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(lastDateKeyXl!==''&&curDateKey!==lastDateKeyXl){var rBlank=ws.addRow(Array(17).fill(''));rBlank.height=12;for(var ci=1;ci<=17;ci++){rBlank.getCell(ci).fill=fl('FFF0F0F0');rBlank.getCell(ci).border={top:bk,bottom:bk};}}lastDateKeyXl=curDateKey;
+var o=r.objective;var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var vals=[r.name,r.format,r.validity||'-',r.budget>0?r.budget:'-',r.spent>0?r.spent:'-',(o==='Alcance'||o==='Reels')&&r.reach>0?r.reach:'-',(o==='Engajamento'&&isEF)&&r.eng>0?r.eng:'-',(o==='EngLink'||o==='ConvLink')&&r.links>0?r.links:'-',o==='Reels'&&r.views>0?r.views:'-',o==='Alcance'&&r.cpm>0?r.cpm:'-',(o==='EngLink'||o==='ConvLink')&&r.cpc>0?r.cpc:'-',o==='Reels'&&r.cThru>0?r.cThru:'-',(o==='Engajamento'&&isEF)&&r.cInt>0?r.cInt:'-',o==='Conversas'&&r.cConv>0?r.cConv:'-','-','-',o==='Conversas'&&r.conv>0?r.conv:'-'];
 var row=ws.addRow(vals);row.height=20;vals.forEach(function(v,ci){var cell=row.getCell(ci+1);cell.fill=fl(C.white);cell.font=fn(false,10,C.black);cell.alignment=ci===0?al('left','top',true):al('center','top');cell.border=bAll;if(typeof v==='number'){if([3,4,9,10,11,12,13].includes(ci))cell.numFmt=BRL;if([5,6,7,8,16].includes(ci))cell.numFmt=NUM;}});});
 // Empty + Legendas
 var rE=ws.addRow(Array(17).fill(''));rE.height=20;for(var ci=1;ci<=17;ci++){rE.getCell(ci).fill=fl(C.white);rE.getCell(ci).border={};}
