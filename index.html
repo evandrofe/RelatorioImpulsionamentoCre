@@ -1268,6 +1268,9 @@ function processFile(file) {
 function handleFile(event) {
   var file = event.target.files[0];
   if (!file) return;
+  processFile(file);
+  event.target.value = '';
+}
 
   AppState.originalFileName = file.name;
 
