@@ -1,4 +1,9 @@
+// Versão OAuth — cria a planilha no Drive do próprio usuário (Vando)
+// usando o refresh token armazenado em env var.
+
 const { google } = require('googleapis');
+
+const FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'; // pasta compartilhada do Creative
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,104 +13,131 @@ module.exports = async function handler(req, res) {
   try {
     const { cliente, mes, ano, campaignsData, capaData } = req.body;
 
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      },
-       scopes: [
-        'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive',
-      ],
+    // ── Auth via OAuth ────────────────────────────────────────
+    if (!process.env.GOOGLE_REFRESH_TOKEN) {
+      return res.status(500).json({
+        success: false,
+        error: 'GOOGLE_REFRESH_TOKEN não configurado. Acesse /api/oauth-authorize primeiro.',
+      });
+    }
+
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_OAUTH_CLIENT_ID,
+      process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      process.env.GOOGLE_OAUTH_REDIRECT_URI
+    );
+
+    oauth2Client.setCredentials({
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
-    const authClient = await auth.getClient();
-    const drive = google.drive({ version: 'v3', auth: authClient });
+    const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
+    // ── Monta conteúdo ─────────────────────────────────────────
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
-    const fb = capaData?.fb || {};
-    const ig = capaData?.ig || {};
+    const fb = (capaData && capaData.fb) || {};
+    const ig = (capaData && capaData.ig) || {};
     const titulo = [cliente, mes, ano].filter(Boolean).join(' - ');
 
-    // Monta CSV simples da aba Relatório
     const cabecalho = [
-      'Nome da Ação','Formato','Validade','Investimento','Valor Gasto',
-      'Alcance','Engajamento','Cliques no Link','Visualização (ThruPlay)',
-      'Custo por 1.000 Pessoas','Custo por Cliques no Link','Custo por ThruPlay',
-      'Custo por Interação','Custo por Conversa','Filtro','Cidade','Conversas Iniciadas'
+      'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
+      'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
+      'Custo por 1.000 Pessoas', 'Custo por Cliques no Link', 'Custo por ThruPlay',
+      'Custo por Interação', 'Custo por Conversa', 'Filtro', 'Cidade', 'Conversas Iniciadas'
     ];
 
-    const fmtNum = v => (typeof v === 'number' && v > 0) ? v : '';
-    const fmtBRL = v => (typeof v === 'number' && v > 0) ? v : '';
+    const fmt = v => (typeof v === 'number' && v > 0) ? v : '';
 
-    const linhas = campaignsData.map(r => {
+    const linhas = (campaignsData || []).map(r => {
       const o = r.objective;
-      const isEF = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+      const isEF = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format || '');
       return [
         r.name, r.format, r.validity || '',
-        fmtBRL(r.budget), fmtBRL(r.spent),
-        (o==='Alcance'||o==='Reels') ? fmtNum(r.reach) : '',
-        (o==='Engajamento'&&isEF) ? fmtNum(r.eng) : '',
-        (o==='EngLink'||o==='ConvLink') ? fmtNum(r.links) : '',
-        o==='Reels' ? fmtNum(r.views) : '',
-        o==='Alcance' ? fmtBRL(r.cpm) : '',
-        (o==='EngLink'||o==='ConvLink') ? fmtBRL(r.cpc) : '',
-        o==='Reels' ? fmtBRL(r.cThru) : '',
-        (o==='Engajamento'&&isEF) ? fmtBRL(r.cInt) : '',
-        o==='Conversas' ? fmtBRL(r.cConv) : '',
-        '','',
-        o==='Conversas' ? fmtNum(r.conv) : '',
+        fmt(r.budget), fmt(r.spent),
+        (o === 'Alcance' || o === 'Reels') ? fmt(r.reach) : '',
+        (o === 'Engajamento' && isEF) ? fmt(r.eng) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmt(r.links) : '',
+        o === 'Reels' ? fmt(r.views) : '',
+        o === 'Alcance' ? fmt(r.cpm) : '',
+        (o === 'EngLink' || o === 'ConvLink') ? fmt(r.cpc) : '',
+        o === 'Reels' ? fmt(r.cThru) : '',
+        (o === 'Engajamento' && isEF) ? fmt(r.cInt) : '',
+        o === 'Conversas' ? fmt(r.cConv) : '',
+        '', '',
+        o === 'Conversas' ? fmt(r.conv) : '',
       ];
     });
 
     const csvEscape = v => {
-      const s = String(v ?? '');
-      return s.includes(',') || s.includes('"') || s.includes('\n')
-        ? '"' + s.replace(/"/g, '""') + '"' : s;
+      const s = String(v == null ? '' : v);
+      return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
     };
 
-    const csvRows = [cabecalho, ...linhas]
+    const csvRelatorio = [cabecalho, ...linhas]
       .map(row => row.map(csvEscape).join(','))
       .join('\n');
 
-    const csvCapa = [
-      ['titulo', titulo],
-      ['fb_seguidores', fb.seguidores||''],
-      ['fb_seg_anterior', fb.segAnterior||''],
-      ['fb_homens', fb.homens||''],
-      ['fb_mulheres', fb.mulheres||''],
-      ['fb_faixa', fb.faixa||''],
-      ['fb_alcancadas', fb.alcancadas||''],
-      ['fb_visitas', fb.visitas||''],
-      ['ig_seguidores', ig.seguidores||''],
-      ['ig_seg_anterior', ig.segAnterior||''],
-      ['ig_homens', ig.homens||''],
-      ['ig_mulheres', ig.mulheres||''],
-      ['ig_faixa', ig.faixa||''],
-      ['ig_alcancadas', ig.alcancadas||''],
-      ['ig_visitas', ig.visitas||''],
-    ].map(row => row.map(csvEscape).join(',')).join('\n');
-
-    // Upload do CSV do Relatório como Google Sheets
+    // ── Upload como Google Sheets na pasta do Creative ────────
     const uploadRelatorio = await drive.files.create({
       requestBody: {
         name: novoNome,
         mimeType: 'application/vnd.google-apps.spreadsheet',
-        parents: ['1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'],
+        parents: [FOLDER_ID],
       },
       media: {
         mimeType: 'text/csv',
-        body: csvRows,
+        body: csvRelatorio,
       },
+      fields: 'id, webViewLink',
     });
 
     const spreadsheetId = uploadRelatorio.data.id;
+    const url = uploadRelatorio.data.webViewLink
+      || `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
 
-    return res.status(200).json({
-      success: true,
-      url: `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`
-    });
+    // ── (opcional) também cria uma aba "Capa" com os dados da capa ──
+    // Como o upload cria só 1 aba, a gente usa Sheets API pra adicionar outra aba:
+    try {
+      const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
 
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          requests: [
+            { addSheet: { properties: { title: 'Capa', index: 0 } } },
+          ],
+        },
+      });
+
+      const capaValues = [
+        ['titulo', titulo],
+        ['fb_seguidores', fb.seguidores || ''],
+        ['fb_seg_anterior', fb.segAnterior || ''],
+        ['fb_homens', fb.homens || ''],
+        ['fb_mulheres', fb.mulheres || ''],
+        ['fb_faixa', fb.faixa || ''],
+        ['fb_alcancadas', fb.alcancadas || ''],
+        ['fb_visitas', fb.visitas || ''],
+        ['ig_seguidores', ig.seguidores || ''],
+        ['ig_seg_anterior', ig.segAnterior || ''],
+        ['ig_homens', ig.homens || ''],
+        ['ig_mulheres', ig.mulheres || ''],
+        ['ig_faixa', ig.faixa || ''],
+        ['ig_alcancadas', ig.alcancadas || ''],
+        ['ig_visitas', ig.visitas || ''],
+      ];
+
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: 'Capa!A1',
+        valueInputOption: 'RAW',
+        requestBody: { values: capaValues },
+      });
+    } catch (errCapa) {
+      console.warn('Aviso: falhou ao criar aba Capa (relatório principal já criado):', errCapa.message);
+    }
+
+    return res.status(200).json({ success: true, url, spreadsheetId });
   } catch (err) {
     console.error('Erro export Google Sheets:', JSON.stringify({
       message: err.message,
