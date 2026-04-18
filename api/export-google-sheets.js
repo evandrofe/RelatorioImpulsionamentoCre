@@ -1,10 +1,11 @@
-// Versão OAuth — copia o arquivo modelo (.xlsx) convertendo pra Google Sheets,
-// depois preenche os dados nas células mapeadas.
+// Versão OAuth — copia o modelo (Google Sheets nativo) pra pasta de saída
+// e preenche os dados nas células mapeadas.
 
 const { google } = require('googleapis');
 const { Readable } = require('stream');
 
-const FOLDER_ID = '1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'; // pasta "Relatório" do Creative
+// Pasta onde os relatórios finais são salvos (RELATORIOS ADS APP)
+const OUTPUT_FOLDER_ID = '1df1RnmflydB0D7ToThnvh63KAhnYxObo';
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -48,7 +49,7 @@ module.exports = async function handler(req, res) {
     const fb = (capaData && capaData.fb) || {};
     const ig = (capaData && capaData.ig) || {};
 
-    // ── 1. Copiar o template como Google Sheets nativo ────────
+    // ── 1. Copiar o template pra pasta de saída ───────────────
     const templateMeta = await drive.files.get({
       fileId: TEMPLATE_ID,
       fields: 'mimeType, name',
@@ -57,18 +58,18 @@ module.exports = async function handler(req, res) {
     let spreadsheetId;
 
     if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
-      // Já é Google Sheets — copia direto
+      // Google Sheets nativo — copia direto (preserva toda formatação)
       const copied = await drive.files.copy({
         fileId: TEMPLATE_ID,
         requestBody: {
           name: novoNome,
-          parents: [FOLDER_ID],
+          parents: [OUTPUT_FOLDER_ID],
         },
         fields: 'id',
       });
       spreadsheetId = copied.data.id;
     } else {
-      // É .xlsx — baixa o arquivo e reenvia como Sheets (converte na subida)
+      // Fallback pra .xlsx — baixa e reenvia convertendo
       const xlsxBuffer = await drive.files.get(
         { fileId: TEMPLATE_ID, alt: 'media' },
         { responseType: 'arraybuffer' }
@@ -81,7 +82,7 @@ module.exports = async function handler(req, res) {
         requestBody: {
           name: novoNome,
           mimeType: 'application/vnd.google-apps.spreadsheet',
-          parents: [FOLDER_ID],
+          parents: [OUTPUT_FOLDER_ID],
         },
         media: {
           mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
