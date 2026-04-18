@@ -27,9 +27,13 @@ module.exports = async function handler(req, res) {
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
 
     const copia = await drive.files.copy({
-      fileId: templateId,
-      requestBody: { name: novoNome },
-    });
+  fileId: templateId,
+  requestBody: {
+    name: novoNome,
+    parents: ['1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'],
+  },
+});
+    
     const spreadsheetId = copia.data.id;
 
     await drive.permissions.create({
