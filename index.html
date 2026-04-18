@@ -1272,37 +1272,6 @@ function handleFile(event) {
   event.target.value = '';
 }
 
-  AppState.originalFileName = file.name;
-
-  var reader = new FileReader();
-  reader.onload = function (ev) {
-    try {
-      var wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true, dateNF: 'dd/mm/yyyy' });
-      var data = parseExcel(wb);
-
-      if (!data.length) {
-        showError('Nenhuma campanha encontrada.');
-        return;
-      }
-
-      AppState.campaignsData = data;
-      AppState.capaData = collectCapaDataSafe();
-
-      var info = parseFileName(AppState.originalFileName);
-      $('clienteName').textContent = info.cliente;
-
-      showReview();
-      saveAppState();
-    } catch (err) {
-      console.error(err);
-      showError('Erro ao processar.');
-    }
-  };
-
-  reader.readAsArrayBuffer(file);
-  event.target.value = '';
-}
-
 function showError(msg) {
   $('errorText').textContent = msg;
   $('errorMsg').style.display = 'flex';
@@ -1667,13 +1636,13 @@ wsCapa.getRow(8).height=8;
 var pct=function(v){var s=String(v||'').trim();return s?s+(s.slice(-1)==='%'?'':' %'):'';};
 wsCapa.getRow(9).height=30;wsCapa.getRow(10).height=30;
 wsCapa.mergeCells('C9:D10');wsCapa.mergeCells('E9:F10');wsCapa.mergeCells('J9:K10');wsCapa.mergeCells('L9:M10');
-wsCapa.getCell('C9').value=capaData.fb.homens)+' Homens';
+wsCapa.getCell('C9').value=pct(capaData.fb.homens)+' Homens';
 wsCapa.getCell('C9').fill=G;wsCapa.getCell('C9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('C9').alignment=al('center','middle');
-wsCapa.getCell('E9').value=capaData.fb.mulheres)+' Mulheres';
+wsCapa.getCell('E9').value=pct(capaData.fb.mulheres)+' Mulheres';
 wsCapa.getCell('E9').fill=G;wsCapa.getCell('E9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('E9').alignment=al('center','middle');
-wsCapa.getCell('J9').value=capaData.ig.homens)+' Homens';
+wsCapa.getCell('J9').value=pct(capaData.ig.homens)+' Homens';
 wsCapa.getCell('J9').fill=G;wsCapa.getCell('J9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('J9').alignment=al('center','middle');
-wsCapa.getCell('L9').value=capaData.ig.mulheres)+' Mulheres';
+wsCapa.getCell('L9').value=pct(capaData.ig.mulheres)+' Mulheres';
 wsCapa.getCell('L9').fill=G;wsCapa.getCell('L9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('L9').alignment=al('center','middle');
 
 // ── ROW 11: Espaço ────────────────────────────────────────────
