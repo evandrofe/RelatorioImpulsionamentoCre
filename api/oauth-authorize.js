@@ -13,8 +13,9 @@ module.exports = async function handler(req, res) {
     );
 
     const scopes = [
-      'https://www.googleapis.com/auth/drive.file',
-      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive',           // acesso completo ao Drive
+      'https://www.googleapis.com/auth/spreadsheets',    // editar planilhas
+      'https://www.googleapis.com/auth/userinfo.email',  // descobrir qual conta está logada
     ];
 
     const authUrl = oauth2Client.generateAuthUrl({
