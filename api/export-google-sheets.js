@@ -23,19 +23,22 @@ module.exports = async function handler(req, res) {
     const drive = google.drive({ version: 'v3', auth: authClient });
     const sheets = google.sheets({ version: 'v4', auth: authClient });
 
-    const templateId = process.env.GOOGLE_SHEETS_TEMPLATE_ID;
     const novoNome = ['Relatório', cliente, mes, ano].filter(Boolean).join(' - ');
 
-    const copia = await drive.files.copy({
-  fileId: templateId,
-  requestBody: {
-    name: novoNome,
-    parents: ['1utUZnroB5FPJxPSPI12gjovC3YNdHGXH'],
-  },
-});
-    
-    const spreadsheetId = copia.data.id;
+    // Cria planilha nova do zero (não copia — evita quota da service account)
+    const nova = await sheets.spreadsheets.create({
+      requestBody: {
+        properties: { title: novoNome },
+        sheets: [
+          { properties: { title: 'Capa' } },
+          { properties: { title: 'Relatório' } },
+        ],
+      },
+    });
 
+    const spreadsheetId = nova.data.spreadsheetId;
+
+    // Compartilha com você como editor
     await drive.permissions.create({
       fileId: spreadsheetId,
       requestBody: {
@@ -45,11 +48,7 @@ module.exports = async function handler(req, res) {
       },
     });
 
-    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
-    const abas = spreadsheet.data.sheets.map(s => s.properties.title);
-    const abaCapa = abas.find(a => a.toLowerCase().includes('capa')) || abas[0];
-    const abaRelatorio = abas.find(a => a.toLowerCase().includes('relat')) || abas[1];
-
+    // ── CAPA ──
     const fb = capaData?.fb || {};
     const ig = capaData?.ig || {};
     const titulo = [cliente, mes, ano].filter(Boolean).join(' - ');
@@ -70,11 +69,12 @@ module.exports = async function handler(req, res) {
 
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${abaCapa}!A1`,
+      range: 'Capa!A1',
       valueInputOption: 'USER_ENTERED',
       requestBody: { values: capaValues },
     });
 
+    // ── RELATÓRIO ──
     const cabecalho = [
       'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
       'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
@@ -107,7 +107,7 @@ module.exports = async function handler(req, res) {
 
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${abaRelatorio}!A1`,
+      range: 'Relatório!A1',
       valueInputOption: 'USER_ENTERED',
       requestBody: { values: [cabecalho, ...linhas] },
     });
