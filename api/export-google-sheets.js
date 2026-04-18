@@ -1,10 +1,8 @@
-// Versão OAuth — copia o modelo (Google Sheets nativo) pra pasta de saída
-// e preenche os dados nas células mapeadas.
+// Versão OAuth com logs detalhados pra debug.
 
 const { google } = require('googleapis');
 const { Readable } = require('stream');
 
-// Pasta onde os relatórios finais são salvos (RELATORIOS ADS APP)
 const OUTPUT_FOLDER_ID = '1df1RnmflydB0D7ToThnvh63KAhnYxObo';
 
 module.exports = async function handler(req, res) {
@@ -12,23 +10,38 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
+  // Helper para loggar de forma estruturada
+  const log = (step, data) => console.log(`[DEBUG] ${step}:`, JSON.stringify(data));
+  const logErr = (step, err) => console.error(`[DEBUG-ERROR] ${step}:`, JSON.stringify({
+    message: err.message,
+    code: err.code,
+    status: err.status,
+    errors: err.errors,
+    response_status: err.response && err.response.status,
+    response_data: err.response && err.response.data,
+  }));
+
   try {
     const { cliente, mes, ano, campaignsData, capaData } = req.body;
 
-    // ── Validações ────────────────────────────────────────────
+    log('1-env-check', {
+      hasRefreshToken: !!process.env.GOOGLE_REFRESH_TOKEN,
+      refreshTokenPrefix: process.env.GOOGLE_REFRESH_TOKEN
+        ? process.env.GOOGLE_REFRESH_TOKEN.substring(0, 10) + '...'
+        : 'MISSING',
+      templateId: process.env.GOOGLE_SHEETS_TEMPLATE_ID,
+      hasClientId: !!process.env.GOOGLE_OAUTH_CLIENT_ID,
+      hasClientSecret: !!process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+      redirectUri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    });
+
     if (!process.env.GOOGLE_REFRESH_TOKEN) {
-      return res.status(500).json({
-        success: false,
-        error: 'GOOGLE_REFRESH_TOKEN não configurado.',
-      });
+      return res.status(500).json({ success: false, error: 'GOOGLE_REFRESH_TOKEN não configurado.' });
     }
 
     const TEMPLATE_ID = process.env.GOOGLE_SHEETS_TEMPLATE_ID;
     if (!TEMPLATE_ID) {
-      return res.status(500).json({
-        success: false,
-        error: 'GOOGLE_SHEETS_TEMPLATE_ID não configurado.',
-      });
+      return res.status(500).json({ success: false, error: 'GOOGLE_SHEETS_TEMPLATE_ID não configurado.' });
     }
 
     // ── Auth ──────────────────────────────────────────────────
@@ -41,6 +54,29 @@ module.exports = async function handler(req, res) {
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
+    // Testa a autenticação pegando o userinfo
+    try {
+      const tokenResponse = await oauth2Client.getAccessToken();
+      log('2-token-obtained', {
+        hasToken: !!tokenResponse.token,
+        tokenPrefix: tokenResponse.token ? tokenResponse.token.substring(0, 15) + '...' : 'NONE',
+      });
+
+      // Descobre qual conta tá logada
+      const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
+      const userinfo = await oauth2.userinfo.get();
+      log('3-userinfo', {
+        email: userinfo.data.email,
+        verified: userinfo.data.verified_email,
+      });
+    } catch (err) {
+      logErr('2-token-or-userinfo', err);
+      return res.status(500).json({
+        success: false,
+        error: 'Falha na autenticação OAuth: ' + err.message,
+      });
+    }
+
     const drive = google.drive({ version: 'v3', auth: oauth2Client });
     const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
 
@@ -49,51 +85,93 @@ module.exports = async function handler(req, res) {
     const fb = (capaData && capaData.fb) || {};
     const ig = (capaData && capaData.ig) || {};
 
-    // ── 1. Copiar o template pra pasta de saída ───────────────
-    const templateMeta = await drive.files.get({
-      fileId: TEMPLATE_ID,
-      fields: 'mimeType, name',
-    });
-
-    let spreadsheetId;
-
-    if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
-      // Google Sheets nativo — copia direto (preserva toda formatação)
-      const copied = await drive.files.copy({
+    // ── Tenta acessar o template ──────────────────────────────
+    let templateMeta;
+    try {
+      templateMeta = await drive.files.get({
         fileId: TEMPLATE_ID,
-        requestBody: {
-          name: novoNome,
-          parents: [OUTPUT_FOLDER_ID],
-        },
-        fields: 'id',
+        fields: 'id, mimeType, name, owners, trashed',
       });
-      spreadsheetId = copied.data.id;
-    } else {
-      // Fallback pra .xlsx — baixa e reenvia convertendo
-      const xlsxBuffer = await drive.files.get(
-        { fileId: TEMPLATE_ID, alt: 'media' },
-        { responseType: 'arraybuffer' }
-      );
-
-      const buf = Buffer.from(xlsxBuffer.data);
-      const stream = Readable.from(buf);
-
-      const uploaded = await drive.files.create({
-        requestBody: {
-          name: novoNome,
-          mimeType: 'application/vnd.google-apps.spreadsheet',
-          parents: [OUTPUT_FOLDER_ID],
-        },
-        media: {
-          mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          body: stream,
-        },
-        fields: 'id',
+      log('4-template-found', {
+        id: templateMeta.data.id,
+        name: templateMeta.data.name,
+        mimeType: templateMeta.data.mimeType,
+        owners: templateMeta.data.owners && templateMeta.data.owners.map(o => o.emailAddress),
+        trashed: templateMeta.data.trashed,
       });
-      spreadsheetId = uploaded.data.id;
+    } catch (err) {
+      logErr('4-template-get', err);
+      return res.status(500).json({
+        success: false,
+        error: `Erro ao acessar template (${TEMPLATE_ID}): ${err.message}`,
+      });
     }
 
-    // ── 2. Preencher a Capa nas células mapeadas ──────────────
+    // ── Tenta acessar a pasta de saída ────────────────────────
+    try {
+      const folderMeta = await drive.files.get({
+        fileId: OUTPUT_FOLDER_ID,
+        fields: 'id, name, owners, mimeType',
+      });
+      log('5-folder-found', {
+        id: folderMeta.data.id,
+        name: folderMeta.data.name,
+        owners: folderMeta.data.owners && folderMeta.data.owners.map(o => o.emailAddress),
+      });
+    } catch (err) {
+      logErr('5-folder-get', err);
+      return res.status(500).json({
+        success: false,
+        error: `Erro ao acessar pasta de saída (${OUTPUT_FOLDER_ID}): ${err.message}`,
+      });
+    }
+
+    // ── Copiar o template ─────────────────────────────────────
+    let spreadsheetId;
+    try {
+      if (templateMeta.data.mimeType === 'application/vnd.google-apps.spreadsheet') {
+        const copied = await drive.files.copy({
+          fileId: TEMPLATE_ID,
+          requestBody: {
+            name: novoNome,
+            parents: [OUTPUT_FOLDER_ID],
+          },
+          fields: 'id',
+        });
+        spreadsheetId = copied.data.id;
+        log('6-copied', { spreadsheetId });
+      } else {
+        const xlsxBuffer = await drive.files.get(
+          { fileId: TEMPLATE_ID, alt: 'media' },
+          { responseType: 'arraybuffer' }
+        );
+        const buf = Buffer.from(xlsxBuffer.data);
+        const stream = Readable.from(buf);
+
+        const uploaded = await drive.files.create({
+          requestBody: {
+            name: novoNome,
+            mimeType: 'application/vnd.google-apps.spreadsheet',
+            parents: [OUTPUT_FOLDER_ID],
+          },
+          media: {
+            mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            body: stream,
+          },
+          fields: 'id',
+        });
+        spreadsheetId = uploaded.data.id;
+        log('6-uploaded-xlsx', { spreadsheetId });
+      }
+    } catch (err) {
+      logErr('6-copy', err);
+      return res.status(500).json({
+        success: false,
+        error: `Erro ao copiar template: ${err.message}`,
+      });
+    }
+
+    // ── Preencher Capa ────────────────────────────────────────
     const pct = v => {
       const s = String(v || '').trim();
       if (!s) return '';
@@ -101,10 +179,7 @@ module.exports = async function handler(req, res) {
     };
 
     const capaUpdates = [
-      // CABEÇALHO
       { range: 'Capa!C2', values: [[titulo]] },
-
-      // FACEBOOK
       { range: 'Capa!E12', values: [[fb.seguidores || '']] },
       { range: 'Capa!C15', values: [[fb.segAnterior ? `${fb.segAnterior} seguidores no mês anterior` : '']] },
       { range: 'Capa!E18', values: [[fb.homens ? `👨 ${pct(fb.homens)} Homens` : '']] },
@@ -112,8 +187,6 @@ module.exports = async function handler(req, res) {
       { range: 'Capa!B33', values: [[fb.faixa || '']] },
       { range: 'Capa!D33', values: [[fb.alcancadas || '']] },
       { range: 'Capa!G33', values: [[fb.visitas || '']] },
-
-      // INSTAGRAM
       { range: 'Capa!N12', values: [[ig.seguidores || '']] },
       { range: 'Capa!L15', values: [[ig.segAnterior ? `${ig.segAnterior} seguidores no mês anterior` : '']] },
       { range: 'Capa!N18', values: [[ig.homens ? `👨 ${pct(ig.homens)} Homens` : '']] },
@@ -123,15 +196,21 @@ module.exports = async function handler(req, res) {
       { range: 'Capa!P33', values: [[ig.visitas || '']] },
     ];
 
-    await sheets.spreadsheets.values.batchUpdate({
-      spreadsheetId,
-      requestBody: {
-        valueInputOption: 'USER_ENTERED',
-        data: capaUpdates,
-      },
-    });
+    try {
+      await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId,
+        requestBody: {
+          valueInputOption: 'USER_ENTERED',
+          data: capaUpdates,
+        },
+      });
+      log('7-capa-filled', { cells: capaUpdates.length });
+    } catch (err) {
+      logErr('7-capa', err);
+      // não falha, continua
+    }
 
-    // ── 3. Preencher a aba Relatório (cabeçalho + dados) ──────
+    // ── Preencher Relatório ───────────────────────────────────
     const cabecalho = [
       'Nome da Ação', 'Formato', 'Validade', 'Investimento', 'Valor Gasto',
       'Alcance', 'Engajamento', 'Cliques no Link', 'Visualização (ThruPlay)',
@@ -163,29 +242,29 @@ module.exports = async function handler(req, res) {
 
     const valoresRelatorio = [cabecalho, ...linhas];
 
-    // Limpa a aba Relatório antes (caso o modelo tenha dados antigos)
-    await sheets.spreadsheets.values.clear({
-      spreadsheetId,
-      range: 'Relatório!A1:Q1000',
-    });
+    try {
+      await sheets.spreadsheets.values.clear({
+        spreadsheetId,
+        range: 'Relatório!A1:Q1000',
+      });
 
-    await sheets.spreadsheets.values.update({
-      spreadsheetId,
-      range: 'Relatório!A1',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: { values: valoresRelatorio },
-    });
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: 'Relatório!A1',
+        valueInputOption: 'USER_ENTERED',
+        requestBody: { values: valoresRelatorio },
+      });
+      log('8-relatorio-filled', { rows: valoresRelatorio.length });
+    } catch (err) {
+      logErr('8-relatorio', err);
+    }
 
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+    log('9-done', { url });
     return res.status(200).json({ success: true, url, spreadsheetId });
 
   } catch (err) {
-    console.error('Erro export Google Sheets:', JSON.stringify({
-      message: err.message,
-      code: err.code,
-      status: err.status,
-      errors: err.errors,
-    }));
+    logErr('FATAL', err);
     return res.status(500).json({ success: false, error: err.message });
   }
 };
