@@ -184,10 +184,10 @@ module.exports = async function handler(req, res) {
         (o === 'EngLink' || o === 'ConvLink') ? fmtBRL(r.cpc) : '',
         o === 'Reels' ? fmtBRL(r.cThru) : '',
         (o === 'Engajamento' && isEF) ? fmtBRL(r.cInt) : '',
-        o === 'Conversas' ? fmtBRL(r.cConv) : '',
+        (o === 'Conversas' || o === 'WhatsEng') ? fmtBRL(r.cConv) : '',
         '',
         '',
-        o === 'Conversas' ? fmtNum(r.conv) : '',
+        (o === 'Conversas' || o === 'WhatsEng') ? fmtNum(r.conv) : '',
       ]);
     });
 
