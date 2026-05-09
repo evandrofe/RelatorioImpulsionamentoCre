@@ -1043,15 +1043,15 @@ function parseExcel(wb) {
   var iCN=getIdx(headers,['nome da campanha','campaign name']);
   var iAN=getIdx(headers,['nome do anuncio','ad name']);
   var iCA=getIdx(headers,['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);
-  var iDI=getIdx(headers,['inicio','start']);
-  var iDT=getIdx(headers,['termino','end']);
+  var iDI=getIdx(headers,['inicio dos relatorios','inicio','start','data de inicio']);
+  var iDT=getIdx(headers,['termino dos relatorios','termino','end','data de termino']);
   var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);
   var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);
   var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);
   var iIm=getIdx(headers,['impressoes','impressions']);
   var iR=getIdx(headers,['alcance','reach']);
   var iRes=getIdx(headers,['resultados','results','result']);
-  var iEP=getIdx(headers,['engajamentos com o post','post engagements']);
+  var iEP=getIdx(headers,['engajamentos com o post','post engagements','classificacao da taxa de engajamento']);
   var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);
   var iCPR=getIdx(headers,['custo por resultado','cost per result']);
   var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);
@@ -1062,7 +1062,18 @@ function parseExcel(wb) {
   for (var i = 1; i < rows.length; i++) {
     var row = rows[i];
     if (!row || !row.length) continue;
-    var g = function(idx){return (idx>=0&&idx<row.length)?row[idx]:undefined;};
+    var g = function(idx){
+      if (idx < 0 || idx >= row.length) return undefined;
+      var val = row[idx];
+      // Converte string numérica para número
+      if (typeof val === 'string') {
+        var trimmed = val.trim();
+        if (trimmed === '–' || trimmed === '—' || trimmed === '-') return 0;
+        var asNum = parseFloat(trimmed.replace(',','.'));
+        if (!isNaN(asNum) && trimmed !== '') return asNum;
+      }
+      return val;
+    };
     var nameRaw = g(iCN);
     if (!nameRaw) continue;
     var name = String(nameRaw).trim();
