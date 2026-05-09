@@ -644,7 +644,7 @@ var OBJ_BADGE = {
   indefinido:'badge-unknown'
 };
 var OBJ_OPTIONS = ['Alcance','Engajamento','EngLink','Conversas','ConvLink','WhatsEng','Reels','ReelsEng','ReelsAlc','ReelsWhats','ReelsEngLink','Trafego','TrafWhats','TrafLink'];
-var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v1';
+var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v2';
 var DEFAULT_CLASSIFIER_CONFIG = {
   normalizationAliases: {
     panfleto:['panfletos'],
@@ -1825,6 +1825,8 @@ function restoreAppState() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Limpa config de versão antiga se existir
+  try { localStorage.removeItem('relatorios_ads_classifier_config_v1'); } catch(e) {}
   CampaignClassifier.ensureConfig();
   refreshClassifierConfigEditor();
   bindCapaInputs();
