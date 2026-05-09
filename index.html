@@ -36,7 +36,6 @@ main{max-width:1400px;margin:0 auto;padding:32px 24px}
 .instructions strong{color:#9ca3af;display:block;margin-bottom:8px}
 .instructions ul{padding-left:20px;line-height:1.8}
 .instructions code{background:#1a1a1a;padding:2px 6px;border-radius:4px;font-size:12px;color:#ff9900}
-/* Review */
 #reviewArea{display:none}
 .review-card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;margin-bottom:16px}
 .review-card h2{font-size:20px;font-weight:700;margin-bottom:4px}
@@ -61,7 +60,6 @@ main{max-width:1400px;margin:0 auto;padding:32px 24px}
 .review-actions{display:flex;gap:12px;align-items:center;margin-top:8px}
 .review-stats{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
 .stat-chip{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600}
-/* Capa */
 #capaArea{display:none}
 .capa-card{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px}
 .capa-card h2{font-size:20px;font-weight:700;margin-bottom:4px}
@@ -76,7 +74,6 @@ main{max-width:1400px;margin:0 auto;padding:32px 24px}
 .capa-field input{width:100%;background:#1a1a1a;border:1px solid #404040;border-radius:6px;padding:8px 12px;color:#fff;font-size:14px;font-family:inherit}.capa-field input:focus{border-color:#ff9900;outline:none}
 .capa-field input::placeholder{color:#555}
 .capa-actions{display:flex;gap:12px;align-items:center;margin-top:20px}
-/* Preview Capa */
 #capaPreview{display:none;margin-top:28px}
 .capa-preview-box{background:#FBBC04;border-radius:12px;padding:24px;font-family:'Montserrat','Segoe UI',sans-serif;color:#000;box-shadow:0 8px 32px rgba(251,188,4,.25);border:2px solid #e0a800}
 .capa-preview-title{font-size:22px;font-weight:900;text-align:center;color:#fff;background:rgba(0,0,0,.15);border-radius:8px;padding:10px 16px;margin-bottom:20px;letter-spacing:.5px;word-break:break-word}
@@ -92,7 +89,6 @@ main{max-width:1400px;margin:0 auto;padding:32px 24px}
 .capa-preview-metric{text-align:center;background:rgba(255,255,255,.25);border-radius:6px;padding:6px 4px}
 .capa-preview-metric .val{font-size:16px;font-weight:800;display:block}
 .capa-preview-metric .lbl{font-size:9px;font-weight:600;text-transform:uppercase;color:rgba(0,0,0,.6);line-height:1.2;margin-top:2px;display:block}
-/* Report */
 .report-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .report-header h2{font-size:22px;font-weight:700}
 .report-header p{color:#9ca3af;font-size:13px;margin-top:2px}
@@ -110,7 +106,6 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
 .legend p{font-size:13px;margin-bottom:10px;line-height:1.6}
 .legend-note{font-size:11px;color:#6b7280;border-top:1px solid #ddd;padding-top:10px;margin-top:10px}
 @media print{header,#headerBtns,.btn-back{display:none!important}body{background:#fff;color:#000}main{padding:0}}
-
 .config-panel{margin-top:18px;padding:16px;border:1px solid #262626;border-radius:12px;background:#171717}
 .config-panel summary{cursor:pointer;font-weight:700;color:#fff;list-style:none}
 .config-panel summary::-webkit-details-marker{display:none}
@@ -124,8 +119,6 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
 .btn-warning{background:#7c2d12;color:#fff;border:1px solid #9a3412}
 .btn-warning:hover{background:#9a3412}
 .config-status{margin-top:12px;font-size:13px;color:#d4d4d4;min-height:18px}
-
-
 .progress-wrap{max-width:1100px;margin:0 auto 24px}
 .progress-steps{display:flex;gap:12px;flex-wrap:wrap}
 .progress-step{flex:1;min-width:180px;background:#171717;border:1px solid #2f2f2f;border-radius:12px;padding:12px 14px;opacity:.55;transition:all .2s}
@@ -151,8 +144,6 @@ table.report td:first-child{text-align:left;white-space:normal;min-width:180px}
 .classification-banner strong{display:block;color:#fff;margin-bottom:4px}
 footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
 @media(max-width:700px){.summary-grid{grid-template-columns:1fr}}
-
-
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr);gap:24px;align-items:start}
 .premium-panel{background:linear-gradient(180deg,#171717 0%,#121212 100%);border:1px solid #2c2c2c;border-radius:18px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.28)}
 .hero-title{font-size:34px;line-height:1.05;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:12px}
@@ -187,14 +178,8 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
 .example-stat{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px 14px}
 .example-stat span{color:#b8b8b8;font-size:12px}
 .example-stat strong{color:#fff;font-size:14px}
-@media(max-width:980px){
-  .hero-grid{grid-template-columns:1fr}
-  .hero-title{font-size:28px}
-}
-@media(max-width:700px){
-  .compat-list{grid-template-columns:1fr}
-}
-
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr}.hero-title{font-size:28px}}
+@media(max-width:700px){.compat-list{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -243,25 +228,21 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
           <span class="hero-badge">📊 Exportação em Excel</span>
           <span class="hero-badge">🧠 Regras configuráveis por JSON</span>
         </div>
-
         <div class="hero-upload-head">
           <div>
             <h1 class="hero-title">Transforme exportações do Meta Ads em relatórios prontos para múltiplos clientes.</h1>
             <p class="hero-desc">Envie a planilha de qualquer cliente exportada do Meta Ads e deixe o sistema identificar cliente, período, campanhas, formatos e objetivos para acelerar seu fechamento mensal.</p>
           </div>
         </div>
-
         <div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg></div>
         <div class="upload-hero">
           <div class="upload-hero-badge">Fluxo guiado</div>
           <h2>Importe sua planilha do Meta Ads</h2>
           <p class="upload-subtext">Comece com um arquivo <strong>.xlsx</strong> exportado do Gerenciador de Anúncios. O sistema faz a leitura inicial automaticamente e leva você até a exportação final em poucos passos.</p>
         </div>
-
         <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(event)"/>
         <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Selecionar planilha do Meta Ads</button>
         <div class="upload-hint">ou arraste e solte o arquivo .xlsx aqui</div>
-
         <div class="compat-box">
           <div class="compat-box-title">Compatibilidade e leitura automática</div>
           <div class="compat-list">
@@ -275,9 +256,7 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
             </div>
           </div>
         </div>
-
         <div id="errorMsg" class="error" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span id="errorText"></span></div>
-
         <div id="fileSummary" style="display:none">
           <div class="summary-grid">
             <div class="summary-card">
@@ -298,17 +277,14 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
             </div>
           </div>
         </div>
-
         <div id="classificationBanner" class="classification-banner">
           <strong>Leitura automática concluída</strong>
           <span id="classificationBannerText">O sistema já analisou a planilha.</span>
         </div>
-
         <div class="instructions">
           <strong>Padrão de nome das campanhas:</strong>
           <ul><li><code>Nome - Formato - Data - Objetivo</code></li><li>Objetivos: <code>ALC</code> <code>ENG</code> <code>WHATS</code> <code>VIEWS</code></li><li>Modificador: <code>CLIQUE NO LINK</code></li></ul>
         </div>
-
         <details class="config-panel">
         <summary>⚙️ Configurar regras do CampaignClassifier via JSON</summary>
         <p>Edite as regras abaixo para mudar a detecção de formato, objetivo e prioridade sem alterar o código. Ao aplicar, as campanhas já importadas também são reclassificadas.</p>
@@ -320,54 +296,38 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
         </div>
         <div id="classifierConfigStatus" class="config-status"></div>
       </details>
-
     </div>
-  </div>
-      <div>
-        <div class="side-card">
-          <h3>Como funciona</h3>
-          <div class="flow-list">
-            <div class="flow-item">
-              <div class="flow-num">1</div>
-              <div><strong>Envie a planilha</strong><span>Importe a planilha exportada do Meta Ads de qualquer cliente em poucos segundos.</span></div>
-            </div>
-            <div class="flow-item">
-              <div class="flow-num">2</div>
-              <div><strong>Revise a classificação</strong><span>Confira objetivos e formatos detectados automaticamente.</span></div>
-            </div>
-            <div class="flow-item">
-              <div class="flow-num">3</div>
-              <div><strong>Preencha a capa</strong><span>Complete Facebook e Instagram com os dados do período.</span></div>
-            </div>
-            <div class="flow-item">
-              <div class="flow-num">4</div>
-              <div><strong>Exporte o relatório</strong><span>Baixe o Excel final formatado para revisão e entrega.</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="side-card">
-          <h3>O que o sistema identifica sozinho</h3>
-          <div class="auto-list">
-            <div class="auto-pill"><span>Cliente</span><small>nome do arquivo</small></div>
-            <div class="auto-pill"><span>Período</span><small>mês e ano</small></div>
-            <div class="auto-pill"><span>Campanhas</span><small>linhas da planilha</small></div>
-            <div class="auto-pill"><span>Formatos</span><small>aliases e normalização</small></div>
-            <div class="auto-pill"><span>Objetivos</span><small>regras configuráveis</small></div>
-          </div>
-        </div>
-
-        <div class="side-card example-card">
-          <h3>Compatível com múltiplos clientes</h3>
-          <div class="example-file">Uso recorrente com diferentes planilhas exportadas do Meta Ads</div>
-          <div class="example-stats">
-            <div class="example-stat"><span>Cliente identificado</span><strong>Pelo nome do arquivo</strong></div>
-            <div class="example-stat"><span>Período detectado</span><strong>Mês e ano automáticos</strong></div>
-            <div class="example-stat"><span>Campanhas analisadas</span><strong>Leitura da planilha importada</strong></div>
-            <div class="example-stat"><span>Fluxo padronizado</span><strong>Upload → revisão → capa → exportação</strong></div>
-          </div>
+    <div>
+      <div class="side-card">
+        <h3>Como funciona</h3>
+        <div class="flow-list">
+          <div class="flow-item"><div class="flow-num">1</div><div><strong>Envie a planilha</strong><span>Importe a planilha exportada do Meta Ads de qualquer cliente em poucos segundos.</span></div></div>
+          <div class="flow-item"><div class="flow-num">2</div><div><strong>Revise a classificação</strong><span>Confira objetivos e formatos detectados automaticamente.</span></div></div>
+          <div class="flow-item"><div class="flow-num">3</div><div><strong>Preencha a capa</strong><span>Complete Facebook e Instagram com os dados do período.</span></div></div>
+          <div class="flow-item"><div class="flow-num">4</div><div><strong>Exporte o relatório</strong><span>Baixe o Excel final formatado para revisão e entrega.</span></div></div>
         </div>
       </div>
+      <div class="side-card">
+        <h3>O que o sistema identifica sozinho</h3>
+        <div class="auto-list">
+          <div class="auto-pill"><span>Cliente</span><small>nome do arquivo</small></div>
+          <div class="auto-pill"><span>Período</span><small>mês e ano</small></div>
+          <div class="auto-pill"><span>Campanhas</span><small>linhas da planilha</small></div>
+          <div class="auto-pill"><span>Formatos</span><small>aliases e normalização</small></div>
+          <div class="auto-pill"><span>Objetivos</span><small>regras configuráveis</small></div>
+        </div>
+      </div>
+      <div class="side-card example-card">
+        <h3>Compatível com múltiplos clientes</h3>
+        <div class="example-file">Uso recorrente com diferentes planilhas exportadas do Meta Ads</div>
+        <div class="example-stats">
+          <div class="example-stat"><span>Cliente identificado</span><strong>Pelo nome do arquivo</strong></div>
+          <div class="example-stat"><span>Período detectado</span><strong>Mês e ano automáticos</strong></div>
+          <div class="example-stat"><span>Campanhas analisadas</span><strong>Leitura da planilha importada</strong></div>
+          <div class="example-stat"><span>Fluxo padronizado</span><strong>Upload → revisão → capa → exportação</strong></div>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
   <!-- REVIEW -->
@@ -412,7 +372,6 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
         <button class="btn-generate" onclick="confirmAndRender()" style="background:#15803d;border:1px solid #16a34a">Gerar Relatório</button>
         <button class="btn-back" onclick="backToReview()">← Voltar à Revisão</button>
       </div>
-      <!-- PREVIEW DA CAPA -->
       <div id="capaPreview">
         <div class="capa-preview-box" id="capaPreviewBox">
           <div class="capa-preview-title" id="prev_titulo">CLIENTE - MÊS - ANO</div>
@@ -424,7 +383,7 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
               <div class="capa-preview-genero">
                 <span id="prev_fb_h">— Homens</span>
                 <span id="prev_fb_m">— Mulheres</span>
-               </div>
+              </div>
               <div class="capa-preview-metrics">
                 <div class="capa-preview-metric"><span class="val" id="prev_fb_faixa">—</span><span class="lbl">Faixa Etária</span></div>
                 <div class="capa-preview-metric"><span class="val" id="prev_fb_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
@@ -438,7 +397,7 @@ footer{padding:24px 20px;text-align:center;color:#6b7280;font-size:12px}
               <div class="capa-preview-genero">
                 <span id="prev_ig_h">— Homens</span>
                 <span id="prev_ig_m">— Mulheres</span>
-            </div>
+              </div>
               <div class="capa-preview-metrics">
                 <div class="capa-preview-metric"><span class="val" id="prev_ig_faixa">—</span><span class="lbl">Faixa Etária</span></div>
                 <div class="capa-preview-metric"><span class="val" id="prev_ig_alc">—</span><span class="lbl">Contas Alcançadas</span></div>
@@ -476,6 +435,7 @@ var campaignsData = [];
 var originalFileName = '';
 var capaData = { fb: {}, ig: {} };
 
+// CORRIGIDO: removida declaração duplicada de GOOGLE_SHEETS_EXPORT_TEMPLATE
 var GOOGLE_SHEETS_EXPORT_TEMPLATE = {
   name: 'Modelo a ser preenchido 20',
   spreadsheetId: '1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA',
@@ -484,12 +444,6 @@ var GOOGLE_SHEETS_EXPORT_TEMPLATE = {
 };
 
 var APP_STORAGE_KEY = 'relatorios_ads_state_v1';
-var GOOGLE_SHEETS_EXPORT_TEMPLATE = {
-  name: 'Modelo a ser preenchido 20',
-  spreadsheetId: '1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA',
-  url: 'https://docs.google.com/spreadsheets/d/1pc9YlbSVQg5mGD5eh5Nbvr8SNH4t2Thlfr8mPUaMluA/edit',
-  sheetNames: ['Capa', 'Relatório']
-};
 var CAPA_INPUT_IDS = [
   'fb_seguidores', 'fb_seg_anterior', 'fb_homens', 'fb_mulheres',
   'fb_faixa', 'fb_alcancadas', 'fb_visitas',
@@ -560,21 +514,9 @@ var StorageService = {
   }
 };
 
-function buildPersistedState() {
-  return StorageService.buildState();
-}
-
-function saveAppState() {
-  StorageService.save();
-}
-
-function loadAppState() {
-  return StorageService.load();
-}
-
-function clearAppState() {
-  StorageService.clear();
-}
+function saveAppState() { StorageService.save(); }
+function loadAppState() { return StorageService.load(); }
+function clearAppState() { StorageService.clear(); }
 
 // ======================================================
 // Formatação e parsing utilitário
@@ -616,7 +558,6 @@ function parseMetaDate(v) {
   }
   if (!v) return null;
   var s = String(v).trim();
-  // AAAA-MM-DD (ISO sem hora) — parse manual pra evitar problema de timezone
   var iso8 = s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);
   if (iso8) {
     var di = new Date(+iso8[1], +iso8[2] - 1, +iso8[3]);
@@ -652,195 +593,105 @@ function getIdx(headers, keywords) {
     return keywords.some(function (keyword) { return header === keyword; });
   });
   if (exact >= 0) return exact;
-
   return headers.findIndex(function (header) {
     return keywords.some(function (keyword) { return header.includes(keyword); });
   });
 }
 
 function levenshtein(a, b) {
-  var m = a.length;
-  var n = b.length;
-  var d = [];
-
-  for (var i = 0; i <= m; i++) {
-    d[i] = [];
-    for (var j = 0; j <= n; j++) d[i][j] = 0;
-  }
-
+  var m = a.length, n = b.length, d = [];
+  for (var i = 0; i <= m; i++) { d[i] = []; for (var j = 0; j <= n; j++) d[i][j] = 0; }
   for (var i2 = 0; i2 <= m; i2++) d[i2][0] = i2;
   for (var j2 = 0; j2 <= n; j2++) d[0][j2] = j2;
-
   for (var row = 1; row <= m; row++) {
     for (var col = 1; col <= n; col++) {
       d[row][col] = Math.min(
-        d[row - 1][col] + 1,
-        d[row][col - 1] + 1,
-        d[row - 1][col - 1] + (a[row - 1] === b[col - 1] ? 0 : 1)
+        d[row-1][col]+1, d[row][col-1]+1,
+        d[row-1][col-1]+(a[row-1]===b[col-1]?0:1)
       );
     }
   }
-
   return d[m][n];
 }
 
 function fuzzyMatch(word, targets, maxDist) {
   var normalized = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
   for (var i = 0; i < targets.length; i++) {
     if (normalized === targets[i]) return true;
-    if (normalized.length >= 3 && targets[i].length >= 3 && levenshtein(normalized, targets[i]) <= maxDist) {
-      return true;
-    }
+    if (normalized.length >= 3 && targets[i].length >= 3 && levenshtein(normalized, targets[i]) <= maxDist) return true;
   }
-
   return false;
 }
 
 // ======================================================
 // Regras de classificação
 // ======================================================
-
 var OBJ_LABELS = {
-  Alcance: 'Alcance',
-  Engajamento: 'Engajamento',
-  EngLink: 'Engajamento + Link',
-  Conversas: 'Conversas (WhatsApp)',
-  ConvLink: 'WhatsApp + Link',
-  WhatsEng: 'Whats (Engajamento + Conversas)',
-  Reels: 'Reels/Vídeo (ThruPlay)',
-  indefinido: '⚠ Não detectado'
+  Alcance:'Alcance', Engajamento:'Engajamento', EngLink:'Engajamento + Link',
+  Conversas:'Conversas (WhatsApp)', ConvLink:'WhatsApp + Link',
+  WhatsEng:'Whats (Engajamento + Conversas)', Reels:'Reels/Vídeo (ThruPlay)',
+  ReelsEng:'Reels (Engajamento)', ReelsAlc:'Reels (Alcance)',
+  ReelsWhats:'Reels (WhatsApp)', ReelsEngLink:'Reels (Eng + Link)',
+  indefinido:'⚠ Não detectado'
 };
 var OBJ_BADGE = {
-  Alcance: 'badge-alc',
-  Engajamento: 'badge-eng',
-  EngLink: 'badge-eng-link',
-  Conversas: 'badge-conv',
-  ConvLink: 'badge-conv-link',
-  WhatsEng: 'badge-whatseng',
-  Reels: 'badge-views',
-  indefinido: 'badge-unknown'
+  Alcance:'badge-alc', Engajamento:'badge-eng', EngLink:'badge-eng-link',
+  Conversas:'badge-conv', ConvLink:'badge-conv-link', WhatsEng:'badge-whatseng',
+  Reels:'badge-views', ReelsEng:'badge-eng', ReelsAlc:'badge-alc',
+  ReelsWhats:'badge-conv', ReelsEngLink:'badge-eng-link',
+  indefinido:'badge-unknown'
 };
-var OBJ_OPTIONS = ['Alcance', 'Engajamento', 'EngLink', 'Conversas', 'ConvLink', 'WhatsEng', 'Reels'];
+var OBJ_OPTIONS = ['Alcance','Engajamento','EngLink','Conversas','ConvLink','WhatsEng','Reels','ReelsEng','ReelsAlc','ReelsWhats','ReelsEngLink'];
 var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v1';
 var DEFAULT_CLASSIFIER_CONFIG = {
   normalizationAliases: {
-    panfleto: ['panfletos'],
-    tabloide: ['tabloides', 'tablóide', 'tablóides', 'tabloid', 'tabloids'],
-    virtual: ['virtuais'],
-    carrossel: ['carrosel', 'carrosseis', 'carrosséis'],
-    reels: ['reel'],
-    video: ['vídeo', 'videos', 'vídeos', 'vid'],
-    whatsapp: ['whats', 'wpp', 'zap', 'zapp', 'wats'],
-    engajamento: ['eng', 'engaj', 'engajamentos'],
-    alcance: ['alc', 'al', 'alcances'],
-    conversa: ['conversas'],
-    clique: ['cliques', 'clic'],
-    link: ['links']
+    panfleto:['panfletos'],
+    tabloide:['tabloides','tablóide','tablóides','tabloid','tabloids'],
+    virtual:['virtuais'],
+    carrossel:['carrosel','carrosseis','carrosséis'],
+    reels:['reel'],
+    video:['vídeo','videos','vídeos','vid'],
+    whatsapp:['whats','wpp','zap','zapp','wats'],
+    engajamento:['eng','engaj','engajamentos'],
+    alcance:['alc','al','alcances'],
+    conversa:['conversas'],
+    clique:['cliques','clic'],
+    link:['links']
   },
-  formatKeywords: [
-    { keyword: 'reels', label: 'Reels' },
-    { keyword: 'panfleto', label: 'Panfleto', aliases: ['virtual', 'tabloide'] },
-    { keyword: 'carrossel', label: 'Carrossel' },
-    { keyword: 'post', label: 'Post' },
-    { keyword: 'video', label: 'Vídeo', aliases: ['vídeo'] }
+  formatKeywords:[
+    {keyword:'reels',label:'Reels'},
+    {keyword:'panfleto',label:'Panfleto',aliases:['virtual','tabloide']},
+    {keyword:'carrossel',label:'Carrossel'},
+    {keyword:'post',label:'Post'},
+    {keyword:'video',label:'Vídeo',aliases:['vídeo']}
   ],
-  objectivePriority: {
-    Alcance: 1,
-    Engajamento: 2,
-    EngLink: 3,
-    Conversas: 4,
-    ConvLink: 5,
-    WhatsEng: 6,
-    Reels: 7
-  },
-  objectiveRules: [
-    {
-      name: 'Reels por formato',
-      objective: 'Reels',
-      when: { formatIn: ['Reels', 'Vídeo'] }
-    },
-    {
-      name: 'WhatsApp + clique no link',
-      objective: 'ConvLink',
-      when: {
-        textRegex: 'CLIQUE\\s*(NO\\s*)?LINK',
-        anyWords: [['whats', 'whatsapp', 'wapp', 'wpp', 'zap']]
-      }
-    },
-    {
-      name: 'Tráfego + clique no link',
-      objective: 'EngLink',
-      when: {
-        textRegex: 'CLIQUE\\s*(NO\\s*)?LINK',
-        anyWords: [['trafego', 'tráfego'], ['engajamento', 'engaj', 'eng']]
-      }
-    },
-    {
-      name: 'Whats (Engajamento + Conversas)',
-      objective: 'WhatsEng',
-      when: {
-        allWords: [['whats', 'whatsapp', 'wapp', 'wpp', 'zap'], ['engajamento', 'engaj', 'eng']]
-      }
-    },
-    {
-      name: 'Conversas por WhatsApp',
-      objective: 'Conversas',
-      aliases: ['WhatsApp'],
-      when: {
-        anyWords: [['whats', 'whatsapp', 'wapp', 'wpp', 'zap']]
-      }
-    },
-    {
-      name: 'Engajamento',
-      objective: 'Engajamento',
-      when: {
-        anyWords: [['engajamento', 'engaj', 'eng']]
-      }
-    },
-    {
-      name: 'Alcance',
-      objective: 'Alcance',
-      when: {
-        anyWords: [['alcance', 'alc', 'al']]
-      }
-    },
-    {
-      name: 'Reels por visualização',
-      objective: 'Reels',
-      when: {
-        anyWords: [['views', 'visualizacao', 'visualizações', 'thruplay']]
-      }
-    }
+  objectivePriority:{Alcance:1,Engajamento:2,EngLink:3,Conversas:4,ConvLink:5,WhatsEng:6,Reels:7,ReelsEng:8,ReelsAlc:9,ReelsWhats:10,ReelsEngLink:11},
+  objectiveRules:[
+    {name:'Reels por formato',objective:'Reels',when:{formatIn:['Reels','Vídeo']}},
+    {name:'WhatsApp + clique no link',objective:'ConvLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
+    {name:'Tráfego + clique no link',objective:'EngLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['trafego','tráfego'],['engajamento','engaj','eng']]}},
+    {name:'Whats (Engajamento + Conversas)',objective:'WhatsEng',when:{allWords:[['whats','whatsapp','wapp','wpp','zap'],['engajamento','engaj','eng']]}},
+    {name:'Conversas por WhatsApp',objective:'Conversas',aliases:['WhatsApp'],when:{anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
+    {name:'Engajamento',objective:'Engajamento',when:{anyWords:[['engajamento','engaj','eng']]}},
+    {name:'Alcance',objective:'Alcance',when:{anyWords:[['alcance','alc','al']]}},
+    {name:'Reels por visualização',objective:'Reels',when:{anyWords:[['views','visualizacao','visualizações','thruplay']]}}
   ]
 };
 
-function deepClone(value) {
-  return JSON.parse(JSON.stringify(value));
-}
+function deepClone(value) { return JSON.parse(JSON.stringify(value)); }
 
 var CampaignClassifier = {
   config: null,
-  normalizeText: function (value) {
-    return String(value || '')
-      .toUpperCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^A-Z0-9]+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+  normalizeText: function(value) {
+    return String(value||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]+/g,' ').replace(/\s+/g,' ').trim();
   },
-  normalizeWord: function (value) {
-    return this.normalizeText(value).toLowerCase();
-  },
-  normalizeCompact: function (value) {
-    return this.normalizeWord(value).replace(/\s+/g, '');
-  },
-  tokenize: function (value) {
+  normalizeWord: function(value) { return this.normalizeText(value).toLowerCase(); },
+  normalizeCompact: function(value) { return this.normalizeWord(value).replace(/\s+/g,''); },
+  tokenize: function(value) {
     var classifier = this;
     var rawTokens = this.normalizeText(value).split(/[\s\-–_]+/).filter(Boolean);
     var result = [];
-    rawTokens.forEach(function (token) {
+    rawTokens.forEach(function(token) {
       var canonical = classifier.canonicalizeToken(token);
       if (canonical) result.push(canonical);
       if (canonical && canonical !== token.toLowerCase()) result.push(token.toLowerCase());
@@ -849,213 +700,157 @@ var CampaignClassifier = {
     });
     return Array.from(new Set(result.filter(Boolean)));
   },
-  ensureArray: function (value) {
-    return Array.isArray(value) ? value : [];
-  },
-  getDefaultConfig: function () {
-    return deepClone(DEFAULT_CLASSIFIER_CONFIG);
-  },
-  normalizeConfig: function (config) {
+  ensureArray: function(value) { return Array.isArray(value) ? value : []; },
+  getDefaultConfig: function() { return deepClone(DEFAULT_CLASSIFIER_CONFIG); },
+  normalizeConfig: function(config) {
     var base = config && typeof config === 'object' ? deepClone(config) : this.getDefaultConfig();
-
     var aliasesMap = base.normalizationAliases && typeof base.normalizationAliases === 'object'
-      ? base.normalizationAliases
-      : deepClone(DEFAULT_CLASSIFIER_CONFIG.normalizationAliases);
-
+      ? base.normalizationAliases : deepClone(DEFAULT_CLASSIFIER_CONFIG.normalizationAliases);
     var normalizedAliases = {};
-    Object.keys(aliasesMap || {}).forEach(function (key) {
+    Object.keys(aliasesMap||{}).forEach(function(key) {
       var canonical = CampaignClassifier.normalizeWord(key);
       if (!canonical) return;
-      normalizedAliases[canonical] = CampaignClassifier.ensureArray(aliasesMap[key]).map(function (alias) {
-        return String(alias || '').trim();
+      normalizedAliases[canonical] = CampaignClassifier.ensureArray(aliasesMap[key]).map(function(alias) {
+        return String(alias||'').trim();
       }).filter(Boolean);
     });
     base.normalizationAliases = normalizedAliases;
-
-    base.formatKeywords = this.ensureArray(base.formatKeywords).map(function (item) {
-      if (typeof item === 'string') {
-        return {
-          keyword: item,
-          label: item.charAt(0).toUpperCase() + item.slice(1),
-          aliases: []
-        };
-      }
-
+    base.formatKeywords = this.ensureArray(base.formatKeywords).map(function(item) {
+      if (typeof item === 'string') return {keyword:item,label:item.charAt(0).toUpperCase()+item.slice(1),aliases:[]};
       return {
-        keyword: String(item && item.keyword || '').trim(),
-        label: String(item && item.label || item && item.keyword || '').trim(),
-        aliases: CampaignClassifier.ensureArray(item && item.aliases).map(function (alias) {
-          return String(alias || '').trim();
-        }).filter(Boolean)
+        keyword:String(item&&item.keyword||'').trim(),
+        label:String(item&&item.label||item&&item.keyword||'').trim(),
+        aliases:CampaignClassifier.ensureArray(item&&item.aliases).map(function(alias){return String(alias||'').trim();}).filter(Boolean)
       };
-    }).filter(function (item) { return item.keyword; });
-
+    }).filter(function(item){return item.keyword;});
     base.objectivePriority = base.objectivePriority && typeof base.objectivePriority === 'object'
-      ? base.objectivePriority
-      : deepClone(DEFAULT_CLASSIFIER_CONFIG.objectivePriority);
-
-    base.objectiveRules = this.ensureArray(base.objectiveRules).map(function (rule) {
+      ? base.objectivePriority : deepClone(DEFAULT_CLASSIFIER_CONFIG.objectivePriority);
+    base.objectiveRules = this.ensureArray(base.objectiveRules).map(function(rule) {
       return {
-        name: String(rule && rule.name || '').trim(),
-        objective: String(rule && rule.objective || '').trim(),
-        aliases: CampaignClassifier.ensureArray(rule && rule.aliases).map(function (alias) {
-          return String(alias || '').trim();
-        }).filter(Boolean),
-        tolerance: typeof rule.tolerance === 'number' ? rule.tolerance : null,
-        when: rule && typeof rule.when === 'object' ? rule.when : {}
+        name:String(rule&&rule.name||'').trim(),
+        objective:String(rule&&rule.objective||'').trim(),
+        aliases:CampaignClassifier.ensureArray(rule&&rule.aliases).map(function(alias){return String(alias||'').trim();}).filter(Boolean),
+        tolerance:typeof rule.tolerance==='number'?rule.tolerance:null,
+        when:rule&&typeof rule.when==='object'?rule.when:{}
       };
-    }).filter(function (rule) { return rule.objective; });
-
+    }).filter(function(rule){return rule.objective;});
     if (!base.formatKeywords.length) base.formatKeywords = deepClone(DEFAULT_CLASSIFIER_CONFIG.formatKeywords);
     if (!base.objectiveRules.length) base.objectiveRules = deepClone(DEFAULT_CLASSIFIER_CONFIG.objectiveRules);
-
     return base;
   },
-  loadConfig: function () {
+  loadConfig: function() {
     try {
       var raw = localStorage.getItem(CLASSIFIER_CONFIG_STORAGE_KEY);
       if (!raw) return this.getDefaultConfig();
       return this.normalizeConfig(JSON.parse(raw));
-    } catch (err) {
-      console.warn('Não foi possível carregar a configuração do classificador.', err);
-      return this.getDefaultConfig();
-    }
+    } catch(err) { return this.getDefaultConfig(); }
   },
-  saveConfig: function (config) {
+  saveConfig: function(config) {
     var normalized = this.normalizeConfig(config);
     localStorage.setItem(CLASSIFIER_CONFIG_STORAGE_KEY, JSON.stringify(normalized));
     this.config = normalized;
     return normalized;
   },
-  resetConfig: function () {
-    try {
-      localStorage.removeItem(CLASSIFIER_CONFIG_STORAGE_KEY);
-    } catch (err) {
-      console.warn('Não foi possível limpar a configuração do classificador.', err);
-    }
+  resetConfig: function() {
+    try { localStorage.removeItem(CLASSIFIER_CONFIG_STORAGE_KEY); } catch(err) {}
     this.config = this.getDefaultConfig();
     return this.config;
   },
-  exportConfig: function () {
-    return JSON.stringify(this.ensureConfig(), null, 2);
-  },
-  ensureConfig: function () {
+  exportConfig: function() { return JSON.stringify(this.ensureConfig(), null, 2); },
+  ensureConfig: function() {
     if (!this.config) this.config = this.loadConfig();
     return this.config;
   },
-  toSingular: function (value) {
+  toSingular: function(value) {
     var word = this.normalizeWord(value);
     if (!word) return '';
-    if (word.endsWith('oes')) return word.slice(0, -3) + 'ao';
-    if (word.endsWith('aes')) return word.slice(0, -3) + 'ao';
-    if (word.endsWith('is') && word.length > 4) return word.slice(0, -2) + 'l';
-    if (word.endsWith('s') && word.length > 3) return word.slice(0, -1);
+    if (word.endsWith('oes')) return word.slice(0,-3)+'ao';
+    if (word.endsWith('aes')) return word.slice(0,-3)+'ao';
+    if (word.endsWith('is') && word.length > 4) return word.slice(0,-2)+'l';
+    if (word.endsWith('s') && word.length > 3) return word.slice(0,-1);
     return word;
   },
-  getAliasesForCanonical: function (canonical) {
+  getAliasesForCanonical: function(canonical) {
     var cfg = this.ensureConfig();
     var key = this.normalizeWord(canonical);
     return this.ensureArray(cfg.normalizationAliases && cfg.normalizationAliases[key]);
   },
-  canonicalizeToken: function (value) {
+  canonicalizeToken: function(value) {
     var token = this.toSingular(value);
     if (!token) return '';
     var cfg = this.ensureConfig();
     var aliasesMap = cfg.normalizationAliases || {};
     var keys = Object.keys(aliasesMap);
-
     for (var i = 0; i < keys.length; i++) {
       var canonical = this.normalizeWord(keys[i]);
       if (token === canonical) return canonical;
-
       var aliases = this.ensureArray(aliasesMap[keys[i]]);
       for (var j = 0; j < aliases.length; j++) {
         if (token === this.toSingular(aliases[j])) return canonical;
       }
     }
-
     return token;
   },
-  expandTermVariants: function (term) {
+  expandTermVariants: function(term) {
     var classifier = this;
-    var seen = {};
-    var variants = [];
-
+    var seen = {}, variants = [];
     function addVariant(value) {
       var normalized = classifier.normalizeWord(value);
       if (!normalized) return;
-      var forms = [normalized, classifier.toSingular(normalized)];
-      forms.forEach(function (form) {
-        if (!form) return;
-        if (!seen[form]) {
-          seen[form] = true;
-          variants.push(form);
-        }
+      [normalized, classifier.toSingular(normalized)].forEach(function(form) {
+        if (!form || seen[form]) return;
+        seen[form] = true; variants.push(form);
       });
     }
-
     addVariant(term);
     var canonical = this.canonicalizeToken(term);
     addVariant(canonical);
     this.getAliasesForCanonical(canonical).forEach(addVariant);
     this.getAliasesForCanonical(term).forEach(addVariant);
-
     return variants;
   },
-  getCanonicalObjective: function (objective) {
+  getCanonicalObjective: function(objective) {
     var cfg = this.ensureConfig();
     var normalizedObjective = this.normalizeText(objective);
-
     if (!normalizedObjective) return objective || '-';
-
     for (var i = 0; i < cfg.objectiveRules.length; i++) {
       var rule = cfg.objectiveRules[i];
       if (this.normalizeText(rule.objective) === normalizedObjective) return rule.objective;
-
       var aliases = this.ensureArray(rule.aliases);
       for (var j = 0; j < aliases.length; j++) {
-        if (this.normalizeText(aliases[j]) === normalizedObjective) {
-          return rule.objective;
-        }
+        if (this.normalizeText(aliases[j]) === normalizedObjective) return rule.objective;
       }
     }
-
     var priorities = Object.keys(cfg.objectivePriority || {});
     for (var p = 0; p < priorities.length; p++) {
       if (this.normalizeText(priorities[p]) === normalizedObjective) return priorities[p];
     }
-
     return objective || '-';
   },
-  hasFuzzyWord: function (words, dictionary, tolerance) {
+  hasFuzzyWord: function(words, dictionary, tolerance) {
     var expandedDictionary = [];
-    this.ensureArray(dictionary).forEach(function (item) {
+    this.ensureArray(dictionary).forEach(function(item) {
       expandedDictionary = expandedDictionary.concat(CampaignClassifier.expandTermVariants(item));
     });
     expandedDictionary = Array.from(new Set(expandedDictionary));
-
-    return words.some(function (word) {
-      return fuzzyMatch(word, expandedDictionary, tolerance);
-    });
+    return words.some(function(word) { return fuzzyMatch(word, expandedDictionary, tolerance); });
   },
-  normalizeWordGroups: function (groups) {
-    return this.ensureArray(groups).map(function (group) {
+  normalizeWordGroups: function(groups) {
+    return this.ensureArray(groups).map(function(group) {
       return Array.isArray(group) ? group : [group];
-    }).map(function (group) {
-      return group.map(function (item) { return String(item || '').trim(); }).filter(Boolean);
-    }).filter(function (group) { return group.length; });
+    }).map(function(group) {
+      return group.map(function(item){return String(item||'').trim();}).filter(Boolean);
+    }).filter(function(group){return group.length;});
   },
-  matchesWordGroup: function (words, group, tolerance) {
-    return this.hasFuzzyWord(words, group, tolerance);
-  },
-  matchesAllWordGroups: function (words, groups, tolerance) {
+  matchesWordGroup: function(words, group, tolerance) { return this.hasFuzzyWord(words, group, tolerance); },
+  matchesAllWordGroups: function(words, groups, tolerance) {
     var normalizedGroups = this.normalizeWordGroups(groups);
     for (var i = 0; i < normalizedGroups.length; i++) {
       if (!this.matchesWordGroup(words, normalizedGroups[i], tolerance)) return false;
     }
     return true;
   },
-  matchesAnyWordGroups: function (words, groups, tolerance) {
+  matchesAnyWordGroups: function(words, groups, tolerance) {
     var normalizedGroups = this.normalizeWordGroups(groups);
     if (!normalizedGroups.length) return false;
     for (var i = 0; i < normalizedGroups.length; i++) {
@@ -1063,114 +858,80 @@ var CampaignClassifier = {
     }
     return false;
   },
-  testRegex: function (pattern, text) {
+  testRegex: function(pattern, text) {
     if (!pattern) return true;
-    try {
-      return new RegExp(pattern, 'i').test(text);
-    } catch (err) {
-      console.warn('Regex inválida na configuração do classificador:', pattern, err);
-      return false;
-    }
+    try { return new RegExp(pattern,'i').test(text); } catch(err) { return false; }
   },
-  sourceContainsTerm: function (source, term) {
+  sourceContainsTerm: function(source, term) {
     var normalizedSource = this.normalizeWord(source);
     var compactSource = this.normalizeCompact(source);
     var variants = this.expandTermVariants(term);
-
     for (var i = 0; i < variants.length; i++) {
       var variant = variants[i];
       if (!variant) continue;
       if (normalizedSource.indexOf(variant) !== -1) return true;
-      if (compactSource.indexOf(variant.replace(/\s+/g, '')) !== -1) return true;
+      if (compactSource.indexOf(variant.replace(/\s+/g,'')) !== -1) return true;
     }
-
     return false;
   },
-  matchRule: function (rule, campName, format) {
+  matchRule: function(rule, campName, format) {
     var when = rule && rule.when || {};
-    var tolerance = typeof rule.tolerance === 'number'
-      ? rule.tolerance
-      : (typeof when.tolerance === 'number' ? when.tolerance : 1);
-
+    var tolerance = typeof rule.tolerance === 'number' ? rule.tolerance : (typeof when.tolerance === 'number' ? when.tolerance : 1);
     var normalizedText = this.normalizeText(campName);
     var normalizedFormat = this.normalizeText(format);
     var words = this.tokenize(campName);
-
     var formatIn = this.ensureArray(when.formatIn).map(this.normalizeText.bind(this));
     if (formatIn.length && formatIn.indexOf(normalizedFormat) === -1) return false;
-
     if (when.textRegex && !this.testRegex(when.textRegex, normalizedText)) return false;
-
     if (when.textIncludes) {
       var includesGroups = this.normalizeWordGroups(when.textIncludes);
       for (var ig = 0; ig < includesGroups.length; ig++) {
-        var groupMatched = includesGroups[ig].some(function (piece) {
+        var groupMatched = includesGroups[ig].some(function(piece) {
           return CampaignClassifier.sourceContainsTerm(normalizedText, piece);
         });
         if (!groupMatched) return false;
       }
     }
-
     if (when.allWords && !this.matchesAllWordGroups(words, when.allWords, tolerance)) return false;
     if (when.anyWords && !this.matchesAnyWordGroups(words, when.anyWords, tolerance)) return false;
     if (when.noneWords && this.matchesAnyWordGroups(words, when.noneWords, tolerance)) return false;
-
     return true;
   },
-  detectObjective: function (campName, format) {
+  detectObjective: function(campName, format) {
     var cfg = this.ensureConfig();
-
     for (var i = 0; i < cfg.objectiveRules.length; i++) {
-      var rule = cfg.objectiveRules[i];
-      if (this.matchRule(rule, campName, format)) {
-        return rule.objective;
-      }
+      if (this.matchRule(cfg.objectiveRules[i], campName, format)) return cfg.objectiveRules[i].objective;
     }
-
     return 'indefinido';
   },
-  detectFormat: function (campName, adName) {
+  detectFormat: function(campName, adName) {
     var cfg = this.ensureConfig();
     var sources = [campName, adName].filter(Boolean);
-
-    for (var sourceIndex = 0; sourceIndex < sources.length; sourceIndex++) {
-      var source = sources[sourceIndex];
-
-      for (var keywordIndex = 0; keywordIndex < cfg.formatKeywords.length; keywordIndex++) {
-        var keywordRule = cfg.formatKeywords[keywordIndex];
+    for (var si = 0; si < sources.length; si++) {
+      var source = sources[si];
+      for (var ki = 0; ki < cfg.formatKeywords.length; ki++) {
+        var keywordRule = cfg.formatKeywords[ki];
         var terms = [keywordRule.keyword].concat(this.ensureArray(keywordRule.aliases));
-
-        for (var termIndex = 0; termIndex < terms.length; termIndex++) {
-          if (this.sourceContainsTerm(source, terms[termIndex])) {
-            return keywordRule.label || keywordRule.keyword;
-          }
+        for (var ti = 0; ti < terms.length; ti++) {
+          if (this.sourceContainsTerm(source, terms[ti])) return keywordRule.label || keywordRule.keyword;
         }
       }
     }
-
     return '-';
   },
-  getObjectivePriority: function (objective) {
+  getObjectivePriority: function(objective) {
     var cfg = this.ensureConfig();
     var canonicalObjective = this.getCanonicalObjective(objective);
     return cfg.objectivePriority[canonicalObjective] || 999;
   }
 };
 
-function detectObjective(campName, format) {
-  return CampaignClassifier.detectObjective(campName, format);
-}
-
-function detectFormat(campName, adName) {
-  return CampaignClassifier.detectFormat(campName, adName);
-}
-
-function objPriority(objective) {
-  return CampaignClassifier.getObjectivePriority(objective);
-}
+function detectObjective(campName, format) { return CampaignClassifier.detectObjective(campName, format); }
+function detectFormat(campName, adName) { return CampaignClassifier.detectFormat(campName, adName); }
+function objPriority(objective) { return CampaignClassifier.getObjectivePriority(objective); }
 
 function sortCampaignRows(data) {
-  data.sort(function (a, b) {
+  data.sort(function(a, b) {
     var da = extractDateFromName(a.name), db = extractDateFromName(b.name);
     var ta = da ? da.getTime() : (a.sortDate ? a.sortDate.getTime() : 0);
     var tb = db ? db.getTime() : (b.sortDate ? b.sortDate.getTime() : 0);
@@ -1182,122 +943,67 @@ function sortCampaignRows(data) {
 // ======================================================
 // Importação e parsing do Excel
 // ======================================================
-
 function parseTextDate(txt) {
   if (!txt) return null;
-  var s = String(txt).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  var MESES_MAP = {
-    'jan':1,'janeiro':1,'fev':2,'fevereiro':2,'mar':3,'marco':3,
-    'abr':4,'abril':4,'mai':5,'maio':5,'jun':6,'junho':6,
-    'jul':7,'julho':7,'ago':8,'agosto':8,'set':9,'setembro':9,
-    'out':10,'outubro':10,'nov':11,'novembro':11,'dez':12,'dezembro':12
-  };
-  // "24 de dez de 2024" ou "1 de maio de 2026"
+  var s = String(txt).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  var MESES_MAP = {'jan':1,'janeiro':1,'fev':2,'fevereiro':2,'mar':3,'marco':3,'abr':4,'abril':4,'mai':5,'maio':5,'jun':6,'junho':6,'jul':7,'julho':7,'ago':8,'agosto':8,'set':9,'setembro':9,'out':10,'outubro':10,'nov':11,'novembro':11,'dez':12,'dezembro':12};
   var m = s.match(/^(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})$/);
-  if (m) {
-    var mes = MESES_MAP[m[2]];
-    if (mes) return new Date(+m[3], mes - 1, +m[1]);
-  }
+  if (m) { var mes = MESES_MAP[m[2]]; if (mes) return new Date(+m[3], mes-1, +m[1]); }
   return null;
 }
 
 function parseSchedule(val) {
-  if (!val) return { start: null, end: null };
+  if (!val) return {start:null,end:null};
   var s = String(val).trim();
-  // Separa por – ou -
   var parts = s.split(/\s*[–\-]\s*/);
   if (parts.length >= 2) {
     var d1 = parseTextDate(parts[0]) || parseMetaDate(parts[0].trim());
-    var d2 = parseTextDate(parts[parts.length - 1]) || parseMetaDate(parts[parts.length - 1].trim());
-    if (d1 && d2) return { start: d1, end: d2 };
+    var d2 = parseTextDate(parts[parts.length-1]) || parseMetaDate(parts[parts.length-1].trim());
+    if (d1 && d2) return {start:d1,end:d2};
   }
-  // Tenta extrair datas numéricas
   var matches = s.match(/(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{2,4})/g);
-  if (matches && matches.length >= 2) {
-    return { start: parseMetaDate(matches[0]), end: parseMetaDate(matches[1]) };
-  }
-  if (matches && matches.length === 1) {
-    return { start: parseMetaDate(matches[0]), end: null };
-  }
-  // Tenta uma data textual só
+  if (matches && matches.length >= 2) return {start:parseMetaDate(matches[0]),end:parseMetaDate(matches[1])};
+  if (matches && matches.length === 1) return {start:parseMetaDate(matches[0]),end:null};
   var single = parseTextDate(s);
-  if (single) return { start: single, end: null };
-  return { start: null, end: null };
+  if (single) return {start:single,end:null};
+  return {start:null,end:null};
 }
 
 function fmtValidity(dStart, dEnd) {
   if (!dStart) return '';
-  var pad = function(n) { return String(n).padStart(2, '0'); };
-  var d1 = pad(dStart.getDate());
-  var m1 = pad(dStart.getMonth() + 1);
-  var y1 = dStart.getFullYear();
-  if (!dEnd) return d1 + '/' + m1 + '/' + y1;
-  var d2 = pad(dEnd.getDate());
-  var m2 = pad(dEnd.getMonth() + 1);
-  var y2 = dEnd.getFullYear();
-  var diffDays = Math.round((dEnd.getTime() - dStart.getTime()) / 86400000);
-  var conector = (diffDays <= 1) ? ' e ' : ' a ';
-  // Mesmo mês e ano: 01 a 15/05/2026 ou 01 e 02/05/2026
-  if (m1 === m2 && y1 === y2) {
-    if (diffDays <= 1) {
-      return d1 + ' e ' + d2 + '/' + m2 + '/' + y2;
-    }
-    return d1 + ' a ' + d2 + '/' + m2 + '/' + y2;
-  }
-  // Mesmo ano, meses diferentes: 28/04 a 03/05/2026
-  if (y1 === y2) {
-    return d1 + '/' + m1 + conector + d2 + '/' + m2 + '/' + y2;
-  }
-  // Anos diferentes: 28/12/2024 a 03/01/2025
-  return d1 + '/' + m1 + '/' + y1 + conector + d2 + '/' + m2 + '/' + y2;
+  var pad = function(n){return String(n).padStart(2,'0');};
+  var d1=pad(dStart.getDate()),m1=pad(dStart.getMonth()+1),y1=dStart.getFullYear();
+  if (!dEnd) return d1+'/'+m1+'/'+y1;
+  var d2=pad(dEnd.getDate()),m2=pad(dEnd.getMonth()+1),y2=dEnd.getFullYear();
+  var diffDays = Math.round((dEnd.getTime()-dStart.getTime())/86400000);
+  var conector = (diffDays<=1)?' e ':' a ';
+  if (m1===m2 && y1===y2) { return diffDays<=1 ? d1+' e '+d2+'/'+m2+'/'+y2 : d1+' a '+d2+'/'+m2+'/'+y2; }
+  if (y1===y2) return d1+'/'+m1+conector+d2+'/'+m2+'/'+y2;
+  return d1+'/'+m1+'/'+y1+conector+d2+'/'+m2+'/'+y2;
 }
 
 var FORMAT_BASE_WORDS = ['carrossel','carrosel','panfleto','panfletos','tabloide','tabloides','post','reels','reel','video','vídeo','virtual','virtuais'];
-var FORMAT_BASE_REGEX = new RegExp('^(' + FORMAT_BASE_WORDS.join('|') + ')$', 'i');
+var FORMAT_BASE_REGEX = new RegExp('^('+FORMAT_BASE_WORDS.join('|')+')$','i');
 
 function segmentIsFormat(segment) {
-  // Verifica se o segmento contém uma palavra de formato (pode ter modificador junto)
   var words = segment.trim().split(/\s+/);
-  for (var w = 0; w < words.length; w++) {
-    if (FORMAT_BASE_REGEX.test(words[w])) return true;
-  }
+  for (var w = 0; w < words.length; w++) { if (FORMAT_BASE_REGEX.test(words[w])) return true; }
   return false;
 }
 
 function extractFormatLabel(name) {
-  // Extrai o formato completo do nome da campanha (tipo + modificador)
-  // Ex: "Carrossel Dark" → "Carrossel Dark", "Dark Post" → "Post Dark", "Reel" → "Reels"
   if (!name) return '';
   var parts = name.split(/\s*-\s*/);
-  var CANONICAL = {
-    'carrossel':'Carrossel','carrosel':'Carrossel',
-    'panfleto':'Panfleto','panfletos':'Panfleto',
-    'tabloide':'Tabloide','tabloides':'Tabloide',
-    'post':'Post',
-    'reels':'Reels','reel':'Reels',
-    'video':'Vídeo','vídeo':'Vídeo',
-    'virtual':'Virtual','virtuais':'Virtual'
-  };
-
+  var CANONICAL = {'carrossel':'Carrossel','carrosel':'Carrossel','panfleto':'Panfleto','panfletos':'Panfleto','tabloide':'Tabloide','tabloides':'Tabloide','post':'Post','reels':'Reels','reel':'Reels','video':'Vídeo','vídeo':'Vídeo','virtual':'Virtual','virtuais':'Virtual'};
   for (var i = 0; i < parts.length; i++) {
     var segment = parts[i].trim();
     if (!segment) continue;
-    var words = segment.split(/\s+/);
-    var baseWord = '';
-    var modifiers = [];
-
+    var words = segment.split(/\s+/), baseWord='', modifiers=[];
     for (var w = 0; w < words.length; w++) {
-      if (FORMAT_BASE_REGEX.test(words[w])) {
-        baseWord = CANONICAL[words[w].toLowerCase()] || words[w];
-      } else {
-        modifiers.push(words[w]);
-      }
+      if (FORMAT_BASE_REGEX.test(words[w])) baseWord = CANONICAL[words[w].toLowerCase()] || words[w];
+      else modifiers.push(words[w]);
     }
-
-    if (baseWord) {
-      // Retorna: tipo primeiro, depois modificadores
-      return modifiers.length ? baseWord + ' ' + modifiers.join(' ') : baseWord;
-    }
+    if (baseWord) return modifiers.length ? baseWord+' '+modifiers.join(' ') : baseWord;
   }
   return '';
 }
@@ -1306,70 +1012,97 @@ function formatActionName(name, objective) {
   if (!name) return '';
   var parts = name.split(/\s*-\s*/);
   var DATE_PATTERN = /^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/;
-  var OBJ_ABBREV = {
-    'alc': 'Alcance', 'al': 'Alcance', 'alcance': 'Alcance', 'alcances': 'Alcance',
-    'eng': 'Engajamento', 'engaj': 'Engajamento', 'engajamento': 'Engajamento', 'engajamentos': 'Engajamento',
-    'whats': 'WhatsApp', 'whatsapp': 'WhatsApp', 'wpp': 'WhatsApp', 'zap': 'WhatsApp', 'wats': 'WhatsApp',
-    'traf': 'Tráfego', 'trafego': 'Tráfego',
-    'views': 'Visualização', 'visualizacao': 'Visualização', 'thruplay': 'ThruPlay',
-    'conv': 'Conversas', 'conversas': 'Conversas', 'conversa': 'Conversas',
-    'clique no link': 'Clique no Link'
-  };
-
-  var cleaned = [];
-  var foundObj = false;
-
+  var OBJ_ABBREV = {'alc':'Alcance','al':'Alcance','alcance':'Alcance','alcances':'Alcance','eng':'Engajamento','engaj':'Engajamento','engajamento':'Engajamento','engajamentos':'Engajamento','whats':'WhatsApp','whatsapp':'WhatsApp','wpp':'WhatsApp','zap':'WhatsApp','wats':'WhatsApp','traf':'Tráfego','trafego':'Tráfego','views':'Visualização','visualizacao':'Visualização','thruplay':'ThruPlay','conv':'Conversas','conversas':'Conversas','conversa':'Conversas','clique no link':'Clique no Link'};
+  var cleaned = [], foundObj = false;
   for (var i = 0; i < parts.length; i++) {
     var segment = parts[i].trim();
     if (!segment) continue;
-
-    // Pula datas
     if (DATE_PATTERN.test(segment)) continue;
-
-    // Pula segmentos que contêm palavra de formato (com ou sem modificador)
     if (segmentIsFormat(segment)) continue;
-
-    // Verifica se é abreviação de objetivo
-    var segLower = segment.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    if (OBJ_ABBREV[segLower]) {
-      cleaned.push(OBJ_ABBREV[segLower]);
-      foundObj = true;
-      continue;
-    }
-
-    // Segmento normal
+    var segLower = segment.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if (OBJ_ABBREV[segLower]) { cleaned.push(OBJ_ABBREV[segLower]); foundObj=true; continue; }
     cleaned.push(segment);
   }
-
   if (!foundObj && objective && objective !== 'indefinido') {
-    var OBJ_DISPLAY = {
-      'Alcance': 'Alcance',
-      'Engajamento': 'Engajamento',
-      'EngLink': 'Engajamento + Link',
-      'Conversas': 'WhatsApp',
-      'ConvLink': 'WhatsApp + Link',
-      'WhatsEng': 'WhatsApp + Engajamento',
-      'Reels': 'Visualização'
-    };
+    var OBJ_DISPLAY = {'Alcance':'Alcance','Engajamento':'Engajamento','EngLink':'Engajamento + Link','Conversas':'WhatsApp','ConvLink':'WhatsApp + Link','WhatsEng':'WhatsApp + Engajamento','Reels':'Visualização'};
     cleaned.push(OBJ_DISPLAY[objective] || objective);
   }
-
   return cleaned.join(' - ');
 }
 
-function parseExcel(wb){var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,dateNF:'dd/mm/yyyy'});if(!rows.length)throw new Error('Arquivo vazio.');var headers=rows[0].map(function(h){return String(h||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');});
-var iCN=getIdx(headers,['nome da campanha','campaign name']);var iAN=getIdx(headers,['nome do anuncio','ad name']);var iCA=getIdx(headers,['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);var iDI=getIdx(headers,['inicio','start']);var iDT=getIdx(headers,['termino','end']);var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);var iIm=getIdx(headers,['impressoes','impressions']);var iR=getIdx(headers,['alcance','reach']);var iRes=getIdx(headers,['resultados','results','result']);var iEP=getIdx(headers,['engajamentos com o post','post engagements']);var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);var iCPR=getIdx(headers,['custo por resultado','cost per result']);var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);var iLC=getIdx(headers,['cliques no link','link clicks']);var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
-var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||g(iCA)||'').trim();var formatBase=detectFormat(name,adName);var format=extractFormatLabel(name)||extractFormatLabel(adName)||formatBase;var objective=detectObjective(name,formatBase);var dateFromName=extractDateFromName(name);var dStart=parseMetaDate(g(iDI));var dEnd=parseMetaDate(g(iDT));var validity='';if(dStart)validity=fmtValidity(dStart,dEnd);else if(dateFromName)validity=fmtValidity(dateFromName,null);var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
-var cpm=parseCurrency(g(iCPM));if(!cpm&&impr>0&&spent>0)cpm=(spent/impr)*1000;var cpc=parseCurrency(g(iCPC));if(!cpc&&links>0&&spent>0)cpc=spent/links;var cThru=parseCurrency(g(iTC));if(!cThru){var c1=parseCurrency(g(iCPR));if(c1>0)cThru=c1;else if(results>0&&spent>0)cThru=spent/results;}var cInt=parseCurrency(g(iCE));if(!cInt){var c2=parseCurrency(g(iCPR));if(c2>0)cInt=c2;else if(eng>0&&spent>0)cInt=spent/eng;}var cConv=parseCurrency(g(iCC));if(!cConv){var c3=parseCurrency(g(iCPR));if(c3>0)cConv=c3;else if(results>0&&spent>0)cConv=spent/results;}
-data.push({name:name,displayName:formatActionName(name,objective),format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});}
-sortCampaignRows(data);return data;}
-
+function parseExcel(wb) {
+  var ws = wb.Sheets[wb.SheetNames[0]];
+  var rows = XLSX.utils.sheet_to_json(ws,{header:1,raw:true,dateNF:'dd/mm/yyyy'});
+  if (!rows.length) throw new Error('Arquivo vazio.');
+  var headers = rows[0].map(function(h){return String(h||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');});
+  var iCN=getIdx(headers,['nome da campanha','campaign name']);
+  var iAN=getIdx(headers,['nome do anuncio','ad name']);
+  var iCA=getIdx(headers,['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);
+  var iDI=getIdx(headers,['inicio','start']);
+  var iDT=getIdx(headers,['termino','end']);
+  var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);
+  var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);
+  var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);
+  var iIm=getIdx(headers,['impressoes','impressions']);
+  var iR=getIdx(headers,['alcance','reach']);
+  var iRes=getIdx(headers,['resultados','results','result']);
+  var iEP=getIdx(headers,['engajamentos com o post','post engagements']);
+  var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);
+  var iCPR=getIdx(headers,['custo por resultado','cost per result']);
+  var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);
+  var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);
+  var iLC=getIdx(headers,['cliques no link','link clicks']);
+  var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
+  var data = [];
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    if (!row || !row.length) continue;
+    var g = function(idx){return (idx>=0&&idx<row.length)?row[idx]:undefined;};
+    var nameRaw = g(iCN);
+    if (!nameRaw) continue;
+    var name = String(nameRaw).trim();
+    if (!name) continue;
+    var adName = String(g(iAN)||g(iCA)||'').trim();
+    var formatBase = detectFormat(name, adName);
+    var format = extractFormatLabel(name) || extractFormatLabel(adName) || formatBase;
+    var objective = detectObjective(name, formatBase);
+    var dateFromName = extractDateFromName(name);
+    var dStart = parseMetaDate(g(iDI));
+    var dEnd = parseMetaDate(g(iDT));
+    var validity = '';
+    if (dStart) validity = fmtValidity(dStart, dEnd);
+    else if (dateFromName) validity = fmtValidity(dateFromName, null);
+    var sortDate = dateFromName || dStart;
+    var spent = parseCurrency(g(iS));
+    var budget = parseCurrency(g(iB));
+    var impr = parseNum(g(iIm));
+    var reach = parseNum(g(iR));
+    var results = parseNum(g(iRes));
+    var links = parseNum(g(iLC));
+    var eng = parseNum(g(iEP));
+    if (!eng && results > 0) eng = results;
+    var cpm = parseCurrency(g(iCPM));
+    if (!cpm && impr > 0 && spent > 0) cpm = (spent/impr)*1000;
+    var cpc = parseCurrency(g(iCPC));
+    if (!cpc && links > 0 && spent > 0) cpc = spent/links;
+    // CORRIGIDO: cada custo usa sua própria coluna de fallback
+    var cThru = parseCurrency(g(iTC));
+    if (!cThru) { var cprThru = parseCurrency(g(iCPR)); if (cprThru > 0) cThru = cprThru; else if (results > 0 && spent > 0) cThru = spent/results; }
+    var cInt = parseCurrency(g(iCE));
+    if (!cInt) { if (eng > 0 && spent > 0) cInt = spent/eng; }
+    var cConv = parseCurrency(g(iCC));
+    if (!cConv) { var cprConv = parseCurrency(g(iCPR)); if (cprConv > 0) cConv = cprConv; else if (results > 0 && spent > 0) cConv = spent/results; }
+    data.push({name:name,displayName:formatActionName(name,objective),format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});
+  }
+  sortCampaignRows(data);
+  return data;
+}
 
 function setCurrentStep(step) {
   var steps = document.querySelectorAll('#progressSteps .progress-step');
   for (var i = 0; i < steps.length; i++) {
     var itemStep = parseInt(steps[i].getAttribute('data-step'), 10);
-    steps[i].classList.remove('active', 'done');
+    steps[i].classList.remove('active','done');
     if (itemStep < step) steps[i].classList.add('done');
     if (itemStep === step) steps[i].classList.add('active');
   }
@@ -1378,90 +1111,83 @@ function setCurrentStep(step) {
 function showFileSummary() {
   var info = parseFileName(AppState.originalFileName || '');
   var total = AppState.campaignsData.length;
-  var classificados = AppState.campaignsData.filter(function (row) {
-    return row.objective && row.objective !== 'indefinido';
-  }).length;
+  var classificados = AppState.campaignsData.filter(function(row){return row.objective && row.objective !== 'indefinido';}).length;
   var pendentes = total - classificados;
-
   $('fileSummary').style.display = 'block';
   $('sum_cliente').textContent = info.cliente || '-';
-  $('sum_periodo').textContent = ((info.mes || 'Mês não identificado') + (info.ano ? ' ' + info.ano : '')).trim();
+  $('sum_periodo').textContent = ((info.mes || 'Mês não identificado') + (info.ano ? ' '+info.ano : '')).trim();
   $('sum_campanhas').textContent = String(total);
-  $('sum_classificadas').textContent = classificados + '/' + total;
-
+  $('sum_classificadas').textContent = classificados+'/'+total;
   var banner = $('classificationBanner');
   var bannerText = $('classificationBannerText');
   banner.style.display = 'block';
-
   if (pendentes > 0) {
     banner.className = 'classification-banner warn';
-    bannerText.textContent = classificados + ' campanhas classificadas automaticamente e ' + pendentes + ' precisam de revisão.';
+    bannerText.textContent = classificados+' campanhas classificadas automaticamente e '+pendentes+' precisam de revisão.';
   } else {
     banner.className = 'classification-banner';
-    bannerText.textContent = 'Todas as ' + total + ' campanhas foram classificadas automaticamente.';
+    bannerText.textContent = 'Todas as '+total+' campanhas foram classificadas automaticamente.';
   }
 }
 
+// CORRIGIDO: validação de extensão no dropzone
 function setupUploadDropzone() {
   var dropzone = $('uploadDropzone');
   var fileInput = $('fileInput');
   if (!dropzone || !fileInput || dropzone.dataset.ready === 'true') return;
   dropzone.dataset.ready = 'true';
-
-  ['dragenter', 'dragover'].forEach(function(evtName) {
-    dropzone.addEventListener(evtName, function (evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
+  ['dragenter','dragover'].forEach(function(evtName) {
+    dropzone.addEventListener(evtName, function(evt) {
+      evt.preventDefault(); evt.stopPropagation();
       dropzone.classList.add('dropzone-active');
     });
   });
-
-  ['dragleave', 'dragend', 'drop'].forEach(function(evtName) {
-    dropzone.addEventListener(evtName, function (evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
+  ['dragleave','dragend','drop'].forEach(function(evtName) {
+    dropzone.addEventListener(evtName, function(evt) {
+      evt.preventDefault(); evt.stopPropagation();
       dropzone.classList.remove('dropzone-active');
     });
   });
-
-  dropzone.addEventListener('drop', function (evt) {
+  dropzone.addEventListener('drop', function(evt) {
     var files = evt.dataTransfer && evt.dataTransfer.files;
     if (!files || !files.length) return;
-    processFile(files[0]);
+    var file = files[0];
+    // CORRIGIDO: valida extensão antes de processar
+    var ext = file.name.split('.').pop().toLowerCase();
+    if (ext !== 'xlsx' && ext !== 'xls') {
+      showError('Formato inválido. Envie um arquivo .xlsx ou .xls exportado do Meta Ads.');
+      return;
+    }
+    processFile(file);
   });
 }
 
+// CORRIGIDO: reader.onerror adicionado
 function processFile(file) {
   if (!file) return;
-
   AppState.originalFileName = file.name;
-
   var reader = new FileReader();
-  reader.onload = function (ev) {
+  reader.onload = function(ev) {
     try {
-      var wb = XLSX.read(ev.target.result, { type: 'array', cellDates: true, dateNF: 'dd/mm/yyyy' });
+      var wb = XLSX.read(ev.target.result,{type:'array',cellDates:true,dateNF:'dd/mm/yyyy'});
       var data = parseExcel(wb);
-
-      if (!data.length) {
-        showError('Nenhuma campanha encontrada.');
-        return;
-      }
-
+      if (!data.length) { showError('Nenhuma campanha encontrada.'); return; }
       AppState.campaignsData = data;
       AppState.capaData = collectCapaDataSafe();
-
       var info = parseFileName(AppState.originalFileName);
       $('clienteName').textContent = info.cliente;
-
       showFileSummary();
       showReview();
       saveAppState();
-    } catch (err) {
+    } catch(err) {
       console.error(err);
-      showError('Erro ao processar.');
+      showError('Erro ao processar o arquivo. Verifique se é uma exportação válida do Meta Ads.');
     }
   };
-
+  // CORRIGIDO: tratamento de erro na leitura do arquivo
+  reader.onerror = function() {
+    showError('Não foi possível ler o arquivo. Ele pode estar corrompido ou bloqueado.');
+  };
   reader.readAsArrayBuffer(file);
 }
 
@@ -1484,28 +1210,17 @@ function showError(msg) {
 function showReview() {
   $('uploadArea').style.display = 'none';
   $('reviewArea').style.display = 'block';
-
   var tbody = $('reviewBody');
   tbody.innerHTML = '';
-
   for (var i = 0; i < AppState.campaignsData.length; i++) {
     var row = AppState.campaignsData[i];
     var options = '';
-
     for (var oi = 0; oi < OBJ_OPTIONS.length; oi++) {
       var opt = OBJ_OPTIONS[oi];
-      options += '<option value="' + opt + '" ' + (opt === row.objective ? 'selected' : '') + '>' + OBJ_LABELS[opt] + '</option>';
+      options += '<option value="'+opt+'" '+(opt===row.objective?'selected':'')+'>'+OBJ_LABELS[opt]+'</option>';
     }
-
-    tbody.innerHTML += ''
-      + '<tr>'
-      +   '<td class="review-name">' + row.name + '</td>'
-      +   '<td class="review-format">' + row.format + '</td>'
-      +   '<td><span class="badge ' + (OBJ_BADGE[row.objective] || 'badge-unknown') + '" id="badge-' + i + '">' + (OBJ_LABELS[row.objective] || row.objective) + '</span></td>'
-      +   '<td><select class="obj-select" data-idx="' + i + '" onchange="updateObjective(this)">' + options + '</select></td>'
-      + '</tr>';
+    tbody.innerHTML += '<tr><td class="review-name">'+row.name+'</td><td class="review-format">'+row.format+'</td><td><span class="badge '+(OBJ_BADGE[row.objective]||'badge-unknown')+'" id="badge-'+i+'">'+(OBJ_LABELS[row.objective]||row.objective)+'</span></td><td><select class="obj-select" data-idx="'+i+'" onchange="updateObjective(this)">'+options+'</select></td></tr>';
   }
-
   updateStats();
   setCurrentStep(2);
   showFileSummary();
@@ -1519,30 +1234,24 @@ function showReview() {
 function updateObjective(select) {
   var index = parseInt(select.dataset.idx, 10);
   var objective = select.value;
-
   AppState.campaignsData[index].objective = objective;
-
-  var badge = $('badge-' + index);
-  badge.className = 'badge ' + (OBJ_BADGE[objective] || 'badge-unknown');
+  var badge = $('badge-'+index);
+  badge.className = 'badge '+(OBJ_BADGE[objective]||'badge-unknown');
   badge.textContent = OBJ_LABELS[objective] || objective;
-
   updateStats();
   saveAppState();
 }
 
 function updateStats() {
   var counts = {};
-
   for (var i = 0; i < AppState.campaignsData.length; i++) {
     var objective = AppState.campaignsData[i].objective;
-    counts[objective] = (counts[objective] || 0) + 1;
+    counts[objective] = (counts[objective]||0)+1;
   }
-
   var el = $('reviewStats');
   el.innerHTML = '';
-
   for (var key in counts) {
-    el.innerHTML += '<div class="stat-chip ' + (OBJ_BADGE[key] || 'badge-unknown') + '">' + (OBJ_LABELS[key] || key) + ': ' + counts[key] + '</div>';
+    el.innerHTML += '<div class="stat-chip '+(OBJ_BADGE[key]||'badge-unknown')+'">'+(OBJ_LABELS[key]||key)+': '+counts[key]+'</div>';
   }
 }
 
@@ -1550,65 +1259,37 @@ function updateStats() {
 // Tela da capa
 // ======================================================
 function fillCapaInputs(data) {
-  var d = data || {};
-  var fb = d.fb || {};
-  var ig = d.ig || {};
-
+  var d = data || {}, fb = d.fb || {}, ig = d.ig || {};
   var valuesById = {
-    fb_seguidores: fb.seguidores || '',
-    fb_seg_anterior: fb.segAnterior || '',
-    fb_homens: fb.homens || '',
-    fb_mulheres: fb.mulheres || '',
-    fb_faixa: fb.faixa || '',
-    fb_alcancadas: fb.alcancadas || '',
-    fb_visitas: fb.visitas || '',
-    ig_seguidores: ig.seguidores || '',
-    ig_seg_anterior: ig.segAnterior || '',
-    ig_homens: ig.homens || '',
-    ig_mulheres: ig.mulheres || '',
-    ig_faixa: ig.faixa || '',
-    ig_alcancadas: ig.alcancadas || '',
-    ig_visitas: ig.visitas || ''
+    fb_seguidores:fb.seguidores||'',fb_seg_anterior:fb.segAnterior||'',fb_homens:fb.homens||'',
+    fb_mulheres:fb.mulheres||'',fb_faixa:fb.faixa||'',fb_alcancadas:fb.alcancadas||'',fb_visitas:fb.visitas||'',
+    ig_seguidores:ig.seguidores||'',ig_seg_anterior:ig.segAnterior||'',ig_homens:ig.homens||'',
+    ig_mulheres:ig.mulheres||'',ig_faixa:ig.faixa||'',ig_alcancadas:ig.alcancadas||'',ig_visitas:ig.visitas||''
   };
-
-  Object.keys(valuesById).forEach(function (id) {
-    var input = $(id);
-    if (input) input.value = valuesById[id];
-  });
+  Object.keys(valuesById).forEach(function(id){ var input=$(id); if(input) input.value=valuesById[id]; });
 }
 
 function bindCapaInputs() {
   if (capaInputsBound) return;
   capaInputsBound = true;
-
-  CAPA_INPUT_IDS.forEach(function (id) {
+  CAPA_INPUT_IDS.forEach(function(id) {
     var input = $(id);
     if (!input) return;
-
-    input.addEventListener('input', function () {
+    input.addEventListener('input', function() {
       AppState.capaData = collectCapaData();
       saveAppState();
-
-      if ($('capaPreview').style.display === 'block') {
-        updateCapaPreview();
-      }
+      if ($('capaPreview').style.display === 'block') updateCapaPreview();
     });
   });
 }
 
 function goToCapa() {
-  var hasUndefined = AppState.campaignsData.some(function (row) {
-    return row.objective === 'indefinido';
-  });
-
+  var hasUndefined = AppState.campaignsData.some(function(row){return row.objective === 'indefinido';});
   if (hasUndefined && !confirm('Existem campanhas sem objetivo definido. Continuar?')) return;
-
   $('reviewArea').style.display = 'none';
   $('capaArea').style.display = 'block';
-
   var info = parseFileName(AppState.originalFileName);
-  $('capaClienteName').textContent = info.cliente + ' - ' + (info.mes || '') + ' ' + (info.ano || '');
-
+  $('capaClienteName').textContent = info.cliente+' - '+(info.mes||'')+' '+(info.ano||'');
   fillCapaInputs(AppState.capaData);
   bindCapaInputs();
   setCurrentStep(3);
@@ -1627,7 +1308,6 @@ function backToReview() {
 function toggleCapaPreview() {
   var preview = $('capaPreview');
   var button = $('btnPreviewCapa');
-
   if (preview.style.display === 'block') {
     preview.style.display = 'none';
     button.textContent = '👁 Visualizar Capa';
@@ -1635,55 +1315,35 @@ function toggleCapaPreview() {
     updateCapaPreview();
     preview.style.display = 'block';
     button.textContent = '🙈 Ocultar Preview';
-    preview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    preview.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
-
   saveAppState();
 }
 
 function updateCapaPreview() {
   var data = collectCapaData();
   var info = parseFileName(AppState.originalFileName);
-
-  $('prev_titulo').textContent = (info.cliente || 'CLIENTE') + ' - ' + (info.mes || 'MÊS') + ' - ' + (info.ano || 'ANO');
-
-  $('prev_fb_seg').textContent = 'Total de ' + (data.fb.seguidores || '—') + ' seguidores';
-  $('prev_fb_seg_ant').textContent = (data.fb.segAnterior || '—') + ' seguidores no mês anterior';
-  $('prev_fb_h').textContent = (data.fb.homens || '—') + ' Homens';
-  $('prev_fb_m').textContent = (data.fb.mulheres || '—') + ' Mulheres';
-  $('prev_fb_faixa').textContent = data.fb.faixa || '—';
-  $('prev_fb_alc').textContent = data.fb.alcancadas || '—';
-  $('prev_fb_vis').textContent = data.fb.visitas || '—';
-
-  $('prev_ig_seg').textContent = 'Total de ' + (data.ig.seguidores || '—') + ' seguidores';
-  $('prev_ig_seg_ant').textContent = (data.ig.segAnterior || '—') + ' seguidores no mês anterior';
-  $('prev_ig_h').textContent = (data.ig.homens || '—') + ' Homens';
-  $('prev_ig_m').textContent = (data.ig.mulheres || '—') + ' Mulheres';
-  $('prev_ig_faixa').textContent = data.ig.faixa || '—';
-  $('prev_ig_alc').textContent = data.ig.alcancadas || '—';
-  $('prev_ig_vis').textContent = data.ig.visitas || '—';
+  $('prev_titulo').textContent = (info.cliente||'CLIENTE')+' - '+(info.mes||'MÊS')+' - '+(info.ano||'ANO');
+  $('prev_fb_seg').textContent = 'Total de '+(data.fb.seguidores||'—')+' seguidores';
+  $('prev_fb_seg_ant').textContent = (data.fb.segAnterior||'—')+' seguidores no mês anterior';
+  $('prev_fb_h').textContent = (data.fb.homens||'—')+' Homens';
+  $('prev_fb_m').textContent = (data.fb.mulheres||'—')+' Mulheres';
+  $('prev_fb_faixa').textContent = data.fb.faixa||'—';
+  $('prev_fb_alc').textContent = data.fb.alcancadas||'—';
+  $('prev_fb_vis').textContent = data.fb.visitas||'—';
+  $('prev_ig_seg').textContent = 'Total de '+(data.ig.seguidores||'—')+' seguidores';
+  $('prev_ig_seg_ant').textContent = (data.ig.segAnterior||'—')+' seguidores no mês anterior';
+  $('prev_ig_h').textContent = (data.ig.homens||'—')+' Homens';
+  $('prev_ig_m').textContent = (data.ig.mulheres||'—')+' Mulheres';
+  $('prev_ig_faixa').textContent = data.ig.faixa||'—';
+  $('prev_ig_alc').textContent = data.ig.alcancadas||'—';
+  $('prev_ig_vis').textContent = data.ig.visitas||'—';
 }
 
 function collectCapaData() {
   return {
-    fb: {
-      seguidores: $('fb_seguidores').value,
-      segAnterior: $('fb_seg_anterior').value,
-      homens: $('fb_homens').value,
-      mulheres: $('fb_mulheres').value,
-      faixa: $('fb_faixa').value,
-      alcancadas: $('fb_alcancadas').value,
-      visitas: $('fb_visitas').value
-    },
-    ig: {
-      seguidores: $('ig_seguidores').value,
-      segAnterior: $('ig_seg_anterior').value,
-      homens: $('ig_homens').value,
-      mulheres: $('ig_mulheres').value,
-      faixa: $('ig_faixa').value,
-      alcancadas: $('ig_alcancadas').value,
-      visitas: $('ig_visitas').value
-    }
+    fb:{seguidores:$('fb_seguidores').value,segAnterior:$('fb_seg_anterior').value,homens:$('fb_homens').value,mulheres:$('fb_mulheres').value,faixa:$('fb_faixa').value,alcancadas:$('fb_alcancadas').value,visitas:$('fb_visitas').value},
+    ig:{seguidores:$('ig_seguidores').value,segAnterior:$('ig_seg_anterior').value,homens:$('ig_homens').value,mulheres:$('ig_mulheres').value,faixa:$('ig_faixa').value,alcancadas:$('ig_alcancadas').value,visitas:$('ig_visitas').value}
   };
 }
 
@@ -1699,16 +1359,45 @@ function confirmAndRender() {
 // ======================================================
 // Relatório
 // ======================================================
-function renderReport(data){var tbody=document.getElementById('tableBody');tbody.innerHTML='';var lastDateKey='';for(var idx=0;idx<data.length;idx++){var r=data[idx];var o=r.objective;var isEngFmt=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(idx>0&&curDateKey!==lastDateKey){tbody.innerHTML+='<tr><td colspan="17" style="background:#fff;border:none;height:16px"></td></tr>';}lastDateKey=curDateKey;
-var colReach=fmtNum(r.reach);var colEng=(o==='Engajamento'&&isEngFmt)?fmtNum(r.eng):'-';var colLinks=(o==='EngLink'||o==='ConvLink')?fmtNum(r.links):'-';var colViews=(o==='Reels')?fmtNum(r.views):'-';var colCPM=(o==='Alcance')?fmtBRL(r.cpm):'-';var colCPC=(o==='EngLink'||o==='ConvLink')?fmtBRL(r.cpc):'-';var colThru=(o==='Reels')?fmtBRL(r.cThru):'-';var colCInt=(o==='Engajamento'&&isEngFmt)?fmtBRL(r.cInt):'-';var colCConv=(o==='Conversas'||o==='WhatsEng')?fmtBRL(r.cConv):'-';var colConv=(o==='Conversas'||o==='WhatsEng')?fmtNum(r.conv):'-';
-tbody.innerHTML+='<tr><td>'+titleCase(r.displayName||r.name)+'</td><td>'+r.format+'</td><td>'+(r.validity||'-')+'</td><td>'+fmtBRL(r.budget)+'</td><td>'+fmtBRL(r.spent)+'</td><td>'+colReach+'</td><td>'+colEng+'</td><td>'+colLinks+'</td><td>'+colViews+'</td><td>'+colCPM+'</td><td>'+colCPC+'</td><td>'+colThru+'</td><td>'+colCInt+'</td><td>'+colCConv+'</td><td>-</td><td>-</td><td>'+colConv+'</td></tr>';}
-document.getElementById('reportArea').style.display='block';document.getElementById('headerBtns').style.display='flex';var info=parseFileName(originalFileName);document.getElementById('clienteNameReport').textContent=info.cliente;saveAppState();}
+function renderReport(data) {
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  var lastDateKey = '';
+  for (var idx = 0; idx < data.length; idx++) {
+    var r = data[idx];
+    var o = r.objective;
+    var isEngFmt = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+    var isReels = /reels|reel|vídeo|video/i.test(r.format);
+    var curDate = extractDateFromName(r.name);
+    var curDateKey = curDate ? curDate.getTime() : 'none';
+    if (idx > 0 && curDateKey !== lastDateKey) {
+      tbody.innerHTML += '<tr><td colspan="17" style="background:#fff;border:none;height:16px"></td></tr>';
+    }
+    lastDateKey = curDateKey;
+    var colReach=fmtNum(r.reach);
+    var colEng=(o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')?fmtNum(r.eng):'-';
+    var colLinks=(o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')?fmtNum(r.links):'-';
+    var colViews=(o==='Reels')?fmtNum(r.views):'-';
+    var colCPM=(o==='Alcance'||o==='ReelsAlc')?fmtBRL(r.cpm):'-';
+    var colCPC=(o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')?fmtBRL(r.cpc):'-';
+    var colThru=(o==='Reels')?fmtBRL(r.cThru):'-';
+    var colCInt=(o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')?fmtBRL(r.cInt):'-';
+    var colCConv=(o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats')?fmtBRL(r.cConv):'-';
+    var colConv=(o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats')?fmtNum(r.conv):'-';
+    tbody.innerHTML += '<tr><td>'+titleCase(r.displayName||r.name)+'</td><td>'+r.format+'</td><td>'+(r.validity||'-')+'</td><td>'+fmtBRL(r.budget)+'</td><td>'+fmtBRL(r.spent)+'</td><td>'+colReach+'</td><td>'+colEng+'</td><td>'+colLinks+'</td><td>'+colViews+'</td><td>'+colCPM+'</td><td>'+colCPC+'</td><td>'+colThru+'</td><td>'+colCInt+'</td><td>'+colCConv+'</td><td>-</td><td>-</td><td>'+colConv+'</td></tr>';
+  }
+  document.getElementById('reportArea').style.display = 'block';
+  document.getElementById('headerBtns').style.display = 'flex';
+  // CORRIGIDO: usa AppState.originalFileName em vez da variável global solta
+  var info = parseFileName(AppState.originalFileName);
+  document.getElementById('clienteNameReport').textContent = info.cliente;
+  saveAppState();
+}
 
 function resetView() {
   AppState.campaignsData = [];
   AppState.originalFileName = '';
-  AppState.capaData = { fb: {}, ig: {} };
-
+  AppState.capaData = {fb:{},ig:{}};
   $('uploadArea').style.display = 'block';
   $('reviewArea').style.display = 'none';
   $('capaArea').style.display = 'none';
@@ -1716,12 +1405,9 @@ function resetView() {
   $('reportArea').style.display = 'none';
   $('headerBtns').style.display = 'none';
   $('errorMsg').style.display = 'none';
-
   fillCapaInputs(AppState.capaData);
-
   var previewButton = $('btnPreviewCapa');
   if (previewButton) previewButton.textContent = '👁 Visualizar Capa';
-
   setCurrentStep(1);
   if ($('fileSummary')) $('fileSummary').style.display = 'none';
   if ($('classificationBanner')) $('classificationBanner').style.display = 'none';
@@ -1731,237 +1417,212 @@ function resetView() {
 // ======================================================
 // Nome do arquivo e exportação
 // ======================================================
-function parseFileName(filename){var base=filename.replace(/\.[^.]+$/,'').trim();var MESES={'01':'Janeiro','02':'Fevereiro','03':'Março','04':'Abril','05':'Maio','06':'Junho','07':'Julho','08':'Agosto','09':'Setembro','10':'Outubro','11':'Novembro','12':'Dezembro','jan':'Janeiro','fev':'Fevereiro','mar':'Março','abr':'Abril','mai':'Maio','jun':'Junho','jul':'Julho','ago':'Agosto','set':'Setembro','out':'Outubro','nov':'Novembro','dez':'Dezembro','janeiro':'Janeiro','fevereiro':'Fevereiro','março':'Março','marco':'Março','abril':'Abril','maio':'Maio','junho':'Junho','julho':'Julho','agosto':'Agosto','setembro':'Setembro','outubro':'Outubro','novembro':'Novembro','dezembro':'Dezembro'};var parts=base.split(/\s*[-–]\s*/).map(function(p){return p.trim();}).filter(Boolean);var cliente='',mes='',ano='';parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');if(/^\d{4}$/.test(p)){ano=p;return;}if(MESES[pl]){mes=MESES[pl];return;}if(MESES[p.toLowerCase()]){mes=MESES[p.toLowerCase()];return;}if(!cliente)cliente=p;});if(!mes||!ano)parts.forEach(function(p){var pl=p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');for(var k in MESES){if(pl.includes(k)&&k.length>2){mes=MESES[k];break;}}var ym=p.match(/\b(20\d{2})\b/);if(ym)ano=ym[1];});if(!cliente)cliente=parts[0]||'Cliente';if(!ano)ano=new Date().getFullYear().toString();return{cliente:cliente,mes:mes,ano:ano};}
+function parseFileName(filename) {
+  var base = filename.replace(/\.[^.]+$/,'').trim();
+  var MESES = {'01':'Janeiro','02':'Fevereiro','03':'Março','04':'Abril','05':'Maio','06':'Junho','07':'Julho','08':'Agosto','09':'Setembro','10':'Outubro','11':'Novembro','12':'Dezembro','jan':'Janeiro','fev':'Fevereiro','mar':'Março','abr':'Abril','mai':'Maio','jun':'Junho','jul':'Julho','ago':'Agosto','set':'Setembro','out':'Outubro','nov':'Novembro','dez':'Dezembro','janeiro':'Janeiro','fevereiro':'Fevereiro','março':'Março','marco':'Março','abril':'Abril','maio':'Maio','junho':'Junho','julho':'Julho','agosto':'Agosto','setembro':'Setembro','outubro':'Outubro','novembro':'Novembro','dezembro':'Dezembro'};
+  var parts = base.split(/\s*[-–]\s*/).map(function(p){return p.trim();}).filter(Boolean);
+  var cliente='',mes='',ano='';
+  parts.forEach(function(p) {
+    var pl = p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if (/^\d{4}$/.test(p)){ano=p;return;}
+    if (MESES[pl]){mes=MESES[pl];return;}
+    if (MESES[p.toLowerCase()]){mes=MESES[p.toLowerCase()];return;}
+    if (!cliente) cliente=p;
+  });
+  if (!mes||!ano) parts.forEach(function(p) {
+    var pl = p.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    for (var k in MESES) { if (pl.includes(k)&&k.length>2){mes=MESES[k];break;} }
+    var ym = p.match(/\b(20\d{2})\b/);
+    if (ym) ano=ym[1];
+  });
+  if (!cliente) cliente=parts[0]||'Cliente';
+  if (!ano) ano=new Date().getFullYear().toString();
+  return {cliente:cliente,mes:mes,ano:ano};
+}
 
 var ReportExporter = {
-  googleSheetsTemplate: GOOGLE_SHEETS_EXPORT_TEMPLATE,
-exportExcel: async function (){if(!campaignsData.length)return;var btn=document.getElementById('btnExcel');btn.textContent='Gerando...';btn.disabled=true;
-var C={orange:'FFFF9900',gold:'FFFBBC04',gray1:'FFB7B7B7',white:'FFFFFFFF',black:'FF000000',dark:'FF222526',cream:'FFF5F3F0'};var bk={style:'thin',color:{argb:C.black}};var bAll={top:bk,bottom:bk,left:bk,right:bk};var fl=function(a){return{type:'pattern',pattern:'solid',fgColor:{argb:a}};};var fn=function(b,s,a,n){return{bold:!!b,size:s||10,color:{argb:a||C.black},name:n||'Arial'};};var al=function(h,v,w){return{horizontal:h||'center',vertical:v||'top',wrapText:!!w};};var BRL='R$\\ #,##0.00',NUM='#,##0';
-var wb=new ExcelJS.Workbook();
-// ═══ ABA 1: CAPA ═══
-var wsCapa=wb.addWorksheet('Capa');
-var info=parseFileName(originalFileName);
-var titulo=info.cliente+' - '+(info.mes||'')+' - '+(info.ano||'');
-
-// Helpers
-var G=fl(C.gold);
-var setCell=function(ref,val,sz,bold,alignH,alignV,wrap){
-  var c=wsCapa.getCell(ref);
-  c.value=val;
-  c.fill=G;
-  c.font=fn(bold,sz||11,C.black,'Arial');
-  c.alignment=al(alignH||'center',alignV||'middle',!!wrap);
-  return c;
-};
-var setWhite=function(ref){
-  var c=wsCapa.getCell(ref);
-  c.fill=G;
-  return c;
-};
-// Preenche fundo gold em toda a linha
-var goldRow=function(rowNum,cols){
-  var rw=wsCapa.getRow(rowNum);
-  rw.eachCell({includeEmpty:true},function(cell){cell.fill=G;});
-  for(var ci=1;ci<=(cols||16);ci++){wsCapa.getRow(rowNum).getCell(ci).fill=G;}
-};
-
-// Larguras A(1)..P(16) — FB lado esquerdo, IG lado direito
-wsCapa.columns=[
-  {width:2},  // A col1
-  {width:2},  // B col2
-  {width:22}, // C col3 — FB: Total seguidores / seg anterior / faixa
-  {width:2},  // D col4
-  {width:16}, // E col5 — FB: Homens / contas
-  {width:16}, // F col6 — FB: Mulheres / visitas
-  {width:2},  // G col7
-  {width:4},  // H col8 — divisor central
-  {width:2},  // I col9
-  {width:22}, // J col10 — IG: Total seguidores / seg anterior / faixa
-  {width:2},  // K col11
-  {width:16}, // L col12 — IG: Homens / contas
-  {width:16}, // M col13 — IG: Mulheres / visitas
-  {width:2},  // N col14
-  {width:2},  // O col15
-  {width:2},  // P col16
-];
-
-// Pré-criar todas as linhas 1-16 com fundo gold
-for(var ri=1;ri<=16;ri++){
-  var rw=wsCapa.getRow(ri);
-  for(var ci=1;ci<=16;ci++){rw.getCell(ci).fill=G;}
-}
-
-// ── ROW 1: Título ─────────────────────────────────────────────
-wsCapa.mergeCells('A1:P1');
-wsCapa.getRow(1).height=52;
-var cTit=wsCapa.getCell('A1');
-cTit.value=titulo;cTit.fill=G;
-cTit.font=fn(true,26,C.white,'Arial');
-cTit.alignment=al('center','middle');
-
-// ── ROW 2: Espaço ─────────────────────────────────────────────
-wsCapa.getRow(2).height=10;
-
-// ── ROW 3: Labels plataforma ──────────────────────────────────
-wsCapa.getRow(3).height=24;
-wsCapa.mergeCells('C3:G3');wsCapa.mergeCells('J3:N3');
-wsCapa.getCell('C3').value='FACEBOOK';
-wsCapa.getCell('C3').fill=G;wsCapa.getCell('C3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('C3').alignment=al('center','middle');
-wsCapa.getCell('J3').value='INSTAGRAM';
-wsCapa.getCell('J3').fill=G;wsCapa.getCell('J3').font=fn(true,13,C.black,'Arial');wsCapa.getCell('J3').alignment=al('center','middle');
-
-// ── ROW 4: Espaço ─────────────────────────────────────────────
-wsCapa.getRow(4).height=6;
-
-// ── ROW 5-6: Total de seguidores ──────────────────────────────
-wsCapa.getRow(5).height=32;wsCapa.getRow(6).height=32;
-wsCapa.mergeCells('C5:G6');wsCapa.mergeCells('J5:N6');
-wsCapa.getCell('C5').value='Total de '+capaData.fb.seguidores+' seguidores';
-wsCapa.getCell('C5').fill=G;wsCapa.getCell('C5').font=fn(false,20,C.black,'Arial');wsCapa.getCell('C5').alignment=al('center','middle',true);
-wsCapa.getCell('J5').value='Total de '+capaData.ig.seguidores+' seguidores';
-wsCapa.getCell('J5').fill=G;wsCapa.getCell('J5').font=fn(false,20,C.black,'Arial');wsCapa.getCell('J5').alignment=al('center','middle',true);
-
-// ── ROW 7: Seguidores mês anterior ────────────────────────────
-wsCapa.getRow(7).height=22;
-wsCapa.mergeCells('C7:G7');wsCapa.mergeCells('J7:N7');
-wsCapa.getCell('C7').value=capaData.fb.segAnterior+' seguidores no mês anterior';
-wsCapa.getCell('C7').fill=G;wsCapa.getCell('C7').font=fn(true,13,C.black,'Arial');wsCapa.getCell('C7').alignment=al('center','middle',true);
-wsCapa.getCell('J7').value=capaData.ig.segAnterior+' seguidores no mês anterior';
-wsCapa.getCell('J7').fill=G;wsCapa.getCell('J7').font=fn(true,13,C.black,'Arial');wsCapa.getCell('J7').alignment=al('center','middle',true);
-
-// ── ROW 8: Espaço ─────────────────────────────────────────────
-wsCapa.getRow(8).height=8;
-
-// ── ROW 9-10: % Homens e % Mulheres (com % garantido) ─────────
-var pct=function(v){var s=String(v||'').trim();return s?s+(s.slice(-1)==='%'?'':' %'):'';};
-wsCapa.getRow(9).height=30;wsCapa.getRow(10).height=30;
-wsCapa.mergeCells('C9:D10');wsCapa.mergeCells('E9:F10');wsCapa.mergeCells('J9:K10');wsCapa.mergeCells('L9:M10');
-wsCapa.getCell('C9').value=pct(capaData.fb.homens)+' Homens';
-wsCapa.getCell('C9').fill=G;wsCapa.getCell('C9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('C9').alignment=al('center','middle');
-wsCapa.getCell('E9').value=pct(capaData.fb.mulheres)+' Mulheres';
-wsCapa.getCell('E9').fill=G;wsCapa.getCell('E9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('E9').alignment=al('center','middle');
-wsCapa.getCell('J9').value=pct(capaData.ig.homens)+' Homens';
-wsCapa.getCell('J9').fill=G;wsCapa.getCell('J9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('J9').alignment=al('center','middle');
-wsCapa.getCell('L9').value=pct(capaData.ig.mulheres)+' Mulheres';
-wsCapa.getCell('L9').fill=G;wsCapa.getCell('L9').font=fn(true,16,C.black,'Arial');wsCapa.getCell('L9').alignment=al('center','middle');
-
-// ── ROW 11: Espaço ────────────────────────────────────────────
-wsCapa.getRow(11).height=8;
-
-// ── ROW 12-13: Faixa / Contas / Visitas — VALORES ─────────────
-wsCapa.getRow(12).height=34;wsCapa.getRow(13).height=34;
-wsCapa.mergeCells('C12:D13');wsCapa.mergeCells('E12:E13');wsCapa.mergeCells('F12:F13');
-wsCapa.mergeCells('J12:K13');wsCapa.mergeCells('L12:L13');wsCapa.mergeCells('M12:M13');
-wsCapa.getCell('C12').value=capaData.fb.faixa;
-wsCapa.getCell('C12').fill=G;wsCapa.getCell('C12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('C12').alignment=al('center','middle');
-wsCapa.getCell('E12').value=capaData.fb.alcancadas;
-wsCapa.getCell('E12').fill=G;wsCapa.getCell('E12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('E12').alignment=al('center','middle');
-wsCapa.getCell('F12').value=capaData.fb.visitas;
-wsCapa.getCell('F12').fill=G;wsCapa.getCell('F12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('F12').alignment=al('center','middle');
-wsCapa.getCell('J12').value=capaData.ig.faixa;
-wsCapa.getCell('J12').fill=G;wsCapa.getCell('J12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('J12').alignment=al('center','middle');
-wsCapa.getCell('L12').value=capaData.ig.alcancadas;
-wsCapa.getCell('L12').fill=G;wsCapa.getCell('L12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('L12').alignment=al('center','middle');
-wsCapa.getCell('M12').value=capaData.ig.visitas;
-wsCapa.getCell('M12').fill=G;wsCapa.getCell('M12').font=fn(true,22,C.black,'Arial');wsCapa.getCell('M12').alignment=al('center','middle');
-
-// ── ROW 14: Labels Faixa / Contas / Visitas ───────────────────
-wsCapa.getRow(14).height=20;
-wsCapa.mergeCells('C14:D14');
-wsCapa.getCell('C14').value='FAIXA ETÁRIA';
-wsCapa.getCell('C14').fill=G;wsCapa.getCell('C14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('C14').alignment=al('center','middle');
-wsCapa.getCell('E14').value='CONTAS ALCANÇADAS';
-wsCapa.getCell('E14').fill=G;wsCapa.getCell('E14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('E14').alignment=al('center','middle',true);
-wsCapa.getCell('F14').value='VISITAS À PÁGINA';
-wsCapa.getCell('F14').fill=G;wsCapa.getCell('F14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('F14').alignment=al('center','middle',true);
-wsCapa.mergeCells('J14:K14');
-wsCapa.getCell('J14').value='FAIXA ETÁRIA';
-wsCapa.getCell('J14').fill=G;wsCapa.getCell('J14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('J14').alignment=al('center','middle');
-wsCapa.getCell('L14').value='CONTAS ALCANÇADAS';
-wsCapa.getCell('L14').fill=G;wsCapa.getCell('L14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('L14').alignment=al('center','middle',true);
-wsCapa.getCell('M14').value='VISITAS AO PERFIL';
-wsCapa.getCell('M14').fill=G;wsCapa.getCell('M14').font=fn(false,11,C.black,'Arial');wsCapa.getCell('M14').alignment=al('center','middle',true);
-
-// ── ROW 15-16: Espaço final ───────────────────────────────────
-wsCapa.getRow(15).height=10;wsCapa.getRow(16).height=10;
-
-// ═══ ABA 2: RELATÓRIO ═══
-var ws=wb.addWorksheet('Relatório');
-ws.columns=[{width:24},{width:14},{width:15},{width:14},{width:14},{width:13},{width:14},{width:14},{width:18},{width:20},{width:22},{width:20},{width:20},{width:20},{width:12},{width:12},{width:18}];
-ws.addRow(['AÇÕES MENSAIS']);ws.mergeCells('A1:Q1');var r1=ws.getCell('A1');r1.value='AÇÕES MENSAIS';r1.fill=fl(C.orange);r1.font=fn(true,15,C.white);r1.alignment=al('center','middle');r1.border={bottom:bk};ws.getRow(1).height=32;
-var HDR=['NOME DA AÇÃO','FORMATO','VALIDADE','INVESTIMENTO','VALOR GASTO','ALCANCE','ENGAJAMENTO','CLIQUES NO LINK','VISUALIZAÇÃO (THRUPLAY)','CUSTO POR 1.000 PESSOAS','CUSTO POR CLIQUES NO LINK','CUSTO POR THRUPLAY','CUSTO POR INTERAÇÃO','CUSTO POR CONVERSA','FILTRO','CIDADE','CONVERSAS INICIADAS'];
-ws.addRow(HDR);ws.getRow(2).height=20;HDR.forEach(function(_,ci){var cell=ws.getRow(2).getCell(ci+1);cell.fill=fl(C.gray1);cell.font=fn(true,10,C.black,'Century Gothic');cell.alignment=al('center','middle',true);cell.border=bAll;});
-var lastDateKeyXl='';campaignsData.forEach(function(r){var curDate=extractDateFromName(r.name);var curDateKey=curDate?curDate.getTime():'none';if(lastDateKeyXl!==''&&curDateKey!==lastDateKeyXl){var rBlank=ws.addRow(Array(17).fill(''));rBlank.height=12;for(var ci=1;ci<=17;ci++){rBlank.getCell(ci).fill=fl('FFF0F0F0');rBlank.getCell(ci).border={top:bk,bottom:bk};}}lastDateKeyXl=curDateKey;
-var o=r.objective;var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);var vals=[titleCase(r.displayName||r.name),r.format,r.validity||'-',r.budget>0?r.budget:'-',r.spent>0?r.spent:'-',r.reach>0?r.reach:'-',(o==='Engajamento'&&isEF)&&r.eng>0?r.eng:'-',(o==='EngLink'||o==='ConvLink')&&r.links>0?r.links:'-',o==='Reels'&&r.views>0?r.views:'-',o==='Alcance'&&r.cpm>0?r.cpm:'-',(o==='EngLink'||o==='ConvLink')&&r.cpc>0?r.cpc:'-',o==='Reels'&&r.cThru>0?r.cThru:'-',(o==='Engajamento'&&isEF)&&r.cInt>0?r.cInt:'-',(o==='Conversas'||o==='WhatsEng')&&r.cConv>0?r.cConv:'-','-','-',(o==='Conversas'||o==='WhatsEng')&&r.conv>0?r.conv:'-'];
-var row=ws.addRow(vals);row.height=20;vals.forEach(function(v,ci){var cell=row.getCell(ci+1);cell.fill=fl(C.white);cell.font=fn(false,10,C.black);cell.alignment=ci===0?al('left','top',true):al('center','top');cell.border=bAll;if(typeof v==='number'){if([3,4,9,10,11,12,13].includes(ci))cell.numFmt=BRL;if([5,6,7,8,16].includes(ci))cell.numFmt=NUM;}});});
-// Empty + Legendas
-var rE=ws.addRow(Array(17).fill(''));rE.height=20;for(var ci=1;ci<=17;ci++){rE.getCell(ci).fill=fl(C.white);rE.getCell(ci).border={};}
-var rLT=ws.addRow(['RAIO-X DOS RESULTADOS - ENTENDA O QUE CADA INDICADOR MOSTRA']);ws.mergeCells('A'+rLT.number+':I'+rLT.number);var cLT=rLT.getCell(1);cLT.fill=fl(C.orange);cLT.font=fn(true,11,C.white,'Century Gothic');cLT.alignment=al('center','middle');rLT.height=20;
-var legs=['Alcance: É o número de contas que a postagem alcançou. Ou seja, a quantidade de contas que receberam o post.','Engajamento: É o número de vezes que houve interação com a postagem de pessoas com maior probabilidade de interesse no produto ofertado. A plataforma analisa os perfis de pessoas que estejam procurando os produtos ofertados, e faz a entrega para estes perfis (sem filtro). Ou seja, a soma da quantidade de vezes que o post foi aberto, curtido, compartilhado, comentado por um público mais engajado.','Conversas iniciadas: Quantidade de conversas iniciadas no WhatsApp a partir do anúncio.','Visualização (ThruPlay): Número de vezes que o vídeo foi assistido por pelo menos 15 segundos ou até o fim, quando menor que esse tempo.','Cliques no link: Quantidade de cliques em links do anúncio para destinos externos, como site ou WhatsApp.'];
-legs.forEach(function(txt){var rL=ws.addRow([txt]);ws.mergeCells('A'+rL.number+':I'+rL.number);var cL=rL.getCell(1);cL.fill=fl(C.white);cL.font=fn(false,10,C.dark);cL.alignment=al('left','top',true);cL.border={bottom:bk,right:bk};rL.height=24;});
-var rSep=ws.addRow(Array(9).fill(''));rSep.height=10;for(var ci=1;ci<=9;ci++){rSep.getCell(ci).border={bottom:{style:'double',color:{argb:C.black}}};rSep.getCell(ci).fill=fl(C.white);}
-var fnTxt='*Algumas colunas podem não ser preenchidas, pois variam de acordo com o tipo de impulsionamento e com as métricas disponíveis em cada campanha. Além disso, em alguns casos, a plataforma pode não utilizar toda a verba prevista, seja por limitação de público, concorrência no leilão de anúncios, baixo engajamento ou instabilidades na entrega. Por isso, o valor efetivamente considerado como consumido é o da coluna "Valor gasto".';
-var rFn=ws.addRow([fnTxt]);ws.mergeCells('A'+rFn.number+':I'+rFn.number);var cFn=rFn.getCell(1);cFn.fill=fl(C.white);cFn.font=fn(false,10,C.black,'Century Gothic');cFn.alignment=al('left','top',true);cFn.border={bottom:{style:'double',color:{argb:C.black}},right:{style:'double',color:{argb:C.black}}};rFn.height=50;
-// Download
-try{var buf=await wb.xlsx.writeBuffer();var blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=['Relatório de impulsionamento',info.cliente,info.mes,info.ano].filter(Boolean).join(' - ')+'.xlsx';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}finally{btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg> Baixar Excel';btn.disabled=false;}}
+  exportExcel: async function() {
+    if (!AppState.campaignsData.length) return;
+    var btn = document.getElementById('btnExcel');
+    btn.textContent = 'Gerando...';
+    btn.disabled = true;
+    // CORRIGIDO: usa AppState em vez de variáveis globais soltas
+    var info = parseFileName(AppState.originalFileName);
+    var cd = AppState.capaData;
+    var C={orange:'FFFF9900',gold:'FFFBBC04',gray1:'FFB7B7B7',white:'FFFFFFFF',black:'FF000000',dark:'FF222526',cream:'FFF5F3F0'};
+    var bk={style:'thin',color:{argb:C.black}};
+    var bAll={top:bk,bottom:bk,left:bk,right:bk};
+    var fl=function(a){return{type:'pattern',pattern:'solid',fgColor:{argb:a}};};
+    var fn=function(b,s,a,n){return{bold:!!b,size:s||10,color:{argb:a||C.black},name:n||'Arial'};};
+    var al=function(h,v,w){return{horizontal:h||'center',vertical:v||'top',wrapText:!!w};};
+    var BRL='R$\\ #,##0.00', NUM='#,##0';
+    var wb = new ExcelJS.Workbook();
+    // ═══ ABA 1: CAPA ═══
+    var wsCapa = wb.addWorksheet('Capa');
+    var titulo = info.cliente+' - '+(info.mes||'')+' - '+(info.ano||'');
+    var G = fl(C.gold);
+    wsCapa.columns=[{width:2},{width:2},{width:22},{width:2},{width:16},{width:16},{width:2},{width:4},{width:2},{width:22},{width:2},{width:16},{width:16},{width:2},{width:2},{width:2}];
+    for (var ri=1;ri<=16;ri++){var rw=wsCapa.getRow(ri);for(var ci=1;ci<=16;ci++){rw.getCell(ci).fill=G;}}
+    // ROW 1: Título
+    wsCapa.mergeCells('A1:P1');wsCapa.getRow(1).height=52;
+    var cTit=wsCapa.getCell('A1');cTit.value=titulo;cTit.fill=G;cTit.font=fn(true,26,C.white,'Arial');cTit.alignment=al('center','middle');
+    // ROW 2
+    wsCapa.getRow(2).height=10;
+    // ROW 3: Labels plataforma
+    wsCapa.getRow(3).height=24;
+    wsCapa.mergeCells('C3:G3');wsCapa.mergeCells('J3:N3');
+    var cFB=wsCapa.getCell('C3');cFB.value='FACEBOOK';cFB.fill=G;cFB.font=fn(true,13,C.black,'Arial');cFB.alignment=al('center','middle');
+    var cIG=wsCapa.getCell('J3');cIG.value='INSTAGRAM';cIG.fill=G;cIG.font=fn(true,13,C.black,'Arial');cIG.alignment=al('center','middle');
+    // ROW 4
+    wsCapa.getRow(4).height=6;
+    // ROW 5-6: Total seguidores
+    wsCapa.getRow(5).height=32;wsCapa.getRow(6).height=32;
+    wsCapa.mergeCells('C5:G6');wsCapa.mergeCells('J5:N6');
+    var cFBSeg=wsCapa.getCell('C5');cFBSeg.value='Total de '+cd.fb.seguidores+' seguidores';cFBSeg.fill=G;cFBSeg.font=fn(false,20,C.black,'Arial');cFBSeg.alignment=al('center','middle',true);
+    var cIGSeg=wsCapa.getCell('J5');cIGSeg.value='Total de '+cd.ig.seguidores+' seguidores';cIGSeg.fill=G;cIGSeg.font=fn(false,20,C.black,'Arial');cIGSeg.alignment=al('center','middle',true);
+    // ROW 7: Seg anterior
+    wsCapa.getRow(7).height=22;
+    wsCapa.mergeCells('C7:G7');wsCapa.mergeCells('J7:N7');
+    var cFBSA=wsCapa.getCell('C7');cFBSA.value=cd.fb.segAnterior+' seguidores no mês anterior';cFBSA.fill=G;cFBSA.font=fn(true,13,C.black,'Arial');cFBSA.alignment=al('center','middle',true);
+    var cIGSA=wsCapa.getCell('J7');cIGSA.value=cd.ig.segAnterior+' seguidores no mês anterior';cIGSA.fill=G;cIGSA.font=fn(true,13,C.black,'Arial');cIGSA.alignment=al('center','middle',true);
+    // ROW 8
+    wsCapa.getRow(8).height=8;
+    // ROW 9-10: Gênero
+    var pct=function(v){var s=String(v||'').trim();return s?s+(s.slice(-1)==='%'?'':' %'):'';};
+    wsCapa.getRow(9).height=30;wsCapa.getRow(10).height=30;
+    wsCapa.mergeCells('C9:D10');wsCapa.mergeCells('E9:F10');wsCapa.mergeCells('J9:K10');wsCapa.mergeCells('L9:M10');
+    var cFBH=wsCapa.getCell('C9');cFBH.value=pct(cd.fb.homens)+' Homens';cFBH.fill=G;cFBH.font=fn(true,16,C.black,'Arial');cFBH.alignment=al('center','middle');
+    var cFBM=wsCapa.getCell('E9');cFBM.value=pct(cd.fb.mulheres)+' Mulheres';cFBM.fill=G;cFBM.font=fn(true,16,C.black,'Arial');cFBM.alignment=al('center','middle');
+    var cIGH=wsCapa.getCell('J9');cIGH.value=pct(cd.ig.homens)+' Homens';cIGH.fill=G;cIGH.font=fn(true,16,C.black,'Arial');cIGH.alignment=al('center','middle');
+    var cIGM=wsCapa.getCell('L9');cIGM.value=pct(cd.ig.mulheres)+' Mulheres';cIGM.fill=G;cIGM.font=fn(true,16,C.black,'Arial');cIGM.alignment=al('center','middle');
+    // ROW 11
+    wsCapa.getRow(11).height=8;
+    // ROW 12-13: Valores
+    wsCapa.getRow(12).height=34;wsCapa.getRow(13).height=34;
+    wsCapa.mergeCells('C12:D13');wsCapa.mergeCells('E12:E13');wsCapa.mergeCells('F12:F13');
+    wsCapa.mergeCells('J12:K13');wsCapa.mergeCells('L12:L13');wsCapa.mergeCells('M12:M13');
+    var cFBF=wsCapa.getCell('C12');cFBF.value=cd.fb.faixa;cFBF.fill=G;cFBF.font=fn(true,22,C.black,'Arial');cFBF.alignment=al('center','middle');
+    var cFBA=wsCapa.getCell('E12');cFBA.value=cd.fb.alcancadas;cFBA.fill=G;cFBA.font=fn(true,22,C.black,'Arial');cFBA.alignment=al('center','middle');
+    var cFBV=wsCapa.getCell('F12');cFBV.value=cd.fb.visitas;cFBV.fill=G;cFBV.font=fn(true,22,C.black,'Arial');cFBV.alignment=al('center','middle');
+    var cIGF=wsCapa.getCell('J12');cIGF.value=cd.ig.faixa;cIGF.fill=G;cIGF.font=fn(true,22,C.black,'Arial');cIGF.alignment=al('center','middle');
+    var cIGA=wsCapa.getCell('L12');cIGA.value=cd.ig.alcancadas;cIGA.fill=G;cIGA.font=fn(true,22,C.black,'Arial');cIGA.alignment=al('center','middle');
+    var cIGV=wsCapa.getCell('M12');cIGV.value=cd.ig.visitas;cIGV.fill=G;cIGV.font=fn(true,22,C.black,'Arial');cIGV.alignment=al('center','middle');
+    // ROW 14: Labels
+    wsCapa.getRow(14).height=20;
+    wsCapa.mergeCells('C14:D14');
+    var lFBF=wsCapa.getCell('C14');lFBF.value='FAIXA ETÁRIA';lFBF.fill=G;lFBF.font=fn(false,11,C.black,'Arial');lFBF.alignment=al('center','middle');
+    var lFBA=wsCapa.getCell('E14');lFBA.value='CONTAS ALCANÇADAS';lFBA.fill=G;lFBA.font=fn(false,11,C.black,'Arial');lFBA.alignment=al('center','middle',true);
+    var lFBV=wsCapa.getCell('F14');lFBV.value='VISITAS À PÁGINA';lFBV.fill=G;lFBV.font=fn(false,11,C.black,'Arial');lFBV.alignment=al('center','middle',true);
+    wsCapa.mergeCells('J14:K14');
+    var lIGF=wsCapa.getCell('J14');lIGF.value='FAIXA ETÁRIA';lIGF.fill=G;lIGF.font=fn(false,11,C.black,'Arial');lIGF.alignment=al('center','middle');
+    var lIGA=wsCapa.getCell('L14');lIGA.value='CONTAS ALCANÇADAS';lIGA.fill=G;lIGA.font=fn(false,11,C.black,'Arial');lIGA.alignment=al('center','middle',true);
+    var lIGV=wsCapa.getCell('M14');lIGV.value='VISITAS AO PERFIL';lIGV.fill=G;lIGV.font=fn(false,11,C.black,'Arial');lIGV.alignment=al('center','middle',true);
+    wsCapa.getRow(15).height=10;wsCapa.getRow(16).height=10;
+    // ═══ ABA 2: RELATÓRIO ═══
+    var ws = wb.addWorksheet('Relatório');
+    ws.columns=[{width:24},{width:14},{width:15},{width:14},{width:14},{width:13},{width:14},{width:14},{width:18},{width:20},{width:22},{width:20},{width:20},{width:20},{width:12},{width:12},{width:18}];
+    ws.addRow(['AÇÕES MENSAIS']);ws.mergeCells('A1:Q1');
+    var r1=ws.getCell('A1');r1.value='AÇÕES MENSAIS';r1.fill=fl(C.orange);r1.font=fn(true,15,C.white);r1.alignment=al('center','middle');r1.border={bottom:bk};ws.getRow(1).height=32;
+    var HDR=['NOME DA AÇÃO','FORMATO','VALIDADE','INVESTIMENTO','VALOR GASTO','ALCANCE','ENGAJAMENTO','CLIQUES NO LINK','VISUALIZAÇÃO (THRUPLAY)','CUSTO POR 1.000 PESSOAS','CUSTO POR CLIQUES NO LINK','CUSTO POR THRUPLAY','CUSTO POR INTERAÇÃO','CUSTO POR CONVERSA','FILTRO','CIDADE','CONVERSAS INICIADAS'];
+    ws.addRow(HDR);ws.getRow(2).height=20;
+    HDR.forEach(function(_,ci){var cell=ws.getRow(2).getCell(ci+1);cell.fill=fl(C.gray1);cell.font=fn(true,10,C.black,'Century Gothic');cell.alignment=al('center','middle',true);cell.border=bAll;});
+    var lastDateKeyXl='';
+    AppState.campaignsData.forEach(function(r) {
+      var curDate=extractDateFromName(r.name);
+      var curDateKey=curDate?curDate.getTime():'none';
+      if (lastDateKeyXl!==''&&curDateKey!==lastDateKeyXl) {
+        var rBlank=ws.addRow(Array(17).fill(''));rBlank.height=12;
+        for (var ci=1;ci<=17;ci++){rBlank.getCell(ci).fill=fl('FFF0F0F0');rBlank.getCell(ci).border={top:bk,bottom:bk};}
+      }
+      lastDateKeyXl=curDateKey;
+      var o=r.objective;
+      var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+      var vals=[
+        titleCase(r.displayName||r.name),r.format,r.validity||'-',
+        r.budget>0?r.budget:'-',r.spent>0?r.spent:'-',r.reach>0?r.reach:'-',
+        ((o==='Engajamento'&&isEF)||(o==='ReelsEng')||(o==='ReelsEngLink'))&&r.eng>0?r.eng:'-',
+        (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')&&r.links>0?r.links:'-',
+        o==='Reels'&&r.views>0?r.views:'-',
+        (o==='Alcance'||o==='ReelsAlc')&&r.cpm>0?r.cpm:'-',
+        (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')&&r.cpc>0?r.cpc:'-',
+        o==='Reels'&&r.cThru>0?r.cThru:'-',
+        ((o==='Engajamento'&&isEF)||(o==='ReelsEng')||(o==='ReelsEngLink'))&&r.cInt>0?r.cInt:'-',
+        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats')&&r.cConv>0?r.cConv:'-',
+        '-','-',
+        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats')&&r.conv>0?r.conv:'-'
+      ];
+      var row=ws.addRow(vals);row.height=20;
+      vals.forEach(function(v,ci){
+        var cell=row.getCell(ci+1);
+        cell.fill=fl(C.white);cell.font=fn(false,10,C.black);
+        cell.alignment=ci===0?al('left','top',true):al('center','top');
+        cell.border=bAll;
+        if(typeof v==='number'){
+          if([3,4,9,10,11,12,13].includes(ci))cell.numFmt=BRL;
+          if([5,6,7,8,16].includes(ci))cell.numFmt=NUM;
+        }
+      });
+    });
+    var rE=ws.addRow(Array(17).fill(''));rE.height=20;for(var ci=1;ci<=17;ci++){rE.getCell(ci).fill=fl(C.white);rE.getCell(ci).border={};}
+    var rLT=ws.addRow(['RAIO-X DOS RESULTADOS - ENTENDA O QUE CADA INDICADOR MOSTRA']);
+    ws.mergeCells('A'+rLT.number+':I'+rLT.number);
+    var cLT=rLT.getCell(1);cLT.fill=fl(C.orange);cLT.font=fn(true,11,C.white,'Century Gothic');cLT.alignment=al('center','middle');rLT.height=20;
+    var legs=['Alcance: É o número de contas que a postagem alcançou. Ou seja, a quantidade de contas que receberam o post.','Engajamento: É o número de vezes que houve interação com a postagem de pessoas com maior probabilidade de interesse no produto ofertado. A plataforma analisa os perfis de pessoas que estejam procurando os produtos ofertados, e faz a entrega para estes perfis (sem filtro). Ou seja, a soma da quantidade de vezes que o post foi aberto, curtido, compartilhado, comentado por um público mais engajado.','Conversas iniciadas: Quantidade de conversas iniciadas no WhatsApp a partir do anúncio.','Visualização (ThruPlay): Número de vezes que o vídeo foi assistido por pelo menos 15 segundos ou até o fim, quando menor que esse tempo.','Cliques no link: Quantidade de cliques em links do anúncio para destinos externos, como site ou WhatsApp.'];
+    legs.forEach(function(txt){
+      var rL=ws.addRow([txt]);ws.mergeCells('A'+rL.number+':I'+rL.number);
+      var cL=rL.getCell(1);cL.fill=fl(C.white);cL.font=fn(false,10,C.dark);cL.alignment=al('left','top',true);cL.border={bottom:bk,right:bk};rL.height=24;
+    });
+    var rSep=ws.addRow(Array(9).fill(''));rSep.height=10;
+    for(var ci=1;ci<=9;ci++){rSep.getCell(ci).border={bottom:{style:'double',color:{argb:C.black}}};rSep.getCell(ci).fill=fl(C.white);}
+    var fnTxt='*Algumas colunas podem não ser preenchidas, pois variam de acordo com o tipo de impulsionamento e com as métricas disponíveis em cada campanha. Além disso, em alguns casos, a plataforma pode não utilizar toda a verba prevista, seja por limitação de público, concorrência no leilão de anúncios, baixo engajamento ou instabilidades na entrega. Por isso, o valor efetivamente considerado como consumido é o da coluna "Valor gasto".';
+    var rFn=ws.addRow([fnTxt]);ws.mergeCells('A'+rFn.number+':I'+rFn.number);
+    var cFn=rFn.getCell(1);cFn.fill=fl(C.white);cFn.font=fn(false,10,C.black,'Century Gothic');cFn.alignment=al('left','top',true);cFn.border={bottom:{style:'double',color:{argb:C.black}},right:{style:'double',color:{argb:C.black}}};rFn.height=50;
+    try {
+      var buf=await wb.xlsx.writeBuffer();
+      var blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');a.href=url;
+      a.download=['Relatório de impulsionamento',info.cliente,info.mes,info.ano].filter(Boolean).join(' - ')+'.xlsx';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    } finally {
+      btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg> Baixar Excel';
+      btn.disabled=false;
+    }
+  }
 };
 
+// CORRIGIDO: apenas uma declaração de exportExcel
 function exportExcel() {
   return ReportExporter.exportExcel();
 }
 
-function exportExcel() {
-  return ReportExporter.exportExcel();
-}
-
+// CORRIGIDO: usa AppState.capaData em vez de capaData global
 async function exportGoogleSheets() {
   try {
-    if (!campaignsData.length) {
-      alert('Nenhuma campanha carregada.');
-      return;
-    }
-
-    const info = parseFileName(originalFileName || 'Cliente');
-
-    const payload = {
+    if (!AppState.campaignsData.length) { alert('Nenhuma campanha carregada.'); return; }
+    var info = parseFileName(AppState.originalFileName || 'Cliente');
+    var payload = {
       cliente: info.cliente || 'Cliente',
       mes: info.mes || '',
       ano: info.ano || '',
-      campaignsData: campaignsData,
-      capaData: capaData
+      campaignsData: AppState.campaignsData,
+      capaData: AppState.capaData
     };
-
-    const btn = document.getElementById('btnGoogleSheets');
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = 'Gerando Google Sheets...';
-    }
-
-    const response = await fetch('/api/export-google-sheets', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
-
-    if (!result.success) {
-      throw new Error(result.error || 'Falha ao gerar Google Sheets.');
-    }
-
-    window.open(result.url, '_blank');
-  } catch (error) {
+    var btn = document.getElementById('btnGoogleSheets');
+    if (btn) { btn.disabled=true; btn.textContent='Gerando Google Sheets...'; }
+    var response = await fetch('/api/export-google-sheets',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    var result = await response.json();
+    if (!result.success) throw new Error(result.error || 'Falha ao gerar Google Sheets.');
+    window.open(result.url,'_blank');
+  } catch(error) {
     console.error(error);
-    alert('Erro ao exportar para Google Sheets: ' + error.message);
+    alert('Erro ao exportar para Google Sheets: '+error.message);
   } finally {
-    const btn = document.getElementById('btnGoogleSheets');
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Google Sheets';
-    }
+    var btn = document.getElementById('btnGoogleSheets');
+    if (btn) { btn.disabled=false; btn.textContent='Google Sheets'; }
   }
 }
-  
+
 function setClassifierConfigStatus(message, isError) {
   var status = $('classifierConfigStatus');
   if (!status) return;
@@ -1977,41 +1638,29 @@ function refreshClassifierConfigEditor() {
 
 function reclassifyCampaignData() {
   if (!AppState.campaignsData || !AppState.campaignsData.length) return;
-
   for (var i = 0; i < AppState.campaignsData.length; i++) {
     var row = AppState.campaignsData[i];
     row.format = detectFormat(row.name, row.adName || '');
     row.objective = detectObjective(row.name, row.format);
   }
-
   sortCampaignRows(AppState.campaignsData);
-
-  if ($('reviewArea').style.display === 'block') {
-    showReview();
-    return;
-  }
-
-  if ($('reportArea').style.display === 'block') {
-    renderReport(AppState.campaignsData);
-    return;
-  }
-
+  if ($('reviewArea').style.display === 'block') { showReview(); return; }
+  if ($('reportArea').style.display === 'block') { renderReport(AppState.campaignsData); return; }
   saveAppState();
 }
 
 function applyClassifierConfig() {
   var input = $('classifierConfigInput');
   if (!input) return;
-
   try {
     var parsed = JSON.parse(input.value);
     CampaignClassifier.saveConfig(parsed);
     refreshClassifierConfigEditor();
     reclassifyCampaignData();
     setClassifierConfigStatus('Configuração aplicada com sucesso.');
-  } catch (err) {
+  } catch(err) {
     console.error(err);
-    setClassifierConfigStatus('JSON inválido: ' + err.message, true);
+    setClassifierConfigStatus('JSON inválido: '+err.message, true);
   }
 }
 
@@ -2024,55 +1673,41 @@ function resetClassifierConfig() {
 
 function downloadClassifierConfig() {
   try {
-    var blob = new Blob([CampaignClassifier.exportConfig()], { type: 'application/json;charset=utf-8' });
+    var blob = new Blob([CampaignClassifier.exportConfig()],{type:'application/json;charset=utf-8'});
     var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'campaign-classifier-config.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    var a = document.createElement('a');a.href=url;a.download='campaign-classifier-config.json';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
     setClassifierConfigStatus('Arquivo JSON baixado.');
-  } catch (err) {
+  } catch(err) {
     console.error(err);
     setClassifierConfigStatus('Não foi possível baixar o JSON.', true);
   }
 }
-
 
 // ======================================================
 // Restauração de sessão
 // ======================================================
 function restoreAppState() {
   bindCapaInputs();
-
   var saved = loadAppState();
   if (!saved || !saved.campaignsData || !saved.campaignsData.length) return;
-
   AppState.campaignsData = saved.campaignsData;
   AppState.originalFileName = saved.originalFileName || '';
-  AppState.capaData = saved.capaData || { fb: {}, ig: {} };
-
+  AppState.capaData = saved.capaData || {fb:{},ig:{}};
   fillCapaInputs(AppState.capaData);
-
   var info = parseFileName(AppState.originalFileName || 'Cliente');
   $('clienteName').textContent = info.cliente;
-
   showFileSummary();
   showReview();
-
   if (saved.currentView === 'capa' || saved.currentView === 'report') {
     goToCapa();
     fillCapaInputs(AppState.capaData);
-
     if (saved.previewVisible) {
       updateCapaPreview();
       $('capaPreview').style.display = 'block';
       $('btnPreviewCapa').textContent = '🙈 Ocultar Preview';
     }
   }
-
   if (saved.currentView === 'report') {
     AppState.capaData = collectCapaData();
     $('capaArea').style.display = 'none';
@@ -2080,11 +1715,10 @@ function restoreAppState() {
     renderReport(AppState.campaignsData);
     setCurrentStep(4);
   }
-
   saveAppState();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   CampaignClassifier.ensureConfig();
   refreshClassifierConfigEditor();
   bindCapaInputs();
@@ -2094,6 +1728,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
-<footer>Relatório de Impulsionamento • v1.1</footer>
+<footer>Relatório de Impulsionamento • v1.2-dev</footer>
 </body>
 </html>
