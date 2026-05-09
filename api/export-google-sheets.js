@@ -178,7 +178,7 @@ module.exports = async function handler(req, res) {
         r.validity || '',
         fmt(r.budget) ? fmtBRL(r.budget) : '',
         fmt(r.spent) ? fmtBRL(r.spent) : '',
-        (o === 'Alcance' || o === 'Reels') ? fmtNum(r.reach) : '',
+        fmtNum(r.reach),
         (o === 'Engajamento' && isEF) ? fmtNum(r.eng) : '',
         (o === 'EngLink' || o === 'ConvLink') ? fmtNum(r.links) : '',
         o === 'Reels' ? fmtNum(r.views) : '',
