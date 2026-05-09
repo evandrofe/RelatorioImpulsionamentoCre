@@ -1177,9 +1177,78 @@ function sortCampaignRows(data) {
 // Importação e parsing do Excel
 // ======================================================
 
+function parseTextDate(txt) {
+  if (!txt) return null;
+  var s = String(txt).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  var MESES_MAP = {
+    'jan':1,'janeiro':1,'fev':2,'fevereiro':2,'mar':3,'marco':3,
+    'abr':4,'abril':4,'mai':5,'maio':5,'jun':6,'junho':6,
+    'jul':7,'julho':7,'ago':8,'agosto':8,'set':9,'setembro':9,
+    'out':10,'outubro':10,'nov':11,'novembro':11,'dez':12,'dezembro':12
+  };
+  // "24 de dez de 2024" ou "1 de maio de 2026"
+  var m = s.match(/^(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})$/);
+  if (m) {
+    var mes = MESES_MAP[m[2]];
+    if (mes) return new Date(+m[3], mes - 1, +m[1]);
+  }
+  return null;
+}
+
+function parseSchedule(val) {
+  if (!val) return { start: null, end: null };
+  var s = String(val).trim();
+  // Separa por – ou -
+  var parts = s.split(/\s*[–\-]\s*/);
+  if (parts.length >= 2) {
+    var d1 = parseTextDate(parts[0]) || parseMetaDate(parts[0].trim());
+    var d2 = parseTextDate(parts[parts.length - 1]) || parseMetaDate(parts[parts.length - 1].trim());
+    if (d1 && d2) return { start: d1, end: d2 };
+  }
+  // Tenta extrair datas numéricas
+  var matches = s.match(/(\d{1,2}[\/\.\-]\d{1,2}[\/\.\-]\d{2,4})/g);
+  if (matches && matches.length >= 2) {
+    return { start: parseMetaDate(matches[0]), end: parseMetaDate(matches[1]) };
+  }
+  if (matches && matches.length === 1) {
+    return { start: parseMetaDate(matches[0]), end: null };
+  }
+  // Tenta uma data textual só
+  var single = parseTextDate(s);
+  if (single) return { start: single, end: null };
+  return { start: null, end: null };
+}
+
+function fmtValidity(dStart, dEnd) {
+  if (!dStart) return '';
+  var pad = function(n) { return String(n).padStart(2, '0'); };
+  var d1 = pad(dStart.getDate());
+  var m1 = pad(dStart.getMonth() + 1);
+  var y1 = dStart.getFullYear();
+  if (!dEnd) return d1 + '/' + m1 + '/' + y1;
+  var d2 = pad(dEnd.getDate());
+  var m2 = pad(dEnd.getMonth() + 1);
+  var y2 = dEnd.getFullYear();
+  var diffDays = Math.round((dEnd.getTime() - dStart.getTime()) / 86400000);
+  var conector = (diffDays <= 1) ? ' e ' : ' a ';
+  // Mesmo mês e ano: 01 a 15/05/2026 ou 01 e 02/05/2026
+  if (m1 === m2 && y1 === y2) {
+    if (diffDays <= 1) {
+      return d1 + ' e ' + d2 + '/' + m2 + '/' + y2;
+    }
+    return d1 + ' a ' + d2 + '/' + m2 + '/' + y2;
+  }
+  // Mesmo ano, meses diferentes: 28/04 a 03/05/2026
+  if (y1 === y2) {
+    return d1 + '/' + m1 + conector + d2 + '/' + m2 + '/' + y2;
+  }
+  // Anos diferentes: 28/12/2024 a 03/01/2025
+  return d1 + '/' + m1 + '/' + y1 + conector + d2 + '/' + m2 + '/' + y2;
+}
+
 function parseExcel(wb){var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,dateNF:'dd/mm/yyyy'});if(!rows.length)throw new Error('Arquivo vazio.');var headers=rows[0].map(function(h){return String(h||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');});
-var iCN=getIdx(headers,['nome da campanha','campaign name']);var iAN=getIdx(headers,['nome do anuncio','ad name','nome do conjunto']);var iDS=getIdx(headers,['inicio dos relatorios','reporting starts','data de inicio']);var iDE=getIdx(headers,['termino dos relatorios','reporting ends','data de termino','data de fim']);var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);var iIm=getIdx(headers,['impressoes','impressions']);var iR=getIdx(headers,['alcance','reach']);var iRes=getIdx(headers,['resultados','results','result']);var iEP=getIdx(headers,['engajamentos com o post','post engagements']);var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);var iCPR=getIdx(headers,['custo por resultado','cost per result']);var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);var iLC=getIdx(headers,['cliques no link','link clicks']);var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
-var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||'').trim();var format=detectFormat(name,adName);var objective=detectObjective(name,format);var dateFromName=extractDateFromName(name);var dStart=parseMetaDate(g(iDS));var dEnd=parseMetaDate(g(iDE));var validity='';if(dateFromName)validity=fmtDateBR(dateFromName)+(dEnd?' – '+fmtDateBR(dEnd):' –');else if(dStart)validity=fmtDateBR(dStart)+(dEnd?' – '+fmtDateBR(dEnd):' –');var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
+var iCN=getIdx(headers,['nome da campanha','campaign name']);var iAN=getIdx(headers,['nome do anuncio','ad name']);var iCA=getIdx(headers,['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);var iDS=getIdx(headers,['inicio dos relatorios','reporting starts','data de inicio']);var iDE=getIdx(headers,['termino dos relatorios','reporting ends','data de termino','data de fim']);var iProg=getIdx(headers,['programacao','schedule']);var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);var iIm=getIdx(headers,['impressoes','impressions']);var iR=getIdx(headers,['alcance','reach']);var iRes=getIdx(headers,['resultados','results','result']);var iEP=getIdx(headers,['engajamentos com o post','post engagements']);var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);var iCPR=getIdx(headers,['custo por resultado','cost per result']);var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);var iLC=getIdx(headers,['cliques no link','link clicks']);var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
+var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||g(iCA)||'').trim();var format=detectFormat(name,adName);var objective=detectObjective(name,format);var dateFromName=extractDateFromName(name);var sched=parseSchedule(g(iProg));var dStart=sched.start||parseMetaDate(g(iDS));var dEnd=sched.end||parseMetaDate(g(iDE));var validity='';if(dStart)validity=fmtValidity(dStart,dEnd);else if(dateFromName)validity=fmtValidity(dateFromName,dEnd);var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
 var cpm=parseCurrency(g(iCPM));if(!cpm&&impr>0&&spent>0)cpm=(spent/impr)*1000;var cpc=parseCurrency(g(iCPC));if(!cpc&&links>0&&spent>0)cpc=spent/links;var cThru=parseCurrency(g(iTC));if(!cThru){var c1=parseCurrency(g(iCPR));if(c1>0)cThru=c1;else if(results>0&&spent>0)cThru=spent/results;}var cInt=parseCurrency(g(iCE));if(!cInt){var c2=parseCurrency(g(iCPR));if(c2>0)cInt=c2;else if(eng>0&&spent>0)cInt=spent/eng;}var cConv=parseCurrency(g(iCC));if(!cConv){var c3=parseCurrency(g(iCPR));if(c3>0)cConv=c3;else if(results>0&&spent>0)cConv=spent/results;}
 data.push({name:name,format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});}
 sortCampaignRows(data);return data;}
