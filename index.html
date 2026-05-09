@@ -670,17 +670,24 @@ var DEFAULT_CLASSIFIER_CONFIG = {
   ],
   objectivePriority:{Alcance:1,Engajamento:2,EngLink:3,Conversas:4,ConvLink:5,WhatsEng:6,Reels:7,ReelsEng:8,ReelsAlc:9,ReelsWhats:10,ReelsEngLink:11,Trafego:12,TrafWhats:13,TrafLink:14},
   objectiveRules:[
-    {name:'Reels por formato',objective:'Reels',when:{formatIn:['Reels','Vídeo']}},
-    {name:'WhatsApp + clique no link',objective:'ConvLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
-    {name:'Tráfego + clique no link',objective:'EngLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['trafego','tráfego'],['engajamento','engaj','eng']]}},
-    {name:'Whats (Engajamento + Conversas)',objective:'WhatsEng',when:{allWords:[['whats','whatsapp','wapp','wpp','zap'],['engajamento','engaj','eng']]}},
-    {name:'Conversas por WhatsApp',objective:'Conversas',aliases:['WhatsApp'],when:{anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
-    {name:'Engajamento',objective:'Engajamento',when:{anyWords:[['engajamento','engaj','eng']]}},
-    {name:'Alcance',objective:'Alcance',when:{anyWords:[['alcance','alc','al']]}},
-    {name:'Reels por visualização',objective:'Reels',when:{anyWords:[['views','visualizacao','visualizações','thruplay']]}},
+    // Tráfego tem prioridade máxima — vem antes de qualquer detecção por formato
     {name:'Tráfego + WhatsApp',objective:'TrafWhats',when:{allWords:[['trafego','traf'],['whats','whatsapp','wapp','wpp','zap']]}},
     {name:'Tráfego + Link',objective:'TrafLink',when:{allWords:[['trafego','traf'],['link','clique']]}},
-    {name:'Tráfego',objective:'Trafego',when:{anyWords:[['trafego','traf']]}}
+    {name:'Tráfego',objective:'Trafego',when:{anyWords:[['trafego','traf']]}},
+    // WhatsApp + clique no link
+    {name:'WhatsApp + clique no link',objective:'ConvLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
+    // Engajamento + link
+    {name:'Engajamento + clique no link',objective:'EngLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['engajamento','engaj','eng']]}},
+    // WhatsApp + Engajamento
+    {name:'Whats (Engajamento + Conversas)',objective:'WhatsEng',when:{allWords:[['whats','whatsapp','wapp','wpp','zap'],['engajamento','engaj','eng']]}},
+    // Conversas por WhatsApp
+    {name:'Conversas por WhatsApp',objective:'Conversas',aliases:['WhatsApp'],when:{anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
+    // Reels por formato (só cai aqui se não tiver Tráfego no nome)
+    {name:'Reels por formato',objective:'Reels',when:{formatIn:['Reels','Vídeo']}},
+    // Objetivos por palavra-chave
+    {name:'Engajamento',objective:'Engajamento',when:{anyWords:[['engajamento','engaj','eng']]}},
+    {name:'Alcance',objective:'Alcance',when:{anyWords:[['alcance','alc','al']]}},
+    {name:'Reels por visualização',objective:'Reels',when:{anyWords:[['views','visualizacao','visualizações','thruplay']]}}
   ]
 };
 
@@ -1466,23 +1473,23 @@ function renderReport(data) {
     var r = data[idx];
     var o = r.objective;
     var isEngFmt = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
-    var isReels = /reels|reel|vídeo|video/i.test(r.format);
+    var isTraf = (o==='Trafego'||o==='TrafLink'||o==='TrafWhats');
     var curDate = extractDateFromName(r.name);
     var curDateKey = curDate ? curDate.getTime() : 'none';
     if (idx > 0 && curDateKey !== lastDateKey) {
       tbody.innerHTML += '<tr><td colspan="17" style="background:#fff;border:none;height:16px"></td></tr>';
     }
     lastDateKey = curDateKey;
-    var colReach=fmtNum(r.reach);
-    var colEng=(o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')?fmtNum(r.eng):'-';
-    var colLinks=(o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink'||o==='Trafego'||o==='TrafLink')?fmtNum(r.links):'-';
-    var colViews=(o==='Reels')?fmtNum(r.views):'-';
-    var colCPM=(o==='Alcance'||o==='ReelsAlc')?fmtBRL(r.cpm):'-';
-    var colCPC=(o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink'||o==='Trafego'||o==='TrafLink')?fmtBRL(r.cpc):'-';
-    var colThru=(o==='Reels')?fmtBRL(r.cThru):'-';
-    var colCInt=(o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')?fmtBRL(r.cInt):'-';
-    var colCConv=(o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats')?fmtBRL(r.cConv):'-';
-    var colConv=(o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats')?fmtNum(r.conv):'-';
+    var colReach  = fmtNum(r.reach);
+    var colEng    = ((o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')) ? fmtNum(r.eng) : '-';
+    var colLinks  = (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink'||o==='Trafego'||o==='TrafLink') ? fmtNum(r.links) : '-';
+    var colViews  = (o==='Reels') ? fmtNum(r.views) : '-';
+    var colCPM    = (o==='Alcance'||o==='ReelsAlc') ? fmtBRL(r.cpm) : '-';
+    var colCPC    = (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink'||o==='Trafego'||o==='TrafLink') ? fmtBRL(r.cpc) : '-';
+    var colThru   = (o==='Reels') ? fmtBRL(r.cThru) : '-';
+    var colCInt   = ((o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')) ? fmtBRL(r.cInt) : '-';
+    var colCConv  = (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats'||o==='ConvLink') ? fmtBRL(r.cConv) : '-';
+    var colConv   = (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats'||o==='ConvLink') ? fmtNum(r.conv) : '-';
     tbody.innerHTML += '<tr><td>'+titleCase(r.displayName||r.name)+'</td><td>'+r.format+'</td><td>'+(r.validity||'-')+'</td><td>'+fmtBRL(r.budget)+'</td><td>'+fmtBRL(r.spent)+'</td><td>'+colReach+'</td><td>'+colEng+'</td><td>'+colLinks+'</td><td>'+colViews+'</td><td>'+colCPM+'</td><td>'+colCPC+'</td><td>'+colThru+'</td><td>'+colCInt+'</td><td>'+colCConv+'</td><td>-</td><td>-</td><td>'+colConv+'</td></tr>';
   }
   document.getElementById('reportArea').style.display = 'block';
@@ -1646,9 +1653,9 @@ var ReportExporter = {
         (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink'||o==='Trafego'||o==='TrafLink')&&r.cpc>0?r.cpc:'-',
         o==='Reels'&&r.cThru>0?r.cThru:'-',
         ((o==='Engajamento'&&isEF)||(o==='ReelsEng')||(o==='ReelsEngLink'))&&r.cInt>0?r.cInt:'-',
-        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats')&&r.cConv>0?r.cConv:'-',
+        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats'||o==='ConvLink')&&r.cConv>0?r.cConv:'-',
         '-','-',
-        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats')&&r.conv>0?r.conv:'-'
+        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='TrafWhats'||o==='ConvLink')&&r.conv>0?r.conv:'-'
       ];
       var row=ws.addRow(vals);row.height=20;
       vals.forEach(function(v,ci){
