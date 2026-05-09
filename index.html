@@ -999,8 +999,7 @@ function segmentIsFormat(segment) {
 
 function extractFormatLabel(name) {
   if (!name) return '';
-  var parts = name.split(/\s*-\s*/);
-  var CANONICAL = {'carrossel':'Carrossel','carrosel':'Carrossel','panfleto':'Panfleto','panfletos':'Panfleto','tabloide':'Tabloide','tabloides':'Tabloide','post':'Post','reels':'Reels','reel':'Reels','video':'Vídeo','vídeo':'Vídeo','virtual':'Virtual','virtuais':'Virtual'};
+  var parts = name.split(/\s*[-–]\s*/);
   for (var i = 0; i < parts.length; i++) {
     var segment = parts[i].trim();
     if (!segment) continue;
@@ -1016,7 +1015,7 @@ function extractFormatLabel(name) {
 
 function formatActionName(name, objective) {
   if (!name) return '';
-  var parts = name.split(/\s*-\s*/);
+  var parts = name.split(/\s*[-–]\s*/);
   var DATE_PATTERN = /^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/;
   var OBJ_ABBREV = {'alc':'Alcance','al':'Alcance','alcance':'Alcance','alcances':'Alcance','eng':'Engajamento','engaj':'Engajamento','engajamento':'Engajamento','engajamentos':'Engajamento','whats':'WhatsApp','whatsapp':'WhatsApp','wpp':'WhatsApp','zap':'WhatsApp','wats':'WhatsApp','traf':'Tráfego','trafego':'Tráfego','views':'Visualização','visualizacao':'Visualização','thruplay':'ThruPlay','conv':'Conversas','conversas':'Conversas','conversa':'Conversas','clique no link':'Clique no Link'};
   var cleaned = [], foundObj = false;
