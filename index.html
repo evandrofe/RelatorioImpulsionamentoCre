@@ -999,6 +999,15 @@ function segmentIsFormat(segment) {
 
 function extractFormatLabel(name) {
   if (!name) return '';
+  var CANONICAL = {
+    'carrossel':'Carrossel','carrosel':'Carrossel',
+    'panfleto':'Panfleto','panfletos':'Panfleto',
+    'tabloide':'Tabloide','tabloides':'Tabloide',
+    'post':'Post',
+    'reels':'Reels','reel':'Reels',
+    'video':'Vídeo','vídeo':'Vídeo',
+    'virtual':'Virtual','virtuais':'Virtual'
+  };
   var parts = name.split(/\s*[-–]\s*/);
   for (var i = 0; i < parts.length; i++) {
     var segment = parts[i].trim();
