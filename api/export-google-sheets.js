@@ -173,7 +173,7 @@ module.exports = async function handler(req, res) {
       lastDateKey = curDateKey;
 
       dataRows.push([
-        titleCase(r.name),
+        titleCase(r.displayName || r.name),
         r.format,
         r.validity || '',
         fmt(r.budget) ? fmtBRL(r.budget) : '',
