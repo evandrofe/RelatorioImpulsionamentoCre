@@ -1252,11 +1252,59 @@ function fmtValidity(dStart, dEnd) {
   return d1 + '/' + m1 + '/' + y1 + conector + d2 + '/' + m2 + '/' + y2;
 }
 
+var FORMAT_BASE_WORDS = ['carrossel','carrosel','panfleto','panfletos','tabloide','tabloides','post','reels','reel','video','vídeo','virtual','virtuais'];
+var FORMAT_BASE_REGEX = new RegExp('^(' + FORMAT_BASE_WORDS.join('|') + ')$', 'i');
+
+function segmentIsFormat(segment) {
+  // Verifica se o segmento contém uma palavra de formato (pode ter modificador junto)
+  var words = segment.trim().split(/\s+/);
+  for (var w = 0; w < words.length; w++) {
+    if (FORMAT_BASE_REGEX.test(words[w])) return true;
+  }
+  return false;
+}
+
+function extractFormatLabel(name) {
+  // Extrai o formato completo do nome da campanha (tipo + modificador)
+  // Ex: "Carrossel Dark" → "Carrossel Dark", "Dark Post" → "Post Dark", "Reel" → "Reels"
+  if (!name) return '';
+  var parts = name.split(/\s*-\s*/);
+  var CANONICAL = {
+    'carrossel':'Carrossel','carrosel':'Carrossel',
+    'panfleto':'Panfleto','panfletos':'Panfleto',
+    'tabloide':'Tabloide','tabloides':'Tabloide',
+    'post':'Post',
+    'reels':'Reels','reel':'Reels',
+    'video':'Vídeo','vídeo':'Vídeo',
+    'virtual':'Virtual','virtuais':'Virtual'
+  };
+
+  for (var i = 0; i < parts.length; i++) {
+    var segment = parts[i].trim();
+    if (!segment) continue;
+    var words = segment.split(/\s+/);
+    var baseWord = '';
+    var modifiers = [];
+
+    for (var w = 0; w < words.length; w++) {
+      if (FORMAT_BASE_REGEX.test(words[w])) {
+        baseWord = CANONICAL[words[w].toLowerCase()] || words[w];
+      } else {
+        modifiers.push(words[w]);
+      }
+    }
+
+    if (baseWord) {
+      // Retorna: tipo primeiro, depois modificadores
+      return modifiers.length ? baseWord + ' ' + modifiers.join(' ') : baseWord;
+    }
+  }
+  return '';
+}
+
 function formatActionName(name, objective) {
   if (!name) return '';
   var parts = name.split(/\s*-\s*/);
-  // Formatos e abreviações de objetivo a remover dos segmentos
-  var FORMAT_WORDS = /^(carrossel|carrosel|panfleto|panfletos|tabloide|tabloides|tabloide|post|reels?|video|vídeo|virtual|virtuais)$/i;
   var DATE_PATTERN = /^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/;
   var OBJ_ABBREV = {
     'alc': 'Alcance', 'al': 'Alcance', 'alcance': 'Alcance', 'alcances': 'Alcance',
@@ -1275,13 +1323,13 @@ function formatActionName(name, objective) {
     var segment = parts[i].trim();
     if (!segment) continue;
 
-    // Pula segmentos que são datas (03/03/26, 09/03/26)
+    // Pula datas
     if (DATE_PATTERN.test(segment)) continue;
 
-    // Pula segmentos que são nomes de formato
-    if (FORMAT_WORDS.test(segment)) continue;
+    // Pula segmentos que contêm palavra de formato (com ou sem modificador)
+    if (segmentIsFormat(segment)) continue;
 
-    // Verifica se é abreviação de objetivo — substitui pela palavra completa
+    // Verifica se é abreviação de objetivo
     var segLower = segment.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (OBJ_ABBREV[segLower]) {
       cleaned.push(OBJ_ABBREV[segLower]);
@@ -1289,11 +1337,10 @@ function formatActionName(name, objective) {
       continue;
     }
 
-    // Segmento normal — mantém
+    // Segmento normal
     cleaned.push(segment);
   }
 
-  // Se não encontrou objetivo no nome mas temos o objetivo detectado, adiciona
   if (!foundObj && objective && objective !== 'indefinido') {
     var OBJ_DISPLAY = {
       'Alcance': 'Alcance',
@@ -1312,7 +1359,7 @@ function formatActionName(name, objective) {
 
 function parseExcel(wb){var ws=wb.Sheets[wb.SheetNames[0]];var rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,dateNF:'dd/mm/yyyy'});if(!rows.length)throw new Error('Arquivo vazio.');var headers=rows[0].map(function(h){return String(h||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');});
 var iCN=getIdx(headers,['nome da campanha','campaign name']);var iAN=getIdx(headers,['nome do anuncio','ad name']);var iCA=getIdx(headers,['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);var iDI=getIdx(headers,['inicio','start']);var iDT=getIdx(headers,['termino','end']);var iB=getIdx(headers,['orcamento da campanha','campaign budget','orcamento','investimento']);var iS=getIdx(headers,['valor usado (brl)','valor usado','amount spent','valor gasto']);var iCPM=getIdx(headers,['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);var iIm=getIdx(headers,['impressoes','impressions']);var iR=getIdx(headers,['alcance','reach']);var iRes=getIdx(headers,['resultados','results','result']);var iEP=getIdx(headers,['engajamentos com o post','post engagements']);var iTC=getIdx(headers,['custo por thruplay','cost per thruplay']);var iCPR=getIdx(headers,['custo por resultado','cost per result']);var iCE=getIdx(headers,['custo por engajamento com o post','cost per post engagement','custo por interacao']);var iCC=getIdx(headers,['custo por conversa por mensagem iniciada','cost per messaging conversation started']);var iLC=getIdx(headers,['cliques no link','link clicks']);var iCPC=getIdx(headers,['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
-var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||g(iCA)||'').trim();var format=detectFormat(name,adName);var objective=detectObjective(name,format);var dateFromName=extractDateFromName(name);var dStart=parseMetaDate(g(iDI));var dEnd=parseMetaDate(g(iDT));var validity='';if(dStart)validity=fmtValidity(dStart,dEnd);else if(dateFromName)validity=fmtValidity(dateFromName,null);var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
+var data=[];for(var i=1;i<rows.length;i++){var row=rows[i];if(!row||!row.length)continue;var g=function(idx){return(idx>=0&&idx<row.length)?row[idx]:undefined;};var nameRaw=g(iCN);if(!nameRaw)continue;var name=String(nameRaw).trim();if(!name)continue;var adName=String(g(iAN)||g(iCA)||'').trim();var formatBase=detectFormat(name,adName);var format=extractFormatLabel(name)||extractFormatLabel(adName)||formatBase;var objective=detectObjective(name,formatBase);var dateFromName=extractDateFromName(name);var dStart=parseMetaDate(g(iDI));var dEnd=parseMetaDate(g(iDT));var validity='';if(dStart)validity=fmtValidity(dStart,dEnd);else if(dateFromName)validity=fmtValidity(dateFromName,null);var sortDate=dateFromName||dStart;var spent=parseCurrency(g(iS));var budget=parseCurrency(g(iB));var impr=parseNum(g(iIm));var reach=parseNum(g(iR));var results=parseNum(g(iRes));var links=parseNum(g(iLC));var eng=parseNum(g(iEP));if(!eng&&results>0)eng=results;
 var cpm=parseCurrency(g(iCPM));if(!cpm&&impr>0&&spent>0)cpm=(spent/impr)*1000;var cpc=parseCurrency(g(iCPC));if(!cpc&&links>0&&spent>0)cpc=spent/links;var cThru=parseCurrency(g(iTC));if(!cThru){var c1=parseCurrency(g(iCPR));if(c1>0)cThru=c1;else if(results>0&&spent>0)cThru=spent/results;}var cInt=parseCurrency(g(iCE));if(!cInt){var c2=parseCurrency(g(iCPR));if(c2>0)cInt=c2;else if(eng>0&&spent>0)cInt=spent/eng;}var cConv=parseCurrency(g(iCC));if(!cConv){var c3=parseCurrency(g(iCPR));if(c3>0)cConv=c3;else if(results>0&&spent>0)cConv=spent/results;}
 data.push({name:name,displayName:formatActionName(name,objective),format:format,objective:objective,validity:validity,sortDate:sortDate,budget:budget,spent:spent,cpm:cpm,cpc:cpc,cThru:cThru,cInt:cInt,cConv:cConv,reach:reach,impr:impr,views:results,eng:eng,conv:results,links:links});}
 sortCampaignRows(data);return data;}
