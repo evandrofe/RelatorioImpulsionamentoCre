@@ -541,7 +541,17 @@ function titleCase(str) {
 function parseCurrency(v) {
   if (typeof v === 'number') return v;
   if (!v) return 0;
-  return parseFloat(String(v).replace(/[^0-9,.\-]/g, '').replace(/\.(?=\d{3})/g, '').replace(',', '.')) || 0;
+  var s = String(v).trim();
+  if (s === '' || s === '-' || s === '–' || s === '—') return 0;
+  // Remove símbolo de moeda e espaços
+  s = s.replace(/[R$\s]/g, '');
+  // Formato BR: ponto = milhar, vírgula = decimal (ex: 1.234,56 ou 0,70)
+  if (s.indexOf(',') !== -1) {
+    s = s.replace(/\./g, '').replace(',', '.');
+  }
+  // Formato US: vírgula = milhar, ponto = decimal (ex: 1,234.56)
+  // Já está correto, não precisa alterar
+  return parseFloat(s) || 0;
 }
 
 function parseNum(v) {
