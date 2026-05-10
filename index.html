@@ -1105,11 +1105,13 @@ function parseExcel(wb) {
   var iCN   = getIdx(headers, ['nome da campanha','campaign name']);
   var iAN   = getIdx(headers, ['nome do anuncio','ad name']);
   var iCA   = getIdx(headers, ['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);
-  var iDI   = getIdx(headers, ['inicio','inicio dos relatorios','start','data de inicio']);
-  var iDT   = getIdx(headers, ['termino','termino dos relatorios','end','data de termino']);
+  var iDI   = getIdx(headers, ['inicio dos relatorios','inicio','start','data de inicio']);
+  var iDT   = getIdx(headers, ['termino dos relatorios','termino','end','data de termino']);
   var iB    = getIdx(headers, ['orcamento da campanha','campaign budget','orcamento','investimento']);
   var iS    = getIdx(headers, ['valor usado (brl)','valor usado','amount spent','valor gasto']);
   var iR    = getIdx(headers, ['alcance','reach']);
+  var iIm   = getIdx(headers, ['impressoes','impressions']);
+  // Colunas detalhadas (nem sempre presentes)
   var iEP   = getIdx(headers, ['engajamentos com o post','post engagements','engajamento']);
   var iLC   = getIdx(headers, ['cliques no link','link clicks']);
   var iThru = getIdx(headers, ['thruplays','thruplay','visualizacao (thruplay)','visualizacoes']);
@@ -1119,6 +1121,9 @@ function parseExcel(wb) {
   var iCInt = getIdx(headers, ['custo por engajamento com o post','cost per post engagement','custo por interacao']);
   var iCConv= getIdx(headers, ['custo por conversa por mensagem iniciada','cost per messaging conversation started','custo por conversa']);
   var iConv = getIdx(headers, ['conversas por mensagem iniciadas','messaging conversations started','conversas iniciadas']);
+  // Colunas genéricas da exportação simplificada
+  var iRes  = getIdx(headers, ['resultados','results','result']);
+  var iCPR  = getIdx(headers, ['custo por resultado','cost per result']);
   var iTRes = getIdx(headers, ['tipo de resultado']);
 
   // Função segura de leitura — nunca quebra
@@ -1153,21 +1158,10 @@ function parseExcel(wb) {
 
     var name = String(nameRaw).trim();
     var adName = String(g(row, iAN) || g(row, iCA) || '').trim();
-    var tipoResultado = String(g(row, iTRes) || '').toLowerCase();
 
     var formatBase = detectFormat(name, adName);
     var format = extractFormatLabel(name) || extractFormatLabel(adName) || formatBase;
     var objective = detectObjective(name, formatBase);
-
-    // Se objetivo indefinido, tenta inferir pelo tipo de resultado do Meta
-    if (objective === 'indefinido' && tipoResultado) {
-      if (tipoResultado.includes('thruplay') || tipoResultado.includes('visuali')) objective = 'ReelsAlc';
-      else if (tipoResultado.includes('conversa')) objective = 'EngWhats';
-      else if (tipoResultado.includes('clique') || tipoResultado.includes('link')) objective = 'EngLink';
-      else if (tipoResultado.includes('alcance')) objective = 'Alc';
-      else if (tipoResultado.includes('interac') || tipoResultado.includes('engaj')) objective = 'Eng';
-      else if (tipoResultado.includes('visita')) objective = 'Alc';
-    }
 
     var dateFromName = extractDateFromName(name);
     var dStart = parseMetaDate(g(row, iDI));
@@ -1180,22 +1174,47 @@ function parseExcel(wb) {
     var spent  = safeNum(row, iS);
     var budget = safeNum(row, iB);
     var reach  = Math.round(safeNum(row, iR));
-    var eng    = Math.round(safeNum(row, iEP));
-    var links  = Math.round(safeNum(row, iLC));
-    var thru   = Math.round(safeNum(row, iThru));
-    var conv   = Math.round(safeNum(row, iConv));
+    var impr   = Math.round(safeNum(row, iIm));
 
-    var cpm   = safeNum(row, iCPM);
-    var cpc   = safeNum(row, iCPC);
+    // Valores genéricos da exportação simplificada
+    var resultados = Math.round(safeNum(row, iRes));
+    var custoRes   = safeNum(row, iCPR);
+
+    // Tipo de resultado da Meta (ex: "Cliques no link", "ThruPlay", "Interações com a publicação", "Conversas")
+    var tipoRes = String(g(row, iTRes) || '').toLowerCase();
+    var isClique = tipoRes.includes('clique') || tipoRes.includes('link');
+    var isThruplay = tipoRes.includes('thruplay') || tipoRes.includes('visuali');
+    var isConversa = tipoRes.includes('conversa') || tipoRes.includes('mensagem');
+    var isEngajamento = tipoRes.includes('interac') || tipoRes.includes('engaj');
+
+    // Colunas detalhadas — usa direto se disponível, senão usa Resultados pelo tipo
+    var eng   = Math.round(safeNum(row, iEP)  || (isEngajamento ? resultados : 0));
+    var links = Math.round(safeNum(row, iLC)  || (isClique      ? resultados : 0));
+    var thru  = Math.round(safeNum(row, iThru)|| (isThruplay    ? resultados : 0));
+    var conv  = Math.round(safeNum(row, iConv)|| (isConversa    ? resultados : 0));
+
+    // CPM — calcula se não tiver
+    var cpm = safeNum(row, iCPM);
+    if (!cpm && impr > 0 && spent > 0) cpm = (spent / impr) * 1000;
+
+    // CPC — usa coluna específica, senão custo por resultado se for clique
+    var cpc = safeNum(row, iCPC);
+    if (!cpc && isClique) cpc = custoRes || (links > 0 && spent > 0 ? spent / links : 0);
     if (!cpc && links > 0 && spent > 0) cpc = spent / links;
 
+    // Custo por ThruPlay
     var cThru = safeNum(row, iCThru);
+    if (!cThru && isThruplay) cThru = custoRes || (thru > 0 && spent > 0 ? spent / thru : 0);
     if (!cThru && thru > 0 && spent > 0) cThru = spent / thru;
 
-    var cInt  = safeNum(row, iCInt);
+    // Custo por interação
+    var cInt = safeNum(row, iCInt);
+    if (!cInt && isEngajamento) cInt = custoRes || (eng > 0 && spent > 0 ? spent / eng : 0);
     if (!cInt && eng > 0 && spent > 0) cInt = spent / eng;
 
+    // Custo por conversa
     var cConv = safeNum(row, iCConv);
+    if (!cConv && isConversa) cConv = custoRes || (conv > 0 && spent > 0 ? spent / conv : 0);
     if (!cConv && conv > 0 && spent > 0) cConv = spent / conv;
 
     data.push({
