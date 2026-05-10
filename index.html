@@ -627,22 +627,37 @@ function fuzzyMatch(word, targets, maxDist) {
 // Regras de classificação
 // ======================================================
 var OBJ_LABELS = {
-  Alcance:'Alcance', Engajamento:'Engajamento', EngLink:'Engajamento + Link',
-  Conversas:'Conversas (WhatsApp)', ConvLink:'WhatsApp + Link',
-  WhatsEng:'Whats (Engajamento + Conversas)', Reels:'Reels/Vídeo (ThruPlay)',
-  ReelsEng:'Reels (Engajamento)', ReelsAlc:'Reels (Alcance)',
-  ReelsWhats:'Reels (WhatsApp)', ReelsEngLink:'Reels (Eng + Link)',
-  indefinido:'⚠ Não detectado'
+  Alc:         'Alcance',
+  Eng:         'Engajamento',
+  EngLink:     'Engajamento de Link',
+  EngWhats:    'Engajamento Conversa Whats',
+  TrafLink:    'Tráfego de Link',
+  TrafWhats:   'Tráfego Conversas Whats',
+  ReelsAlc:    'Reels Alcance',
+  ReelsEng:    'Reels Engajamento',
+  ReelsEngLink:'Reels Engajamento de Link',
+  ReelsEngWhats:'Reels Engajamento Conversa Whats',
+  ReelsTrafLink:'Reels Tráfego de Link',
+  ReelsTrafWhats:'Reels Tráfego Conversas Whats',
+  indefinido:  '⚠ Não detectado'
 };
 var OBJ_BADGE = {
-  Alcance:'badge-alc', Engajamento:'badge-eng', EngLink:'badge-eng-link',
-  Conversas:'badge-conv', ConvLink:'badge-conv-link', WhatsEng:'badge-whatseng',
-  Reels:'badge-views', ReelsEng:'badge-eng', ReelsAlc:'badge-alc',
-  ReelsWhats:'badge-conv', ReelsEngLink:'badge-eng-link',
-  indefinido:'badge-unknown'
+  Alc:          'badge-alc',
+  Eng:          'badge-eng',
+  EngLink:      'badge-eng-link',
+  EngWhats:     'badge-conv',
+  TrafLink:     'badge-eng-link',
+  TrafWhats:    'badge-conv',
+  ReelsAlc:     'badge-views',
+  ReelsEng:     'badge-views',
+  ReelsEngLink: 'badge-views',
+  ReelsEngWhats:'badge-views',
+  ReelsTrafLink:'badge-views',
+  ReelsTrafWhats:'badge-views',
+  indefinido:   'badge-unknown'
 };
-var OBJ_OPTIONS = ['Alcance','Engajamento','EngLink','Conversas','ConvLink','WhatsEng','Reels','ReelsEng','ReelsAlc','ReelsWhats','ReelsEngLink'];
-var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v2';
+var OBJ_OPTIONS = ['Alc','Eng','EngLink','EngWhats','TrafLink','TrafWhats','ReelsAlc','ReelsEng','ReelsEngLink','ReelsEngWhats','ReelsTrafLink','ReelsTrafWhats'];
+var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v3';
 var DEFAULT_CLASSIFIER_CONFIG = {
   normalizationAliases: {
     panfleto:['panfletos'],
@@ -665,16 +680,34 @@ var DEFAULT_CLASSIFIER_CONFIG = {
     {keyword:'post',label:'Post'},
     {keyword:'video',label:'Vídeo',aliases:['vídeo']}
   ],
-  objectivePriority:{Alcance:1,Engajamento:2,EngLink:3,Conversas:4,ConvLink:5,WhatsEng:6,Reels:7,ReelsEng:8,ReelsAlc:9,ReelsWhats:10,ReelsEngLink:11},
+  objectivePriority:{Alc:1,Eng:2,EngLink:3,EngWhats:4,TrafLink:5,TrafWhats:6,ReelsAlc:7,ReelsEng:8,ReelsEngLink:9,ReelsEngWhats:10,ReelsTrafLink:11,ReelsTrafWhats:12},
   objectiveRules:[
-    {name:'Reels por formato',objective:'Reels',when:{formatIn:['Reels','Vídeo']}},
-    {name:'WhatsApp + clique no link',objective:'ConvLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
-    {name:'Engajamento + clique no link',objective:'EngLink',when:{textRegex:'CLIQUE\\s*(NO\\s*)?LINK',anyWords:[['engajamento','engaj','eng']]}},
-    {name:'Whats (Engajamento + Conversas)',objective:'WhatsEng',when:{allWords:[['whats','whatsapp','wapp','wpp','zap'],['engajamento','engaj','eng']]}},
-    {name:'Conversas por WhatsApp',objective:'Conversas',aliases:['WhatsApp'],when:{anyWords:[['whats','whatsapp','wapp','wpp','zap']]}},
-    {name:'Engajamento',objective:'Engajamento',when:{anyWords:[['engajamento','engaj','eng']]}},
-    {name:'Alcance',objective:'Alcance',when:{anyWords:[['alcance','alc','al']]}},
-    {name:'Reels por visualização',objective:'Reels',when:{anyWords:[['views','visualizacao','visualizações','thruplay']]}}
+    // ── REELS (sempre vem primeiro pois é formato específico) ──
+    // Reels + TRAF + WHATS
+    {name:'Reels Tráfego Whats',objective:'ReelsTrafWhats',when:{allWords:[['reels','reel'],['traf','trafego'],['whats','whatsapp','wpp','zap','wats']]}},
+    // Reels + TRAF + LINK
+    {name:'Reels Tráfego Link',objective:'ReelsTrafLink',when:{allWords:[['reels','reel'],['traf','trafego'],['link','clique']]}},
+    // Reels + ENG + WHATS
+    {name:'Reels Eng Whats',objective:'ReelsEngWhats',when:{allWords:[['reels','reel'],['eng','engajamento','engaj'],['whats','whatsapp','wpp','zap','wats']]}},
+    // Reels + ENG + LINK
+    {name:'Reels Eng Link',objective:'ReelsEngLink',when:{allWords:[['reels','reel'],['eng','engajamento','engaj'],['link','clique']]}},
+    // Reels + ENG
+    {name:'Reels Eng',objective:'ReelsEng',when:{allWords:[['reels','reel'],['eng','engajamento','engaj']]}},
+    // Reels + ALC ou só REELS
+    {name:'Reels Alcance',objective:'ReelsAlc',when:{anyWords:[['reels','reel']]}},
+    // ── MÍDIA COMUM ──
+    // TRAF + WHATS
+    {name:'Tráfego Whats',objective:'TrafWhats',when:{allWords:[['traf','trafego'],['whats','whatsapp','wpp','zap','wats']]}},
+    // TRAF + LINK
+    {name:'Tráfego Link',objective:'TrafLink',when:{allWords:[['traf','trafego'],['link','clique']]}},
+    // ENG + WHATS
+    {name:'Eng Whats',objective:'EngWhats',when:{allWords:[['eng','engajamento','engaj'],['whats','whatsapp','wpp','zap','wats']]}},
+    // ENG + LINK
+    {name:'Eng Link',objective:'EngLink',when:{allWords:[['eng','engajamento','engaj'],['link','clique']]}},
+    // ENG
+    {name:'Engajamento',objective:'Eng',when:{anyWords:[['eng','engajamento','engaj']]}},
+    // ALC
+    {name:'Alcance',objective:'Alc',when:{anyWords:[['alc','alcance']]}}
   ]
 };
 
@@ -1020,7 +1053,7 @@ function formatActionName(name, objective) {
   if (!name) return '';
   var parts = name.split(/\s*[-–]\s*/);
   var DATE_PATTERN = /^\d{1,2}\/\d{1,2}(\/\d{2,4})?$/;
-  var OBJ_ABBREV = {'alc':'Alcance','al':'Alcance','alcance':'Alcance','alcances':'Alcance','eng':'Engajamento','engaj':'Engajamento','engajamento':'Engajamento','engajamentos':'Engajamento','whats':'WhatsApp','whatsapp':'WhatsApp','wpp':'WhatsApp','zap':'WhatsApp','wats':'WhatsApp','views':'Visualização','visualizacao':'Visualização','thruplay':'ThruPlay','conv':'Conversas','conversas':'Conversas','conversa':'Conversas','clique no link':'Clique no Link'};
+  var OBJ_ABBREV = {'alc':'Alcance','al':'Alcance','alcance':'Alcance','eng':'Engajamento','engaj':'Engajamento','engajamento':'Engajamento','whats':'WhatsApp','whatsapp':'WhatsApp','wpp':'WhatsApp','zap':'WhatsApp','wats':'WhatsApp','traf':'Tráfego','trafego':'Tráfego','link':'Link','views':'Visualização','thruplay':'ThruPlay','conv':'Conversas','conversas':'Conversas'};
   var cleaned = [], foundObj = false;
   for (var i = 0; i < parts.length; i++) {
     var segment = parts[i].trim();
@@ -1032,7 +1065,7 @@ function formatActionName(name, objective) {
     cleaned.push(segment);
   }
   if (!foundObj && objective && objective !== 'indefinido') {
-    var OBJ_DISPLAY = {'Alcance':'Alcance','Engajamento':'Engajamento','EngLink':'Engajamento + Link','Conversas':'WhatsApp','ConvLink':'WhatsApp + Link','WhatsEng':'WhatsApp + Engajamento','Reels':'Visualização'};
+    var OBJ_DISPLAY = {'Alc':'Alcance','Eng':'Engajamento','EngLink':'Engajamento + Link','EngWhats':'Eng + Whats','TrafLink':'Tráfego + Link','TrafWhats':'Tráfego + Whats','ReelsAlc':'Reels Alcance','ReelsEng':'Reels Engajamento','ReelsEngLink':'Reels Eng + Link','ReelsEngWhats':'Reels Eng + Whats','ReelsTrafLink':'Reels Tráfego + Link','ReelsTrafWhats':'Reels Tráfego + Whats'};
     cleaned.push(OBJ_DISPLAY[objective] || objective);
   }
   return cleaned.join(' - ');
@@ -1059,25 +1092,24 @@ function parseExcel(wb) {
   });
 
   // Mapeamento tolerante de colunas — pega a primeira que encontrar
-  var iCN  = getIdx(headers, ['nome da campanha','campaign name']);
-  var iAN  = getIdx(headers, ['nome do anuncio','ad name']);
-  var iCA  = getIdx(headers, ['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);
-  var iDI  = getIdx(headers, ['inicio','inicio dos relatorios','start','data de inicio']);
-  var iDT  = getIdx(headers, ['termino','termino dos relatorios','end','data de termino']);
-  var iB   = getIdx(headers, ['orcamento da campanha','campaign budget','orcamento','investimento']);
-  var iS   = getIdx(headers, ['valor usado (brl)','valor usado','amount spent','valor gasto']);
-  var iCPM = getIdx(headers, ['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes']);
-  var iIm  = getIdx(headers, ['impressoes','impressions']);
-  var iR   = getIdx(headers, ['alcance','reach']);
-  var iRes = getIdx(headers, ['resultados','results','result']);
-  var iTRes= getIdx(headers, ['tipo de resultado']);  // "Cliques no link", "ThruPlay", "Interações", etc.
-  var iEP  = getIdx(headers, ['engajamentos com o post','post engagements']);
-  var iTC  = getIdx(headers, ['custo por thruplay','cost per thruplay']);
-  var iCPR = getIdx(headers, ['custo por resultado','cost per result']);
-  var iCE  = getIdx(headers, ['custo por engajamento com o post','cost per post engagement','custo por interacao']);
-  var iCC  = getIdx(headers, ['custo por conversa por mensagem iniciada','cost per messaging conversation started']);
-  var iLC  = getIdx(headers, ['cliques no link','link clicks']);
-  var iCPC = getIdx(headers, ['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
+  var iCN   = getIdx(headers, ['nome da campanha','campaign name']);
+  var iAN   = getIdx(headers, ['nome do anuncio','ad name']);
+  var iCA   = getIdx(headers, ['nome do conjunto de anuncios','ad set name','conjunto de anuncios','nome do conjunto']);
+  var iDI   = getIdx(headers, ['inicio','inicio dos relatorios','start','data de inicio']);
+  var iDT   = getIdx(headers, ['termino','termino dos relatorios','end','data de termino']);
+  var iB    = getIdx(headers, ['orcamento da campanha','campaign budget','orcamento','investimento']);
+  var iS    = getIdx(headers, ['valor usado (brl)','valor usado','amount spent','valor gasto']);
+  var iR    = getIdx(headers, ['alcance','reach']);
+  var iEP   = getIdx(headers, ['engajamentos com o post','post engagements','engajamento']);
+  var iLC   = getIdx(headers, ['cliques no link','link clicks']);
+  var iThru = getIdx(headers, ['thruplays','thruplay','visualizacao (thruplay)','visualizacoes']);
+  var iCPM  = getIdx(headers, ['cpm (custo por 1.000 impressoes)','cpm','custo por 1.000 impressoes','custo por 1.000 pessoas']);
+  var iCPC  = getIdx(headers, ['cpc (custo por clique no link)','cpc (custo por clique)','custo por clique no link','cpc']);
+  var iCThru= getIdx(headers, ['custo por thruplay','cost per thruplay']);
+  var iCInt = getIdx(headers, ['custo por engajamento com o post','cost per post engagement','custo por interacao']);
+  var iCConv= getIdx(headers, ['custo por conversa por mensagem iniciada','cost per messaging conversation started','custo por conversa']);
+  var iConv = getIdx(headers, ['conversas por mensagem iniciadas','messaging conversations started','conversas iniciadas']);
+  var iTRes = getIdx(headers, ['tipo de resultado']);
 
   // Função segura de leitura — nunca quebra
   function g(row, idx) {
@@ -1119,12 +1151,12 @@ function parseExcel(wb) {
 
     // Se objetivo indefinido, tenta inferir pelo tipo de resultado do Meta
     if (objective === 'indefinido' && tipoResultado) {
-      if (tipoResultado.includes('thruplay') || tipoResultado.includes('visuali')) objective = 'Reels';
-      else if (tipoResultado.includes('conversa')) objective = 'Conversas';
+      if (tipoResultado.includes('thruplay') || tipoResultado.includes('visuali')) objective = 'ReelsAlc';
+      else if (tipoResultado.includes('conversa')) objective = 'EngWhats';
       else if (tipoResultado.includes('clique') || tipoResultado.includes('link')) objective = 'EngLink';
-      else if (tipoResultado.includes('alcance')) objective = 'Alcance';
-      else if (tipoResultado.includes('interac') || tipoResultado.includes('engaj')) objective = 'Engajamento';
-      else if (tipoResultado.includes('visita')) objective = 'Alcance';
+      else if (tipoResultado.includes('alcance')) objective = 'Alc';
+      else if (tipoResultado.includes('interac') || tipoResultado.includes('engaj')) objective = 'Eng';
+      else if (tipoResultado.includes('visita')) objective = 'Alc';
     }
 
     var dateFromName = extractDateFromName(name);
@@ -1137,31 +1169,24 @@ function parseExcel(wb) {
 
     var spent  = safeNum(row, iS);
     var budget = safeNum(row, iB);
-    var impr   = Math.round(safeNum(row, iIm));
     var reach  = Math.round(safeNum(row, iR));
-    var results= Math.round(safeNum(row, iRes));
-    var links  = Math.round(safeNum(row, iLC));
     var eng    = Math.round(safeNum(row, iEP));
-    if (!eng && results > 0) eng = results;
+    var links  = Math.round(safeNum(row, iLC));
+    var thru   = Math.round(safeNum(row, iThru));
+    var conv   = Math.round(safeNum(row, iConv));
 
-    var cpm = safeNum(row, iCPM);
-    if (!cpm && impr > 0 && spent > 0) cpm = (spent / impr) * 1000;
-
-    var cpc = safeNum(row, iCPC);
+    var cpm   = safeNum(row, iCPM);
+    var cpc   = safeNum(row, iCPC);
     if (!cpc && links > 0 && spent > 0) cpc = spent / links;
 
-    var cpr = safeNum(row, iCPR); // custo por resultado genérico
+    var cThru = safeNum(row, iCThru);
+    if (!cThru && thru > 0 && spent > 0) cThru = spent / thru;
 
-    var cThru = safeNum(row, iTC);
-    if (!cThru && cpr > 0) cThru = cpr;
-    else if (!cThru && results > 0 && spent > 0) cThru = spent / results;
-
-    var cInt = safeNum(row, iCE);
+    var cInt  = safeNum(row, iCInt);
     if (!cInt && eng > 0 && spent > 0) cInt = spent / eng;
 
-    var cConv = safeNum(row, iCC);
-    if (!cConv && cpr > 0) cConv = cpr;
-    else if (!cConv && results > 0 && spent > 0) cConv = spent / results;
+    var cConv = safeNum(row, iCConv);
+    if (!cConv && conv > 0 && spent > 0) cConv = spent / conv;
 
     data.push({
       name: name,
@@ -1172,17 +1197,16 @@ function parseExcel(wb) {
       sortDate: sortDate,
       budget: budget,
       spent: spent,
+      reach: reach,
+      eng: eng,
+      links: links,
+      views: thru,
+      conv: conv,
       cpm: cpm,
       cpc: cpc,
       cThru: cThru,
       cInt: cInt,
-      cConv: cConv,
-      reach: reach,
-      impr: impr,
-      views: results,
-      eng: eng,
-      conv: results,
-      links: links
+      cConv: cConv
     });
   }
 
@@ -1459,23 +1483,33 @@ function renderReport(data) {
   for (var idx = 0; idx < data.length; idx++) {
     var r = data[idx];
     var o = r.objective;
-    var isEngFmt = /panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+    var isReels = /^Reels/i.test(o);
     var curDate = extractDateFromName(r.name);
     var curDateKey = curDate ? curDate.getTime() : 'none';
     if (idx > 0 && curDateKey !== lastDateKey) {
       tbody.innerHTML += '<tr><td colspan="17" style="background:#fff;border:none;height:16px"></td></tr>';
     }
     lastDateKey = curDateKey;
-    var colReach  = fmtNum(r.reach);
-    var colEng    = ((o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')) ? fmtNum(r.eng) : '-';
-    var colLinks  = (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink') ? fmtNum(r.links) : '-';
-    var colViews  = (o==='Reels') ? fmtNum(r.views) : '-';
-    var colCPM    = (o==='Alcance'||o==='ReelsAlc') ? fmtBRL(r.cpm) : '-';
-    var colCPC    = (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink') ? fmtBRL(r.cpc) : '-';
-    var colThru   = (o==='Reels') ? fmtBRL(r.cThru) : '-';
-    var colCInt   = ((o==='Engajamento'&&isEngFmt)||(o==='ReelsEng')||(o==='ReelsEngLink')) ? fmtBRL(r.cInt) : '-';
-    var colCConv  = (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='ConvLink') ? fmtBRL(r.cConv) : '-';
-    var colConv   = (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='ConvLink') ? fmtNum(r.conv) : '-';
+    // Alcance — sempre preenchido
+    var colReach = fmtNum(r.reach);
+    // Engajamento
+    var colEng = (o==='Eng'||o==='EngLink'||o==='TrafLink'||o==='ReelsEng'||o==='ReelsEngLink'||o==='ReelsTrafLink'||o==='ReelsEngWhats'||o==='ReelsTrafWhats') ? fmtNum(r.eng) : '-';
+    // Cliques no link
+    var colLinks = (o==='EngLink'||o==='TrafLink'||o==='ReelsEngLink'||o==='ReelsTrafLink') ? fmtNum(r.links) : '-';
+    // ThruPlay (visualização)
+    var colViews = isReels ? fmtNum(r.views) : '-';
+    // CPM
+    var colCPM = (o==='Alc') ? fmtBRL(r.cpm) : '-';
+    // Custo por clique
+    var colCPC = (o==='EngLink'||o==='TrafLink'||o==='ReelsEngLink'||o==='ReelsTrafLink') ? fmtBRL(r.cpc) : '-';
+    // Custo por ThruPlay
+    var colThru = (o==='ReelsAlc'||o==='ReelsEng'||o==='ReelsEngLink'||o==='ReelsTrafLink') ? fmtBRL(r.cThru) : '-';
+    // Custo por interação
+    var colCInt = (o==='Eng'||o==='ReelsEng') ? fmtBRL(r.cInt) : '-';
+    // Custo por conversa
+    var colCConv = (o==='EngWhats'||o==='TrafWhats'||o==='ReelsEngWhats'||o==='ReelsTrafWhats') ? fmtBRL(r.cConv) : '-';
+    // Conversas iniciadas
+    var colConv = (o==='EngWhats'||o==='TrafWhats'||o==='ReelsEngWhats'||o==='ReelsTrafWhats') ? fmtNum(r.conv) : '-';
     tbody.innerHTML += '<tr><td>'+titleCase(r.displayName||r.name)+'</td><td>'+r.format+'</td><td>'+(r.validity||'-')+'</td><td>'+fmtBRL(r.budget)+'</td><td>'+fmtBRL(r.spent)+'</td><td>'+colReach+'</td><td>'+colEng+'</td><td>'+colLinks+'</td><td>'+colViews+'</td><td>'+colCPM+'</td><td>'+colCPC+'</td><td>'+colThru+'</td><td>'+colCInt+'</td><td>'+colCConv+'</td><td>-</td><td>-</td><td>'+colConv+'</td></tr>';
   }
   document.getElementById('reportArea').style.display = 'block';
@@ -1628,20 +1662,33 @@ var ReportExporter = {
       }
       lastDateKeyXl=curDateKey;
       var o=r.objective;
-      var isEF=/panfleto|carrossel|virtual|tabloide|post/i.test(r.format);
+      var isReelsXl = /^Reels/i.test(o);
       var vals=[
-        titleCase(r.displayName||r.name),r.format,r.validity||'-',
-        r.budget>0?r.budget:'-',r.spent>0?r.spent:'-',r.reach>0?r.reach:'-',
-        ((o==='Engajamento'&&isEF)||(o==='ReelsEng')||(o==='ReelsEngLink'))&&r.eng>0?r.eng:'-',
-        (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')&&r.links>0?r.links:'-',
-        o==='Reels'&&r.views>0?r.views:'-',
-        (o==='Alcance'||o==='ReelsAlc')&&r.cpm>0?r.cpm:'-',
-        (o==='EngLink'||o==='ConvLink'||o==='ReelsEngLink')&&r.cpc>0?r.cpc:'-',
-        o==='Reels'&&r.cThru>0?r.cThru:'-',
-        ((o==='Engajamento'&&isEF)||(o==='ReelsEng')||(o==='ReelsEngLink'))&&r.cInt>0?r.cInt:'-',
-        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='ConvLink')&&r.cConv>0?r.cConv:'-',
+        titleCase(r.displayName||r.name),
+        r.format,
+        r.validity||'-',
+        r.budget>0?r.budget:'-',
+        r.spent>0?r.spent:'-',
+        r.reach>0?r.reach:'-',
+        // Engajamento
+        (o==='Eng'||o==='EngLink'||o==='TrafLink'||o==='ReelsEng'||o==='ReelsEngLink'||o==='ReelsTrafLink'||o==='ReelsEngWhats'||o==='ReelsTrafWhats')&&r.eng>0?r.eng:'-',
+        // Cliques no link
+        (o==='EngLink'||o==='TrafLink'||o==='ReelsEngLink'||o==='ReelsTrafLink')&&r.links>0?r.links:'-',
+        // ThruPlay
+        isReelsXl&&r.views>0?r.views:'-',
+        // CPM
+        o==='Alc'&&r.cpm>0?r.cpm:'-',
+        // Custo por clique
+        (o==='EngLink'||o==='TrafLink'||o==='ReelsEngLink'||o==='ReelsTrafLink')&&r.cpc>0?r.cpc:'-',
+        // Custo por ThruPlay
+        (o==='ReelsAlc'||o==='ReelsEng'||o==='ReelsEngLink'||o==='ReelsTrafLink')&&r.cThru>0?r.cThru:'-',
+        // Custo por interação
+        (o==='Eng'||o==='ReelsEng')&&r.cInt>0?r.cInt:'-',
+        // Custo por conversa
+        (o==='EngWhats'||o==='TrafWhats'||o==='ReelsEngWhats'||o==='ReelsTrafWhats')&&r.cConv>0?r.cConv:'-',
         '-','-',
-        (o==='Conversas'||o==='WhatsEng'||o==='ReelsWhats'||o==='ConvLink')&&r.conv>0?r.conv:'-'
+        // Conversas iniciadas
+        (o==='EngWhats'||o==='TrafWhats'||o==='ReelsEngWhats'||o==='ReelsTrafWhats')&&r.conv>0?r.conv:'-'
       ];
       var row=ws.addRow(vals);row.height=20;
       vals.forEach(function(v,ci){
@@ -1813,6 +1860,7 @@ function restoreAppState() {
 document.addEventListener('DOMContentLoaded', function() {
   // Limpa config de versão antiga se existir
   try { localStorage.removeItem('relatorios_ads_classifier_config_v1'); } catch(e) {}
+  try { localStorage.removeItem('relatorios_ads_classifier_config_v2'); } catch(e) {}
   CampaignClassifier.ensureConfig();
   refreshClassifierConfigEditor();
   bindCapaInputs();
