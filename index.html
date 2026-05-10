@@ -667,7 +667,7 @@ var OBJ_BADGE = {
   indefinido:   'badge-unknown'
 };
 var OBJ_OPTIONS = ['Alc','Eng','EngLink','EngWhats','TrafLink','TrafWhats','ReelsAlc','ReelsEng','ReelsEngLink','ReelsEngWhats','ReelsTrafLink','ReelsTrafWhats'];
-var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v3';
+var CLASSIFIER_CONFIG_STORAGE_KEY = 'relatorios_ads_classifier_config_v4';
 var DEFAULT_CLASSIFIER_CONFIG = {
   normalizationAliases: {
     panfleto:['panfletos'],
@@ -715,7 +715,7 @@ var DEFAULT_CLASSIFIER_CONFIG = {
     // ENG + LINK
     {name:'Eng Link',objective:'EngLink',when:{allWords:[['eng','engajamento','engaj'],['link','clique']]}},
     // ENG
-    {name:'Engajamento',objective:'Eng',when:{anyWords:[['eng','engajamento','engaj']]}},
+    {name:'Engajamento',objective:'Eng',when:{anyWords:[['eng','engajamento','engaj','e']]}},
     // ALC
     {name:'Alcance',objective:'Alc',when:{anyWords:[['alc','alcance']]}}
   ]
@@ -1193,6 +1193,9 @@ function parseExcel(wb) {
     var thru  = Math.round(safeNum(row, iThru)|| (isThruplay    ? resultados : 0));
     var conv  = Math.round(safeNum(row, iConv)|| (isConversa    ? resultados : 0));
 
+    // Se nenhum tipo específico, tenta usar resultados como engajamento genérico
+    if (!eng && !links && !thru && !conv && resultados > 0) eng = resultados;
+
     // CPM — calcula se não tiver
     var cpm = safeNum(row, iCPM);
     if (!cpm && impr > 0 && spent > 0) cpm = (spent / impr) * 1000;
@@ -1210,6 +1213,7 @@ function parseExcel(wb) {
     // Custo por interação
     var cInt = safeNum(row, iCInt);
     if (!cInt && isEngajamento) cInt = custoRes || (eng > 0 && spent > 0 ? spent / eng : 0);
+    if (!cInt && custoRes > 0 && eng > 0) cInt = custoRes;
     if (!cInt && eng > 0 && spent > 0) cInt = spent / eng;
 
     // Custo por conversa
@@ -1890,6 +1894,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Limpa config de versão antiga se existir
   try { localStorage.removeItem('relatorios_ads_classifier_config_v1'); } catch(e) {}
   try { localStorage.removeItem('relatorios_ads_classifier_config_v2'); } catch(e) {}
+  try { localStorage.removeItem('relatorios_ads_classifier_config_v3'); } catch(e) {}
   CampaignClassifier.ensureConfig();
   refreshClassifierConfigEditor();
   bindCapaInputs();
